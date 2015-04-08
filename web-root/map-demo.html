@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Map Demo</title>
+    <script type="text/javascript" src="d3/d3.v3.js"></script>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<input type="range" min="500" max="5000" id="theRange" value="500" onchange="updateProjection(this)">
+
+<input type="range" min="-500" max="500" value="0" id="theRange1" onchange="updateProjection(this)">
+
+<input type="range" min="-300" max="300" value="0" id="theRange2" onchange="updateProjection(this)" style="transform: rotate(90deg)">
+
+<script type="text/javascript">
+
+    var w = 500;
+    var h = 300;
+
+    var projection = d3.geo.albersUsa()
+            .translate([w/2, h/2]).scale([500]);
+
+
+    var path = d3.geo.path().projection(projection);
+    var paths = null;
+    var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+    var colors = d3.scale.category20();
+
+    //for counties data, see view-source:http://upload.wikimedia.org/wikipedia/commons/5/59/Usa_counties_large.svg
+
+    //Load in GeoJSON data
+    d3.json("data/us-states.json", function(json) {
+
+        var selectedData = []
+        json.features.forEach(function(d){
+            if(d.properties.name != "1California"){
+                selectedData.push(d);
+            }
+        })
+
+
+
+        //Bind data and create one path per GeoJSON feature
+        paths = svg.selectAll("path")
+                .data(selectedData)
+                .enter()
+                .append("path")
+                .attr("i",function(d,i){return i })
+                .style("fill", function(d, i) {return colors(i)})
+                .style("stroke", "grey")
+                .attr("d", path)
+                .on("mouseover", stateIn)
+                .on("mouseout", stateOut)
+
+
+    });
+
+    function stateIn(){
+        d3.select(this).style("opacity",".6");
+    }
+
+    function stateOut(){
+
+        var ctrl = d3.select(this);
+        var i=ctrl.attr("i");
+        d3.select(this).style("fill",colors(i));
+        d3.select(this).style("opacity","1");
+    }
+
+    function updateProjection(ctrl){
+
+        var scale =  document.getElementById('theRange').value;
+        var xOffset =  document.getElementById('theRange1').value;
+        var yOffset =  document.getElementById('theRange2').value;
+
+        projection.scale([parseFloat(scale)])
+                .translate([w/2 + parseInt(xOffset) ,h/2 + parseInt(yOffset)]);
+        path.projection(projection)
+        paths.attr("d",path)
+
+    }
+
+
+</script>
+</body>
+</html>
