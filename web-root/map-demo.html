@@ -8,19 +8,33 @@
     </style>
 </head>
 <body>
-<input type="range" min="500" max="5000" id="theRange" value="500" onchange="updateProjection(this)">
-
-<input type="range" min="-500" max="500" value="0" id="theRange1" onchange="updateProjection(this)">
-
-<input type="range" min="-300" max="300" value="0" id="theRange2" onchange="updateProjection(this)" style="transform: rotate(90deg)">
-
 <script type="text/javascript">
 
-    var w = 500;
-    var h = 300;
+
+    var cityData = [
+        {city:"New York", lat:40.71455,lon:-74.007124},
+        {city:"Los Angeles",lat:34.05349,lon:-118.245323},
+        {city:"Chicago",lat:45.37399,lon:-92.888759},
+        {city:"Houston",lat:41.337462,lon:-75.733627},
+        {city:"Philadelphia",lat:37.15477,lon:-94.486114},
+        {city:"Phoenix",lat:32.46764,lon:-85.000823},
+        {city:"San Antonio",lat:37.706576,lon:-122.440612},
+        {city:"San Diego",lat:37.707815,lon:-122.466624},
+        {city:"Dallas",lat:40.636,lon:-91.168309},
+        {city:"San Jose",lat:41.209716,lon:-112.003047}
+    ]
+
+
+    var w = 800;
+    var h = 500;
+
+    var xOffset = 0, yOffset =0, scale = 500;
 
     var projection = d3.geo.albersUsa()
             .translate([w/2, h/2]).scale([500]);
+
+    var drag = d3.behavior.drag()
+            .on("drag", dragMove);
 
 
     var path = d3.geo.path().projection(projection);
@@ -29,6 +43,12 @@
             .append("svg")
             .attr("width", w)
             .attr("height", h);
+
+    svg.call(d3.behavior.zoom().scaleExtent([1, 500]).on("zoom", zoom));
+    svg.call(drag);
+
+
+
     var colors = d3.scale.category20();
 
     //for counties data, see view-source:http://upload.wikimedia.org/wikipedia/commons/5/59/Usa_counties_large.svg
@@ -58,7 +78,52 @@
                 .on("mouseout", stateOut)
 
 
+        svg.selectAll("circle")
+                .data(cityData)
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) {
+                    return projection([d.lon, d.lat])[0];
+                })
+                .attr("cy", function(d) {
+                    return projection([d.lon, d.lat])[1];
+                })
+                .attr("r", 2)
+                .style("fill", "black")
+                .style("opacity", 0.75);
+
+
     });
+
+
+    function moveMap(){
+        projection.scale([scale])
+                .translate([w/2 + parseInt(xOffset) ,h/2 + parseInt(yOffset)]);
+        path.projection(projection)
+        paths.attr("d",path)
+
+        svg.selectAll("circle")
+                .attr("cx", function(d) {
+                    return projection([d.lon, d.lat])[0];
+                })
+                .attr("cy", function(d) {
+                    return projection([d.lon, d.lat])[1];
+                })
+
+    }
+    function zoom(){
+
+
+        scale =   parseFloat(d3.event.scale)*500;
+        moveMap();
+    }
+
+    function dragMove(){
+
+        xOffset += parseFloat(d3.event.dx);
+        yOffset += parseFloat(d3.event.dy);
+        moveMap();
+    }
 
     function stateIn(){
         d3.select(this).style("opacity",".6");
@@ -72,18 +137,8 @@
         d3.select(this).style("opacity","1");
     }
 
-    function updateProjection(ctrl){
 
-        var scale =  document.getElementById('theRange').value;
-        var xOffset =  document.getElementById('theRange1').value;
-        var yOffset =  document.getElementById('theRange2').value;
 
-        projection.scale([parseFloat(scale)])
-                .translate([w/2 + parseInt(xOffset) ,h/2 + parseInt(yOffset)]);
-        path.projection(projection)
-        paths.attr("d",path)
-
-    }
 
 
 </script>
