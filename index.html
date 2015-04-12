@@ -100,13 +100,13 @@
     ]
 
 
-    var w = 800;
+    var w = 720;
     var h = 560;
 
-    var xOffset = 0, yOffset =0, scale = 500;
+    var xOffset = 0, yOffset =0, scale = 800;
 
     var projection = d3.geo.albersUsa()
-            .translate([w/2, h/2]).scale([900]);
+            .translate([w/2, h/2]).scale([800]);
 
     var drag = d3.behavior.drag()
             .on("drag", dragMove);
@@ -119,7 +119,7 @@
             .attr("width", w)
             .attr("height", h);
 
-    svg.call(d3.behavior.zoom().scaleExtent([1, 900]).on("zoom", zoom));
+    svg.call(d3.behavior.zoom().scaleExtent([1, 800]).on("zoom", zoom));
     svg.call(drag);
 
     var colors = d3.scale.category20();
@@ -202,7 +202,7 @@
     function zoom(){
 
 
-        scale =   parseFloat(d3.event.scale)*900;
+        scale =   parseFloat(d3.event.scale)*800;
         moveMap();
     }
 
