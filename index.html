@@ -104,10 +104,10 @@
     var mapRatio = 0.6;
     var h = w*mapRatio;
 
-    var xOffset = 0, yOffset =0, scale =1.1* w;
+    var xOffset = 0, yOffset =0, scale =1.3* w;
 
     var projection = d3.geo.albersUsa()
-            .translate([w/2, h/2]).scale([1.1*w]);
+            .translate([w/2, h/2]).scale([1.3*w]);
 
     var drag = d3.behavior.drag()
             .on("drag", dragMove);
@@ -120,7 +120,7 @@
             .attr("width", w)
             .attr("height", h);
 
-    svg.call(d3.behavior.zoom().scaleExtent([1, 1.1*w]).on("zoom", zoom));
+    svg.call(d3.behavior.zoom().scaleExtent([1, 1.3*w]).on("zoom", zoom));
     svg.call(drag);
     $( window ).resize(function() {
         svg.call(resize);
@@ -206,7 +206,7 @@
     }
 
     function zoom(){
-        scale =   parseFloat(d3.event.scale)*1.2*w;
+        scale =   parseFloat(d3.event.scale)*w;
         moveMap();
     }
 
@@ -232,7 +232,7 @@
         // get the width of a D3 element
         w = $("#map").width();
         h = w*mapRatio;
-        scale =1.1* w;
+        scale =1.3* w;
         svg.attr("width", w)
             .attr("height", h);
         moveMap();
