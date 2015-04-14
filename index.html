@@ -7,6 +7,7 @@
 	<title>CS171 Final Project</title>
 	<!-- Common CSS/JSS are incorporated into bootstrap.min.css -->
 	<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+	<link rel="stylesheet" href="css/campusSecurity.css" type="text/css">
 	<!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -62,13 +63,14 @@
 
 			<aside class="col-md-4 col-sm-12 panel-info-darken">								
 				<div class="col-md-12 col-sm-7 panel panel-info aside-center" id="box1">
-                    <div>Murd:</div><input id="murdId" type="number" min="0" max="100" value="100">
-                    <div>Neg:</div><input id="negId" type="number" min="0" max="100" value="10">
+                    <div>Murd:</div><input id="murdId" type="number" min="0" max="100" value="0">
+                    <div>Neg:</div><input id="negId" type="number" min="0" max="100" value="100">
                     <div>Forcib:</div><input id="forcibId" type="number" min="0" max="100"  value="10">
                     <div>Non-Forcib:</div><input id="nonForcibId" type="number" min="0" max="100"  value="10">
                     <div>Robbe:</div><input id="robbeId" type="number" min="0" max="100"  value="20">
                     <div>Burg:</div><input id="burgId" type="number" min="0" max="100"  value="25">
-                    <div>Vehic:</div><input id="vehicId" type="number" min="0" max="100"  value="15">
+                    <div>Vehic:</div><input id="vehicId" type="number" min="0" max="100"  value="100">
+                    <button onclick="loadData(1)">Refresh</button>
 				</div>
 				<div class="col-md-12 col-sm-5 panel panel-info aside-top" id="box2">
 					<h1>box2</h1>
@@ -122,71 +124,154 @@
     });
 
     var colors = d3.scale.category20();
+    loadData();
+    function loadData(flag){
+        var murdFactor = parseInt($("#murdId").val());
+        var negligenceFactor = parseInt($("#negId").val());
+        var forcibleCrimeFactor = parseInt($("#forcibId").val());
+        var nonForcibleCrimeFactor = parseInt($("#nonForcibId").val());
+        var robberyCrimeFactor = parseInt($("#robbeId").val());
+        var burglaryCrimeFactor = parseInt($("#murdId").val());
+        var vehicleCrimeFactor = parseInt($("#vehicId").val());
+        var multiplier = 10000;
+
+
+        d3.json("data/us-states.json", function(json) {
+            d3.tsv("data/univDataAgg.tsv", function(err,univAggrDataArray){
+
+                //totMurd	totNegM	totForcib	totNonForcib	totRobbe	totAggA	totBurgla	totVehic	totArson
+
+                var univAggrData = univAggrDataArray[0];
+                var aveCrimeFactor = murdFactor * univAggrData.totMurd +
+                        negligenceFactor * univAggrData.totNegM +
+                        forcibleCrimeFactor * univAggrData.totForcib +
+                        nonForcibleCrimeFactor * univAggrData.totNonForcib +
+                        robberyCrimeFactor * univAggrData.totRobbe +
+                        burglaryCrimeFactor * univAggrData.totBurgla +
+                        vehicleCrimeFactor * univAggrData.totVehic;
+
+
+                var minCrimeFactor = null, maxCrimeFactor = null;
+
+                d3.tsv("data/univData.tsv", function (err,cityData) {
+
+                    cityData.forEach(function(d){
+                        var crimeFactor = multiplier *murdFactor * d.Murder +
+                                multiplier * negligenceFactor * d.NegM +
+                                multiplier * forcibleCrimeFactor * d.Forcib +
+                                multiplier * nonForcibleCrimeFactor * d.NonForcib +
+                                multiplier * robberyCrimeFactor * d.Robbe +
+                                multiplier * burglaryCrimeFactor * d.Burgla +
+                                multiplier * vehicleCrimeFactor * d.Vehic;
+                        d["crimeFactor"] = crimeFactor;
+
+                        if (minCrimeFactor == null){
+                            minCrimeFactor = crimeFactor;
+                        }
+                        else if(minCrimeFactor > crimeFactor){
+                            minCrimeFactor = crimeFactor;
+                        }
+
+                        if(maxCrimeFactor == null){
+                            maxCrimeFactor = crimeFactor;
+                        }
+                        else if(maxCrimeFactor<crimeFactor){
+                            maxCrimeFactor = crimeFactor;
+                        }
+
+
+                    })
+
+                    var selectedData = []
+                    json.features.forEach(function(d){
+                        if(d.properties.name != "1California"){
+                            selectedData.push(d);
+                        }
+                    })
+                    //Bind data and create one path per GeoJSON feature
+                    paths = svg.selectAll("path")
+                            .data(selectedData)
+                            .enter()
+                            .append("path")
+                            .attr("i",function(d,i){return i })
+                            .style("fill","lightyellow") // function(d, i) {return colors(i)})
+                            .style("stroke", "grey")
+                            .attr("d", path)
+                            .on("mouseover", stateIn)
+                            .on("mouseout", stateOut)
+
+
+                    //Murder	NegM	Forcib	NonForcib	Robbe	AggA	Burgla	Vehic	Arson
+
+                    var colorScale = d3.scale.linear().domain
+                        ([aveCrimeFactor, maxCrimeFactor]).range(["#8b0000", "#FFF0F0"])
+
+                    svg.selectAll("circle").remove();
+                    svg.selectAll("circle")
+                            .data(cityData)
+                            .enter()
+                            .append("circle")
+                            .attr("city", function(d){return d.City})
+                            .attr("cx", function(d) {
+                                var proj = projection([d.Longitude, d.Latitude]);
+                                if(!proj){
+                                    console.log("Invalid lat /long",d);
+                                    return null;
+                                }
+                                else {
+                                    return projection([d.Longitude, d.Latitude])[0];
+                                }
+
+                            })
+                            .attr("cy", function(d) {
+                                var proj = projection([d.Longitude, d.Latitude]);
+                                if(!proj){
+                                    console.log("Invalid lat /long",d);
+                                    return null;
+                                }
+                                else {
+                                    return proj[1];
+                                }
+                            })
+                            .attr("r",function(d,i){
+                                if (d.crimeFactor > aveCrimeFactor){
+                                    return 3
+                                }
+                                else {
+                                    return 1
+                                }
+                            })
+                            .style("fill", function(d,i){
+
+                                if (d.crimeFactor > aveCrimeFactor){
+                                    return colorScale(d.crimeFactor)
+                                }
+                                else {
+                                    return "green"
+                                }
+
+
+                            })
+                            .style("opacity", 1)
+                            .on('mouseover',showCityData)
+
+                    svg.selectAll("txt").remove();
+                    txt = svg.append("text")
+                            .style("visibility", "hidden")
+                            .attr("class","schoolLabel")
+
+                });
+            });
+        });
+    }
+
+
+
 
     //for counties data, see view-source:http://upload.wikimedia.org/wikipedia/commons/5/59/Usa_counties_large.svg
 
     //Load in GeoJSON data
-    d3.json("data/us-states.json", function(json) {
 
-        d3.tsv("data/universities.tsv", function (err,cityData) {
-
-            var selectedData = []
-            json.features.forEach(function(d){
-                if(d.properties.name != "1California"){
-                    selectedData.push(d);
-                }
-            })
-            //Bind data and create one path per GeoJSON feature
-            paths = svg.selectAll("path")
-                    .data(selectedData)
-                    .enter()
-                    .append("path")
-                    .attr("i",function(d,i){return i })
-                    //.style("fill", function(d, i) {return colors(i)})
-                    .style("stroke", "grey")
-                    .attr("d", path)
-                    .on("mouseover", stateIn)
-                    .on("mouseout", stateOut)
-
-
-            svg.selectAll("circle")
-                    .data(cityData)
-                    .enter()
-                    .append("circle")
-                    .attr("city", function(d){return d.CITY})
-                    .attr("cx", function(d) {
-                        var proj = projection([d.LONGITUDE, d.LATITUDE]);
-                        if(!proj){
-                            console.log("Invalid lat /long",d);
-                            return null;
-                        }
-                        else {
-                            return projection([d.LONGITUDE, d.LATITUDE])[0];
-                        }
-
-                    })
-                    .attr("cy", function(d) {
-                        var proj = projection([d.LONGITUDE, d.LATITUDE]);
-                        if(!proj){
-                            console.log("Invalid lat /long",d);
-                            return null;
-                        }
-                        else {
-                            return proj[1];
-                        }
-                    })
-                    .attr("r", 1)
-                    .style("fill", "red")
-                    .style("opacity", 3)
-                    .on('mouseover',showCityData)
-
-            txt = svg.append("text").style("visibility", "hidden")
-
-        });
-
-
-    });
-	
 
     function showCityData(){
         var circle = d3.select(this);
@@ -202,18 +287,18 @@
 
     function moveMap(){
         //txt.style("visibility", "hidden")
-        projection.scale([scale])
+        /*projection.scale([scale])
                 .translate([w/2 + parseInt(xOffset) ,h/2 + parseInt(yOffset)]);
         path.projection(projection)
         paths.attr("d",path)
 
         svg.selectAll("circle")
                 .attr("cx", function(d) {
-                    return projection([d.LONGITUDE, d.LATITUDE])[0];
+                    return projection([d.Longitude, d.Latitude])[0];
                 })
                 .attr("cy", function(d) {
-                    return projection([d.LONGITUDE, d.LATITUDE])[1];
-                })
+                    return projection([d.Longitude, d.Latitude])[1];
+                })*/
 
     }
 
