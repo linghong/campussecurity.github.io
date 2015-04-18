@@ -1,5 +1,4 @@
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
-/*! common css style is merged into this bootstrap file */
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -6654,37 +6653,88 @@ a.panel-info-darken:hover {
 }
 .panel-calm {
   padding: 5px;
-  border: 1px dashed #989967;
+  border: 1px #989967;
   background-color: #f0f9fc;
 }
 a.panel-calm:hover {
   background-color: #c5e9f3;
 }
+.btn-info-darken {
+  color: #7a7a52;
+  background-color: #daf1f8;
+  border-color: #9bd8eb;
+}
+.btn-info-darken:hover,
+.btn-info-darken:focus,
+.btn-info-darken.focus,
+.btn-info-darken:active,
+.btn-info-darken.active,
+.open > .dropdown-toggle.btn-info-darken {
+  color: #7a7a52;
+  background-color: #b0e1ef;
+  border-color: #68c5e1;
+}
+.btn-info-darken:active,
+.btn-info-darken.active,
+.open > .dropdown-toggle.btn-info-darken {
+  background-image: none;
+}
+.btn-info-darken.disabled,
+.btn-info-darken[disabled],
+fieldset[disabled] .btn-info-darken,
+.btn-info-darken.disabled:hover,
+.btn-info-darken[disabled]:hover,
+fieldset[disabled] .btn-info-darken:hover,
+.btn-info-darken.disabled:focus,
+.btn-info-darken[disabled]:focus,
+fieldset[disabled] .btn-info-darken:focus,
+.btn-info-darken.disabled.focus,
+.btn-info-darken[disabled].focus,
+fieldset[disabled] .btn-info-darken.focus,
+.btn-info-darken.disabled:active,
+.btn-info-darken[disabled]:active,
+fieldset[disabled] .btn-info-darken:active,
+.btn-info-darken.disabled.active,
+.btn-info-darken[disabled].active,
+fieldset[disabled] .btn-info-darken.active {
+  background-color: #daf1f8;
+  border-color: #9bd8eb;
+}
+.btn-info-darken .badge {
+  color: #daf1f8;
+  background-color: #7a7a52;
+}
 .main-top {
-  height: 180px;
+  padding: 5px;
+  text-align: center;
+}
+.main-bottom {
+  height: 360px;
 }
 .main-center {
-  height: 580px;
+  padding: 10px;
 }
 .aside-top,
 .aside-bottom {
-  padding-left: 5px;
+  padding: 10px;
   padding-bottom: 5px;
 }
 .aside-top {
-  height: 130px;
+  height: 440px;
 }
 .aside-bottom {
   height: 245px;
 }
 .aside-center {
-  padding-left: 5px;
+  padding-left: 20px;
   padding-bottom: 5px;
-  height: 400px;
 }
 .section {
   padding: 5px;
   height: 200px;
+}
+btn-small {
+  width: padding:2px;
 }
 /*-----------------------------------------------------------------
 Title , subtitle
