@@ -2,3 +2,7 @@ text.schoolLabel
 {
     color: #ffffff;
 }
+
+input.weightScale{
+    width: 44px;
+}
