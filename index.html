@@ -39,51 +39,62 @@
 					<li><a href='index.html'>Home</a></li>
 					<li><a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a></li>
 					<li><a href='/doc/PressBook.md'>PressBook</a></li>
+                    <li><a href=''>Video</a></li>
 				</ul>
 			</div>
 		</nav>
 		<div class="row panel-info-darken edge-height">
 			<main class="col-md-8 col-sm-12  panel-info-darken" >				
-				<div class="col-md-12 col-sm-12 panel panel-info">	
-					<div class="col-md-6 col-sm-6 panel-calm main-top" id="map-control-1">
-						<h2>Map Control Panel 1</h2>
-
-					</div>
-					<div class="col-md-3 col-sm-3 panel-calm main-top" id="map-control-2">	
-						<h2>Map Control Panel 2</h2>
-					</div>
-					<div class="col-md-3 col-sm-3 panel-calm main-top" id="map-control-3">	
-						<h2>Map Control Panel 3</h2>
-					</div>
-					<div class="col-md-12 col-sm-12 panel-calm main-center" id="map">	
-				
+				<div class="col-md-12 col-sm-12 panel panel-info">	<div class="col-md-12 col-sm-12 panel-calm main-center" id="map">  
+                </div>
+					<div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-1">
+					<div class="btn-group">
+                        <button class="btn btn-info-darken btn-sm" id="weapon">WEAPON</button>
+                        <button class="btn btn-info-darken btn-sm"id="drug">DRUG</button>
+                        <button class="btn btn-info-darken btn-sm" id="liquor">LIQUOR</button>
+                        <button class="btn btn-info-darken btn-sm" id="murd">MURD</button>
+                        <button class="btn btn-info-darken btn-sm" id="forcib">FORCIB</button>
+                        <button class="btn btn-info-darken btn-sm" id="nonfor">NONFOR</button>
+                        <button class="btn btn-info-darken btn-sm" id="robbe">ROBBE</button>
+                        <button class="btn btn-info-darken btn-sm" id="agg">AGG</button>
+                        <button class="btn btn-info-darken btn-sm" id="burgla">BURGLA</button>
+                        <button class="btn btn-info-darken btn-sm" id="vehic">VEHIC</button>
+                        <button class="btn btn-info-darken btn-sm" id="arson">ARSON</button>
+                    </div >
 					</div>					
+					
+					
+                    <div class="col-md-12 col-sm-12 panel panel-info main-bottom" id="history">
+                        <h4>Distribution of College Crime Data in the United States</h4>
+                    </div>					
 				</div>							
 			</main>
 
 			<aside class="col-md-4 col-sm-12 panel-info-darken">								
-				<div class="col-md-12 col-sm-7 panel panel-info aside-center" id="box1">
-                    <div>Murder:</div><input class="weightScale" id="murdId" type="number" min="0" max="100" value="0"
-                                             step="10" onchange="refreshData()">
-                    <div>Neg:</div><input class="weightScale" id="negId" type="number" min="0" max="100" value="100"
-                                          step="10" onchange="refreshData()">
-                    <div>Forcib:</div><input class="weightScale" id="forcibId" type="number" min="0" max="100"
-                                             value="10" step="10" onchange="refreshData()">
-                    <div>Non-Forcib:</div><input class="weightScale" id="nonForcibId" type="number" min="0" max="100"
-                                                 value="10" step="10" onchange="refreshData()">
-                    <div>Robbe:</div><input class="weightScale" id="robbeId" type="number" min="0" max="100"  value="20"
-                                            step="10" onchange="refreshData()">
-                    <div>Burg:</div><input class="weightScale" id="burgId" type="number" min="0" max="100"  value="25"
-                                           step="10" onchange="refreshData()">
-                    <div>Vehic:</div><input class="weightScale" id="vehicId" type="number" min="0" max="100"
-                                            value="100" step="10" onchange="refreshData()">
-				</div>
-				<div class="col-md-12 col-sm-5 panel panel-info aside-top" id="box2">
-					<h1>box2</h1>
-				</div>
-				<div class="col-md-12  col-sm-5 panel panel-info aside-bottom" id="video">
-					<h1>Video</h1>
-				</div>				
+				<div class="col-md-12 col-sm-6 panel panel-info aside-center" id="box1">
+                    <div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-2">
+                        <div class="btn-group">
+                            <button class="btn btn-info-darken btn-sm" id="crime">Campus Crime</button>
+                            <button class="btn btn-info-darken btn-sm"id="arrest">Campus Arrest</button>                       
+                        </div >
+                    </div>
+                    <form role="form">                                            
+                        <div class="form-group name-group">       
+                            <label class="control-label">Murd:<input id="murdId" type="number" min="0" max="100" value="0" class="form-control"></label>
+                            <label class="control-label">Neg:<input id="negId" type="number" min="0" max="100" value="100" class="form-control"></label>
+                            <label class="control-label">Forcib:<input id="forcibId" type="number" min="0" max="100"  value="10" class="form-control"></label>
+                            <!--this category has very low number<label class="control-label">Non-Forcib:<input id="nonForcibId" type="number" min="0" max="100"  value="10"class="form-control"></label>-->
+                            <label class="control-label">Robbe:<input id="robbeId" type="number" min="0" max="100"  value="20" class="form-control"></label>
+                            <label class="control-label">Burg:<input id="burgId" type="number" min="0" max="100"  value="25"class="form-control"></label>
+                            <label class="control-label">Vehic:<input id="vehicId" type="number" min="0" max="100"  value="100" class="form-control"></label>
+                            <button onclick="loadData(1)" class="btn btn-info-darken">Refresh</button>
+    				    </div>
+                    </form>
+                    
+                </div>
+				<div class="col-md-12 col-sm-6 panel panel-info aside-top" id="box2">
+					<h4>College Crime Categorized by School Sectors</h4>
+				</div>							
 		 	</aside>
 		 	<section class="col-md-12 col-sm-12 panel-info-darken">
 		 		<div class="col-md-12  panel panel-info aside-bottom" id="box3">
@@ -411,7 +422,6 @@
         d3.select(this).style("opacity","1");
     }
     function resize(){
-
         // get the width of a D3 element
         w = $("#map").width();
         h = w*mapRatio;
