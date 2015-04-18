@@ -11,17 +11,14 @@ MapViz = function() {
     this.cityDataSave  = null;
     this.path = null;
     this.paths = null;
-    this.scaleFactor = 1.3;
+    this.scaleFactor = 1.1;
     this.scale = this.scaleFactor * this.width;
     this.multiplier = 10000;
     this.zoomTimer = null;
     this.moveTimer = null;
-
-
+    this.timerWaitPeriod = 100;
     this.init();
     this.loadData();
-
-
 };
 
 MapViz.prototype.init = function(){
@@ -52,7 +49,7 @@ MapViz.prototype.init = function(){
 
         that.scale =   parseFloat(d3.event.scale)* that.width;
 
-        that.zoomTimer = setTimeout(that.moveMap(that.scale), 250);
+        that.zoomTimer = setTimeout(that.moveMap(that.scale), that.timerWaitPeriod);
     }
 
     function dragMove(){
@@ -64,7 +61,7 @@ MapViz.prototype.init = function(){
             clearTimeout(that.moveTimer);
         }
 
-        that.moveTimer = setTimeout(that.moveMap(that.scale), 250);
+        that.moveTimer = setTimeout(that.moveMap(that.scale), that.timerWaitPeriod);
     }
 
 
@@ -118,7 +115,7 @@ MapViz.prototype.moveMap = function(scaleIn){
 }
 
 MapViz.prototype.refreshData = function () {
-    var weights = this.getWeights();
+    var weights = weightsContainerViz.getWeights();
     var aveCrimeFactor= this.getAveCrimeFactor(this.universityAggregateData,weights)
     var minCrimeFactor = null, maxCrimeFactor = null;
     var crimeFactors = this.processCrimeFactor(this.cityDataSave,weights);
@@ -139,25 +136,6 @@ MapViz.prototype.getAveCrimeFactor = function (univAggrData,weights){
 };
 
 
-MapViz.prototype.getWeights = function(){
-    var murdFactor = parseInt($("#murdId").val());
-    var negligenceFactor = parseInt($("#negId").val());
-    var forcibleCrimeFactor = parseInt($("#forcibId").val());
-    var robberyCrimeFactor = parseInt($("#robbeId").val());
-    var burglaryCrimeFactor = parseInt($("#murdId").val());
-    var vehicleCrimeFactor = parseInt($("#vehicId").val());
-
-
-    return {
-        murdFactor:murdFactor,
-        negligenceFactor:negligenceFactor,
-        forcibleCrimeFactor:forcibleCrimeFactor,
-        //nonForcibleCrimeFactor:nonForcibleCrimeFactor,
-        robberyCrimeFactor:robberyCrimeFactor,
-        burglaryCrimeFactor:burglaryCrimeFactor,
-        vehicleCrimeFactor:vehicleCrimeFactor
-    }
-}
 
 MapViz.prototype.processCrimeFactor = function (cityData,weights){
     var minCrimeFactor = null, maxCrimeFactor = null;
@@ -230,13 +208,14 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         })
         .attr("r",function(d,i){
 
-            return 2 *(d.crimeFactor/aveCrimeFactor);
-            /*if (d.crimeFactor > aveCrimeFactor){
-
+            if (d.crimeFactor < aveCrimeFactor){
+                return 2 + 2 -(2 *(d.crimeFactor/aveCrimeFactor));
             }
-            else {
-                return 1
-            }*/
+            else{
+                return 2 *(d.crimeFactor/aveCrimeFactor);
+            }
+
+
         })
         .style("fill", function(d,i){
 
@@ -249,14 +228,14 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
 
 
         })
-        /*.style("opacity", function(d){
+        .style("opacity", function(d){
             if (d.crimeFactor > aveCrimeFactor){
-                return 1
+                return .5
             }
             else {
                 return .3
             }
-        })*/
+        })
         .on('mouseover',showCityData)
 
     d3.selectAll("circle")[0].sort(function(d){return d3.ascending(d.crimeFactor)});
@@ -287,7 +266,7 @@ MapViz.prototype.loadData = function (){
 
     d3.json("data/us-states.json", function(json) {
         d3.tsv("data/univDataAgg.tsv", function(err,univAggrDataArray){
-            var weights = that.getWeights();
+            var weights = weightsContainerViz.getWeights();
             that.universityAggregateData = univAggrDataArray[0];
 
             var aveCrimeFactor= that.getAveCrimeFactor(that.universityAggregateData,weights)
@@ -309,6 +288,7 @@ MapViz.prototype.loadData = function (){
                     .enter()
                     .append("path")
                     .attr("i",function(d,i){return i })
+                    //.style("fill","#f2f2f2") // function(d, i) {return colors(i)})
                     .style("fill","#f2f2f2") // function(d, i) {return colors(i)})
                     .style("stroke", "grey")
                     .attr("d", that.path)
@@ -322,10 +302,29 @@ MapViz.prototype.loadData = function (){
 
             });
         });
+
+        var rightEdge = $("#mapContainer").position().left+ $("#mapContainer").width();
+        var topEdge = $("#mapContainer").position().top -divPadding;
+        var leftPosition = rightEdge;
+        var widthOfWeightSel = $( "#weightsSelector").width();
+        $( "#weightsSelector" )
+            .css("left", leftPosition -divPadding);
+        $( "#weightsSelector" )
+            .css("top", topEdge);
+
+        $( "#weightsSelector" )
+            .css("width", 0);
+
+        $( "#weightsSelector" )
+            .css("display", "block");
+
+
+        weightsContainerViz.showWeightsContainer();
     });
 
     function stateIn(){
         d3.select(this).style("opacity",".6");
+        weightsContainerViz.hideWeightsContainer();
     }
 
     function stateOut(){

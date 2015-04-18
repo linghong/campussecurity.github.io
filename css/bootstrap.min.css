@@ -6646,7 +6646,8 @@ a.panel-info:hover {
   background-color: #ceecf5;
 }
 .panel-info-darken {
-  background-color: #e7f6fa;
+  /*background-color: #e7f6fa;*/
+  background-color: #53A68D;
 }
 a.panel-info-darken:hover {
   background-color: #bde6f2;
