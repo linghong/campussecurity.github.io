@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Map Demo</title>
-    <script type="text/javascript" src="d3/d3.v3.js"></script>
+    <script type="text/javascript" src="../js/d3.v3.js"></script>
     <style type="text/css">
         text{
             font-size: 6pt;
@@ -59,7 +59,7 @@
     //for counties data, see view-source:http://upload.wikimedia.org/wikipedia/commons/5/59/Usa_counties_large.svg
 
     //Load in GeoJSON data
-    d3.json("data/us-states.json", function(json) {
+    d3.json("../data/us-states.json", function(json) {
 
         var selectedData = []
         json.features.forEach(function(d){

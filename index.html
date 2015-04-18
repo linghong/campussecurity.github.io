@@ -63,14 +63,20 @@
 
 			<aside class="col-md-4 col-sm-12 panel-info-darken">								
 				<div class="col-md-12 col-sm-7 panel panel-info aside-center" id="box1">
-                    <div>Murd:</div><input id="murdId" type="number" min="0" max="100" value="0">
-                    <div>Neg:</div><input id="negId" type="number" min="0" max="100" value="100">
-                    <div>Forcib:</div><input id="forcibId" type="number" min="0" max="100"  value="10">
-                    <div>Non-Forcib:</div><input id="nonForcibId" type="number" min="0" max="100"  value="10">
-                    <div>Robbe:</div><input id="robbeId" type="number" min="0" max="100"  value="20">
-                    <div>Burg:</div><input id="burgId" type="number" min="0" max="100"  value="25">
-                    <div>Vehic:</div><input id="vehicId" type="number" min="0" max="100"  value="100">
-                    <button onclick="loadData(1)">Refresh</button>
+                    <div>Murder:</div><input class="weightScale" id="murdId" type="number" min="0" max="100" value="0"
+                                             step="10" onchange="refreshData()">
+                    <div>Neg:</div><input class="weightScale" id="negId" type="number" min="0" max="100" value="100"
+                                          step="10" onchange="refreshData()">
+                    <div>Forcib:</div><input class="weightScale" id="forcibId" type="number" min="0" max="100"
+                                             value="10" step="10" onchange="refreshData()">
+                    <div>Non-Forcib:</div><input class="weightScale" id="nonForcibId" type="number" min="0" max="100"
+                                                 value="10" step="10" onchange="refreshData()">
+                    <div>Robbe:</div><input class="weightScale" id="robbeId" type="number" min="0" max="100"  value="20"
+                                            step="10" onchange="refreshData()">
+                    <div>Burg:</div><input class="weightScale" id="burgId" type="number" min="0" max="100"  value="25"
+                                           step="10" onchange="refreshData()">
+                    <div>Vehic:</div><input class="weightScale" id="vehicId" type="number" min="0" max="100"
+                                            value="100" step="10" onchange="refreshData()">
 				</div>
 				<div class="col-md-12 col-sm-5 panel panel-info aside-top" id="box2">
 					<h1>box2</h1>
@@ -109,7 +115,8 @@
     var drag = d3.behavior.drag()
             .on("drag", dragMove);
 
-
+    var universityAggregateData =null;
+    var cityDataSave  = null;
     var path = d3.geo.path().projection(projection);
     var paths = null;
     var svg = d3.select("#map")
@@ -125,7 +132,9 @@
 
     var colors = d3.scale.category20();
     loadData();
-    function loadData(flag){
+    var multiplier = 10000;
+
+    function getWeights(){
         var murdFactor = parseInt($("#murdId").val());
         var negligenceFactor = parseInt($("#negId").val());
         var forcibleCrimeFactor = parseInt($("#forcibId").val());
@@ -133,68 +142,169 @@
         var robberyCrimeFactor = parseInt($("#robbeId").val());
         var burglaryCrimeFactor = parseInt($("#murdId").val());
         var vehicleCrimeFactor = parseInt($("#vehicId").val());
-        var multiplier = 10000;
+
+
+        return {
+            murdFactor:murdFactor,
+            negligenceFactor:negligenceFactor,
+            forcibleCrimeFactor:forcibleCrimeFactor,
+            nonForcibleCrimeFactor:nonForcibleCrimeFactor,
+            robberyCrimeFactor:robberyCrimeFactor,
+            burglaryCrimeFactor:burglaryCrimeFactor,
+            vehicleCrimeFactor:vehicleCrimeFactor
+        }
+    }
+
+    function getAveCrimeFactor(univAggrData,weights){
+
+        return weights.murdFactor * univAggrData.totMurd +
+                weights.negligenceFactor * univAggrData.totNegM +
+                weights.forcibleCrimeFactor * univAggrData.totForcib +
+                weights.nonForcibleCrimeFactor * univAggrData.totNonForcib +
+                weights.robberyCrimeFactor * univAggrData.totRobbe +
+                weights.burglaryCrimeFactor * univAggrData.totBurgla +
+                weights.vehicleCrimeFactor * univAggrData.totVehic;
+    }
+
+    function processCrimeFactor(cityData,weights){
+        var minCrimeFactor = null, maxCrimeFactor = null;
+
+        cityData.forEach(function(d){
+            var crimeFactor = multiplier * weights.murdFactor * d.Murder +
+                    multiplier * weights.negligenceFactor * d.NegM +
+                    multiplier * weights.forcibleCrimeFactor * d.Forcib +
+                    multiplier * weights.nonForcibleCrimeFactor * d.NonForcib +
+                    multiplier * weights.robberyCrimeFactor * d.Robbe +
+                    multiplier * weights.burglaryCrimeFactor * d.Burgla +
+                    multiplier * weights.vehicleCrimeFactor * d.Vehic;
+            d["crimeFactor"] = crimeFactor;
+
+            if (minCrimeFactor == null){
+                minCrimeFactor = crimeFactor;
+            }
+            else if(minCrimeFactor > crimeFactor){
+                minCrimeFactor = crimeFactor;
+            }
+
+            if(maxCrimeFactor == null){
+                maxCrimeFactor = crimeFactor;
+            }
+            else if(maxCrimeFactor<crimeFactor){
+                maxCrimeFactor = crimeFactor;
+            }
+        })
+
+        return{
+            minCrimeFactor: minCrimeFactor,
+            maxCrimeFactor: maxCrimeFactor
+        }
+
+    }
+
+    function paintCircles(aveCrimeFactor,maxCrimeFactor,cityData){
+        var colorScale = d3.scale.linear().domain
+        ([aveCrimeFactor, maxCrimeFactor]).range(["#8b0000", "#FFF0F0"])
+
+        svg.selectAll("circle").remove();
+        svg.selectAll("circle")
+                .data(cityData)
+                .enter()
+                .append("circle")
+                .attr("city", function(d){return d.City})
+                .attr("cx", function(d) {
+                    var proj = projection([d.Longitude, d.Latitude]);
+                    if(!proj){
+                        console.log("Invalid lat /long",d);
+                        return null;
+                    }
+                    else {
+                        return projection([d.Longitude, d.Latitude])[0];
+                    }
+
+                })
+                .attr("cy", function(d) {
+                    var proj = projection([d.Longitude, d.Latitude]);
+                    if(!proj){
+                        console.log("Invalid lat /long",d);
+                        return null;
+                    }
+                    else {
+                        return proj[1];
+                    }
+                })
+                .attr("r",function(d,i){
+                    if (d.crimeFactor > aveCrimeFactor){
+                        return 3
+                    }
+                    else {
+                        return 1.5
+                    }
+                })
+                .style("fill", function(d,i){
+
+                    if (d.crimeFactor > aveCrimeFactor){
+                        return colorScale(d.crimeFactor)
+                    }
+                    else {
+                        return "green"
+                    }
+
+
+                })
+                .style("opacity", function(d){
+                    if (d.crimeFactor > aveCrimeFactor){
+                        return 1
+                    }
+                    else {
+                        return .3
+                    }
+                })
+                .on('mouseover',showCityData)
+
+        svg.selectAll("txt").remove();
+        txt = svg.append("text")
+                .style("visibility", "hidden")
+                .attr("class","schoolLabel")
+    }
+
+    function refreshData(){
+        var weights = getWeights();
+        var aveCrimeFactor= getAveCrimeFactor(universityAggregateData,weights)
+        var minCrimeFactor = null, maxCrimeFactor = null;
+        var crimeFactors = processCrimeFactor(cityDataSave,weights);
+        minCrimeFactor = crimeFactors.minCrimeFactor;
+        maxCrimeFactor = crimeFactors.maxCrimeFactor;
+        paintCircles(aveCrimeFactor,maxCrimeFactor,cityDataSave);
+    }
+
+    function loadData(){
 
 
         d3.json("data/us-states.json", function(json) {
             d3.tsv("data/univDataAgg.tsv", function(err,univAggrDataArray){
+                var weights = getWeights();
+                universityAggregateData = univAggrDataArray[0];
 
-                //totMurd	totNegM	totForcib	totNonForcib	totRobbe	totAggA	totBurgla	totVehic	totArson
-
-                var univAggrData = univAggrDataArray[0];
-                var aveCrimeFactor = murdFactor * univAggrData.totMurd +
-                        negligenceFactor * univAggrData.totNegM +
-                        forcibleCrimeFactor * univAggrData.totForcib +
-                        nonForcibleCrimeFactor * univAggrData.totNonForcib +
-                        robberyCrimeFactor * univAggrData.totRobbe +
-                        burglaryCrimeFactor * univAggrData.totBurgla +
-                        vehicleCrimeFactor * univAggrData.totVehic;
-
-
+                var aveCrimeFactor= getAveCrimeFactor(universityAggregateData,weights)
                 var minCrimeFactor = null, maxCrimeFactor = null;
-
                 d3.tsv("data/univData.tsv", function (err,cityData) {
-
-                    cityData.forEach(function(d){
-                        var crimeFactor = multiplier *murdFactor * d.Murder +
-                                multiplier * negligenceFactor * d.NegM +
-                                multiplier * forcibleCrimeFactor * d.Forcib +
-                                multiplier * nonForcibleCrimeFactor * d.NonForcib +
-                                multiplier * robberyCrimeFactor * d.Robbe +
-                                multiplier * burglaryCrimeFactor * d.Burgla +
-                                multiplier * vehicleCrimeFactor * d.Vehic;
-                        d["crimeFactor"] = crimeFactor;
-
-                        if (minCrimeFactor == null){
-                            minCrimeFactor = crimeFactor;
-                        }
-                        else if(minCrimeFactor > crimeFactor){
-                            minCrimeFactor = crimeFactor;
-                        }
-
-                        if(maxCrimeFactor == null){
-                            maxCrimeFactor = crimeFactor;
-                        }
-                        else if(maxCrimeFactor<crimeFactor){
-                            maxCrimeFactor = crimeFactor;
-                        }
-
-
-                    })
+                    cityDataSave = cityData;
+                    var crimeFactors = processCrimeFactor(cityDataSave,weights);
+                    minCrimeFactor = crimeFactors.minCrimeFactor;
+                    maxCrimeFactor = crimeFactors.maxCrimeFactor;
 
                     var selectedData = []
                     json.features.forEach(function(d){
-                        if(d.properties.name != "1California"){
-                            selectedData.push(d);
-                        }
+                        selectedData.push(d);
                     })
+
                     //Bind data and create one path per GeoJSON feature
                     paths = svg.selectAll("path")
                             .data(selectedData)
                             .enter()
                             .append("path")
                             .attr("i",function(d,i){return i })
-                            .style("fill","lightyellow") // function(d, i) {return colors(i)})
+                            .style("fill","#f2f2f2") // function(d, i) {return colors(i)})
                             .style("stroke", "grey")
                             .attr("d", path)
                             .on("mouseover", stateIn)
@@ -203,62 +313,7 @@
 
                     //Murder	NegM	Forcib	NonForcib	Robbe	AggA	Burgla	Vehic	Arson
 
-                    var colorScale = d3.scale.linear().domain
-                        ([aveCrimeFactor, maxCrimeFactor]).range(["#8b0000", "#FFF0F0"])
-
-                    svg.selectAll("circle").remove();
-                    svg.selectAll("circle")
-                            .data(cityData)
-                            .enter()
-                            .append("circle")
-                            .attr("city", function(d){return d.City})
-                            .attr("cx", function(d) {
-                                var proj = projection([d.Longitude, d.Latitude]);
-                                if(!proj){
-                                    console.log("Invalid lat /long",d);
-                                    return null;
-                                }
-                                else {
-                                    return projection([d.Longitude, d.Latitude])[0];
-                                }
-
-                            })
-                            .attr("cy", function(d) {
-                                var proj = projection([d.Longitude, d.Latitude]);
-                                if(!proj){
-                                    console.log("Invalid lat /long",d);
-                                    return null;
-                                }
-                                else {
-                                    return proj[1];
-                                }
-                            })
-                            .attr("r",function(d,i){
-                                if (d.crimeFactor > aveCrimeFactor){
-                                    return 3
-                                }
-                                else {
-                                    return 1
-                                }
-                            })
-                            .style("fill", function(d,i){
-
-                                if (d.crimeFactor > aveCrimeFactor){
-                                    return colorScale(d.crimeFactor)
-                                }
-                                else {
-                                    return "green"
-                                }
-
-
-                            })
-                            .style("opacity", 1)
-                            .on('mouseover',showCityData)
-
-                    svg.selectAll("txt").remove();
-                    txt = svg.append("text")
-                            .style("visibility", "hidden")
-                            .attr("class","schoolLabel")
+                    paintCircles(aveCrimeFactor,maxCrimeFactor,cityDataSave);
 
                 });
             });
@@ -285,33 +340,65 @@
 
     }
 
-    function moveMap(){
+    function moveMap(scaleIn){
         //txt.style("visibility", "hidden")
-        /*projection.scale([scale])
+        zoomTimer = null;
+        moveTimer = null;
+
+
+        projection.scale([scale])
                 .translate([w/2 + parseInt(xOffset) ,h/2 + parseInt(yOffset)]);
         path.projection(projection)
         paths.attr("d",path)
 
         svg.selectAll("circle")
                 .attr("cx", function(d) {
-                    return projection([d.Longitude, d.Latitude])[0];
+
+                    var proj = projection([d.Longitude, d.Latitude]);
+                    if(!proj){
+                        return null;
+                    }
+                    else {
+                        return projection([d.Longitude, d.Latitude])[0];
+                    }
+
                 })
                 .attr("cy", function(d) {
-                    return projection([d.Longitude, d.Latitude])[1];
-                })*/
+                    var proj = projection([d.Longitude, d.Latitude]);
+                    if(!proj){
+                        return null;
+                    }
+                    else {
+                        return projection([d.Longitude, d.Latitude])[1];
+                    }
+                })
 
     }
 
+    var zoomTimer = null;
+    var moveTimer = null;
+
     function zoom(){
+
+        if(zoomTimer){
+            clearTimeout(zoomTimer);
+        }
+
         scale =   parseFloat(d3.event.scale)*w;
-        moveMap();
+
+        zoomTimer = setTimeout(moveMap(scale), 250);
     }
 
     function dragMove(){
 
         xOffset += parseFloat(d3.event.dx);
         yOffset += parseFloat(d3.event.dy);
-        moveMap();
+
+        if(moveTimer){
+            clearTimeout(moveTimer);
+        }
+
+        moveTimer = setTimeout(moveMap(scale), 250);
     }
 
     function stateIn(){
@@ -321,7 +408,6 @@
     function stateOut(){
         var ctrl = d3.select(this);
         var i=ctrl.attr("i");
-        //d3.select(this).style("fill",colors(i));
         d3.select(this).style("opacity","1");
     }
     function resize(){
