@@ -6,3 +6,9 @@ text.schoolLabel
 input.weightScale{
     width: 44px;
 }
+ .panel-info-darken {
+  background-color: #53A68D;
+ }
+ a.panel-info-darken:hover {
+   background-color: #bde6f2;
+}

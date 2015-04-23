@@ -6601,6 +6601,7 @@ main {
 aside {
   margin-top: 10px;
   padding: 1%;
+  height: 605px;
 }
 .nav > li {
   background: white;
@@ -6646,8 +6647,7 @@ a.panel-info:hover {
   background-color: #ceecf5;
 }
 .panel-info-darken {
-  /*background-color: #e7f6fa;*/
-  background-color: #53A68D;
+  background-color: #e7f6fa;
 }
 a.panel-info-darken:hover {
   background-color: #bde6f2;
@@ -6710,7 +6710,7 @@ fieldset[disabled] .btn-info-darken.active {
   text-align: center;
 }
 .main-bottom {
-  height: 360px;
+  height: 260px;
 }
 .main-center {
   padding: 10px;
@@ -6720,19 +6720,17 @@ fieldset[disabled] .btn-info-darken.active {
   padding: 10px;
   padding-bottom: 5px;
 }
-.aside-top {
-  height: 440px;
-}
 .aside-bottom {
-  height: 245px;
+  height: 300px;
+  padding-left: 10px;
 }
 .aside-center {
-  padding-left: 20px;
+  padding-left: 10px;
   padding-bottom: 5px;
 }
 .section {
   padding: 5px;
-  height: 200px;
+  height: 300px;
 }
 btn-small {
   width: padding:2px;
