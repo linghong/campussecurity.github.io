@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>CS171 Final Project</title>
 	<!-- Common CSS/JSS are incorporated into bootstrap.min.css -->
 	<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -13,11 +13,13 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <script src="js/d3.v3.js"></script>
+    
     <script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-    <script src="js/custom/mapViz.js"></script>
-    <script src="js/custom/weightsContainerViz.js"></script>
+	<script src="js/d3.v3.js"></script>
+	<script src="js/custom/mapViz.js"></script>
+    <script src="js/custom/weightsContainerViz.js">
+    </script>
 </head>
 
 <body>
@@ -41,52 +43,50 @@
 					<li><a href='index.html'>Home</a></li>
 					<li><a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a></li>
 					<li><a href='/doc/PressBook.md'>PressBook</a></li>
-                    <li><a href=''>Video</a></li>
-                    <li><a href='#' onclick="weightsContainerViz.showWeightsContainer()">Show</a></li>
-                    <li><a href='#'  onclick="weightsContainerViz.hideWeightsContainer()">Hide</a></li>
+                    <li><a href=''>Video</a></li>          
+                    <li><a href='#' id="hide">Hide</a></li>
+                    <li><a href='#' id="show">Show</a></li>
 				</ul>
 			</div>
 		</nav>
-		<div id="mapContainer" class="row panel-info-darken edge-height">
-			<main class="panel-info-darken" >
-				<div class="col-md-12 col-sm-12 panel panel-info">	<div class="col-md-12 col-sm-12 panel-calm main-center" id="map">  
-                </div>
+
+		<!--row3 Body Content 1-->
+		<div  class="row panel-info-darken edge-height">
+			<main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
+				<div class="col-md-12 col-sm-12 panel panel-info">	
+					<div class="col-md-12 col-sm-12 panel-calm main-center" id="map">  
+                	</div>
 					<div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-1" >
-					<div class="btn-group">
-                        <button class="btn btn-info-darken btn-sm" id="weapon">WEAPON</button>
-                        <button class="btn btn-info-darken btn-sm"id="drug">DRUG</button>
-                        <button class="btn btn-info-darken btn-sm" id="liquor">LIQUOR</button>
-                        <button class="btn btn-info-darken btn-sm" id="murd">MURD</button>
-                        <button class="btn btn-info-darken btn-sm" id="forcib">FORCIB</button>
-                        <button class="btn btn-info-darken btn-sm" id="nonfor">NONFOR</button>
-                        <button class="btn btn-info-darken btn-sm" id="robbe">ROBBE</button>
-                        <button class="btn btn-info-darken btn-sm" id="agg">AGG</button>
-                        <button class="btn btn-info-darken btn-sm" id="burgla">BURGLA</button>
-                        <button class="btn btn-info-darken btn-sm" id="vehic">VEHIC</button>
-                        <button class="btn btn-info-darken btn-sm" id="arson">ARSON</button>
-                    </div >
-					</div>					
-					
-					
-                    <div class="col-md-12 col-sm-12 panel panel-info main-bottom" id="history">
-                        <h4>Distribution of College Crime Data in the United States</h4>
-                    </div>					
+						<div class="btn-group">
+	                        <button class="btn btn-info-darken btn-sm" id="weapon">WEAPON</button>
+	                        <button class="btn btn-info-darken btn-sm"id="drug">DRUG</button>
+	                        <button class="btn btn-info-darken btn-sm" id="liquor">LIQUOR</button>
+	                        <button class="btn btn-info-darken btn-sm" id="murd">MURD</button>
+	                        <button class="btn btn-info-darken btn-sm" id="forcib">FORCIB</button>
+	                        <button class="btn btn-info-darken btn-sm" id="nonfor">NONFOR</button>
+	                        <button class="btn btn-info-darken btn-sm" id="robbe">ROBBE</button>
+	                        <button class="btn btn-info-darken btn-sm" id="agg">AGG</button>
+	                        <button class="btn btn-info-darken btn-sm" id="burgla">BURGLA</button>
+	                        <button class="btn btn-info-darken btn-sm" id="vehic">VEHIC</button>
+	                        <button class="btn btn-info-darken btn-sm" id="arson">ARSON</button>
+                    	</div >
+					</div>										
 				</div>							
 			</main>
 
-			<aside id="weightsSelector" class="col-md-4 col-sm-12 panel-info-darken" style="position: absolute; display: none;" >
+			<aside class="col-md-4 col-sm-12 panel-info-darken" id="aside">
 				<div class="col-md-12 col-sm-6 panel panel-info aside-center" id="box1">
                     <div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-2">
                         <div class="btn-group">
                             <button class="btn btn-info-darken btn-sm" id="crime">Campus Crime</button>
                             <button class="btn btn-info-darken btn-sm"id="arrest">Campus Arrest</button>                       
                         </div >
-                        <div class="btn-group">
+                        <div class="btn-group" id="weightsSelector">
                             <label class="control-label">Safe:<input id="rbSafe" type="radio" name="safeUnSafe" checked="true" onchange="mapViz.refreshData()"></label>
                             <label class="control-label">Unsafe:<input type="radio" name="safeUnSafe" onchange="mapViz.refreshData()"></label>
                         </div >
                     </div>
-                    <form role="form">                                            
+                    <form role="form" class="col-md-12 col-sm-12">                                            
                         <div class="form-group name-group">       
                             <label class="control-label">Murd:<input id="murdId" type="number" min="0" max="100" value="50" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="control-label">Neg:<input id="negId" type="number" min="0" max="100" value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
@@ -96,29 +96,52 @@
                             <label class="control-label">Burg:<input id="burgId" type="number" min="0" max="100"  value="25"class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="control-label">Vehic:<input id="vehicId" type="number" min="0" max="100"  value="100" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
     				    </div>
-                    </form>
-                    
+                    </form>                  
                 </div>
-				<div class="col-md-12 col-sm-6 panel panel-info aside-top" id="box2">
+                 <div class="col-md-12 col-sm-12 panel panel-info aside-bottom" id="box2">
 					<h4>College Crime Categorized by School Sectors</h4>
 				</div>							
 		 	</aside>
-		 	<section class="col-md-12 col-sm-12 panel-info-darken">
-		 		<div class="col-md-12  panel panel-info aside-bottom" id="box3">
-					<h1>box3</h1>
-				</div>
-		 	</section>
-		</div>
+
+		<!--row4 Body Content 2-->
+		<section class="row panel-info-darken">
+			<div class="col-md-6 col-sm-12 panel panel-info section" id="history">
+                        <h4>Distribution of College Crime Data in the United States</h4>
+            </div>	
+		 	<div class="col-md-6 panel panel-info section" id="box3">
+				<h1>box3</h1>
+			</div>
+		</section>
+
+	</div>
 			
 		<footer class="edge-width">
 			<a href="home.html">Home</a>|<a href="">About</a>|<a href=''>Contact</a>|
 		</footer>
 	</div> 
 	<script type="text/javascript">
-
-        var divPadding=20;
+       var divPadding=20;
         var mapViz = new MapViz();
-        var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
+      var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
+
+        $("#hide").hover(function(){
+        	$('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
+        	$('#aside').hide();
+        	$('#switch').text('Show');
+        }); 
+        $("#show").hover(function(){
+        	$('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
+        	$('#aside').show();
+        	$('#switch').text('Hide');      	
+        });
+   
+  d3.json("data/collegeaggregrate.json", function(error, data) {
+
+      // Parse date string into Javascript objects
+     console.log(data);
+
+  });
+
     </script>
 </body>
 </html>
