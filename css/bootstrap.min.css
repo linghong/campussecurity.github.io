@@ -6602,6 +6602,7 @@ aside {
   margin-top: 10px;
   padding: 1%;
   height: 605px;
+  text-align: center;
 }
 .nav > li {
   background: white;
@@ -6748,4 +6749,11 @@ Title , subtitle
 }
 subtitle {
   font-size: 22px;
+}
+/*-----------------------------------------------------------------
+buttons
+-------------------------------------------------------------------
+*/
+.center {
+  text-align: center;
 }
