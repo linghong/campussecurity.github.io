@@ -17,6 +17,7 @@
     <script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/d3.v3.js"></script>
+	<script src="js/queue.js"></script>
 	<script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js">
     </script>
@@ -95,7 +96,10 @@
                             <label class="control-label">Robbe:<input id="robbeId" type="number" min="0" max="100"  value="20" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="control-label">Burg:<input id="burgId" type="number" min="0" max="100"  value="25"class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="control-label">Vehic:<input id="vehicId" type="number" min="0" max="100"  value="100" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-    				    </div>
+
+                            AvgOfAggregatedAssault	AvgOfBurglary	AvgOfVehicularTheft	AvgArson	AvgOfWeaopn	AvgOfDrug	AvgOfLiquor
+
+                        </div>
                     </form>                  
                 </div>
                  <div class="col-md-12 col-sm-12 panel panel-info aside-bottom" id="box2">
@@ -121,8 +125,8 @@
 	</div> 
 	<script type="text/javascript">
        var divPadding=20;
-        var mapViz = new MapViz();
-      var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
+       var mapViz=null;
+        var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
 
         $("#hide").hover(function(){
         	$('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
@@ -135,12 +139,17 @@
         	$('#switch').text('Hide');      	
         });
    
-  d3.json("data/collegeaggregrate.json", function(error, data) {
 
-      // Parse date string into Javascript objects
-     console.log(data);
 
-  });
+      queue()
+      .defer(d3.json, 'data/us-states.json')
+      .defer(d3.tsv, 'data/zipCodeData.tsv')
+      .defer(d3.tsv, 'data/countryStatistics.tsv')
+      .await(dataLoaded);
+
+       function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics) {
+           mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics);
+       }
 
     </script>
 </body>
