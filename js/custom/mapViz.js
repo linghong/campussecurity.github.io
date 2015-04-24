@@ -1,5 +1,7 @@
 
-MapViz = function() {
+//TODO:
+//add parameters - data and width so that it can be passed from outside.
+MapViz = function(_statesData,_zipCodeData, _countryStatistics) {
     this.txt = null;
     // get the width of a D3 element
     this.width = $("#map").width();
@@ -8,15 +10,17 @@ MapViz = function() {
     this.xOffset = 0;
     this.yOffset =0;
     this.universityAggregateData =null;
-    this.cityDataSave  = null;
     this.path = null;
     this.paths = null;
     this.scaleFactor = 1.1;
     this.scale = this.scaleFactor * this.width;
-    this.multiplier = 10000;
+    this.multiplier = 1;
     this.zoomTimer = null;
     this.moveTimer = null;
     this.timerWaitPeriod = 100;
+    this.zipCodeData = _zipCodeData;
+    this.countryStatistics = _countryStatistics;
+    this.statesData = _statesData;
     this.init();
     this.loadData();
 };
@@ -93,7 +97,7 @@ MapViz.prototype.moveMap = function(scaleIn){
     that.svg.selectAll("circle")
         .attr("cx", function(d) {
 
-            var proj = that.projection([d.Longitude, d.Latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 return -1;
             }
@@ -103,7 +107,7 @@ MapViz.prototype.moveMap = function(scaleIn){
 
         })
         .attr("cy", function(d) {
-            var proj = that.projection([d.Longitude, d.Latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 return null;
             }
@@ -118,21 +122,21 @@ MapViz.prototype.refreshData = function () {
     var weights = weightsContainerViz.getWeights();
     var aveCrimeFactor= this.getAveCrimeFactor(this.universityAggregateData,weights)
     var minCrimeFactor = null, maxCrimeFactor = null;
-    var crimeFactors = this.processCrimeFactor(this.cityDataSave,weights);
+    var crimeFactors = this.processCrimeFactor(this.zipCodeData,weights);
     minCrimeFactor = crimeFactors.minCrimeFactor;
     maxCrimeFactor = crimeFactors.maxCrimeFactor;
-    this.paintCircles(aveCrimeFactor,maxCrimeFactor,this.cityDataSave);
+    this.paintCircles(aveCrimeFactor,maxCrimeFactor,this.zipCodeData);
 }
 
 
 MapViz.prototype.getAveCrimeFactor = function (univAggrData,weights){
 
-    return weights.murdFactor * univAggrData.totMurd +
-        weights.negligenceFactor * univAggrData.totNegM +
-        weights.forcibleCrimeFactor * univAggrData.totForcib +
-        weights.robberyCrimeFactor * univAggrData.totRobbe +
-        weights.burglaryCrimeFactor * univAggrData.totBurgla +
-        weights.vehicleCrimeFactor * univAggrData.totVehic;
+    return weights.murdFactor * univAggrData.avgAggMurderCount +
+        weights.negligenceFactor * univAggrData.avgAggNegligentManSlaughter +
+        weights.forcibleCrimeFactor * univAggrData.avgAggForcibleSexOffense +
+        weights.robberyCrimeFactor * univAggrData.avgAggRobbery +
+        weights.burglaryCrimeFactor * univAggrData.avgAggBurglary +
+        weights.vehicleCrimeFactor * univAggrData.avgAggVehicleTheft;
 };
 
 
@@ -143,13 +147,12 @@ MapViz.prototype.processCrimeFactor = function (cityData,weights){
     var that = this;
 
     cityData.forEach(function(d){
-        var crimeFactor = that.multiplier * weights.murdFactor * d.Murder +
-            that.multiplier * weights.negligenceFactor * d.NegM +
-            that.multiplier * weights.forcibleCrimeFactor * d.Forcib +
-            //that.multiplier * weights.nonForcibleCrimeFactor * d.NonForcib +
-            that.multiplier * weights.robberyCrimeFactor * d.Robbe +
-            that.multiplier * weights.burglaryCrimeFactor * d.Burgla +
-            that.multiplier * weights.vehicleCrimeFactor * d.Vehic;
+        var crimeFactor = that.multiplier * weights.murdFactor * d.avgMurderCount +
+            that.multiplier * weights.negligenceFactor * d.avgNegligentManSlaughter +
+            that.multiplier * weights.forcibleCrimeFactor * d.avgForcibleSexOffense +
+            that.multiplier * weights.robberyCrimeFactor * d.avgRobbery +
+            that.multiplier * weights.burglaryCrimeFactor * d.avgBurglary +
+            that.multiplier * weights.vehicleCrimeFactor * d.avgVehicleTheft;
         d["crimeFactor"] = crimeFactor;
 
         if (minCrimeFactor == null){
@@ -186,18 +189,18 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         .append("circle")
         .attr("city", function(d){return d.City})
         .attr("cx", function(d) {
-            var proj = that.projection([d.Longitude, d.Latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 console.log("Invalid lat /long",d);
                 return null;
             }
             else {
-                return that.projection([d.Longitude, d.Latitude])[0];
+                return that.projection([d.longitude, d.latitude])[0];
             }
 
         })
         .attr("cy", function(d) {
-            var proj = that.projection([d.Longitude, d.Latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 console.log("Invalid lat /long",d);
                 return null;
@@ -208,11 +211,19 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         })
         .attr("r",function(d,i){
 
+
             if (d.crimeFactor < aveCrimeFactor){
-                return 2 + 2 -(2 *(d.crimeFactor/aveCrimeFactor));
+
+                return 2+ 2*((aveCrimeFactor- d.crimeFactor)/aveCrimeFactor)
+                //return 1;
+                //return 2 + 2 -(2 *(d.crimeFactor/aveCrimeFactor));
             }
             else{
-                return 2 *(d.crimeFactor/aveCrimeFactor);
+
+                return 2+ 10*(d.crimeFactor/( maxCrimeFactor-aveCrimeFactor))
+                //console.log(2*(d.crimeFactor-aveCrimeFactor)/aveCrimeFactor)
+                //return 1;
+                //return 2 *(d.crimeFactor/aveCrimeFactor);
             }
 
 
@@ -264,63 +275,57 @@ MapViz.prototype.loadData = function (){
 
     var that = this;
 
-    d3.json("data/us-states.json", function(json) {
-        d3.tsv("data/univDataAgg.tsv", function(err,univAggrDataArray){
-            var weights = weightsContainerViz.getWeights();
-            that.universityAggregateData = univAggrDataArray[0];
+    var weights = weightsContainerViz.getWeights();
+    that.universityAggregateData = that.countryStatistics[0];
 
-            var aveCrimeFactor= that.getAveCrimeFactor(that.universityAggregateData,weights)
-            var minCrimeFactor = null, maxCrimeFactor = null;
-            d3.tsv("data/univData.tsv", function (err,cityData) {
-                that.cityDataSave = cityData;
-                var crimeFactors = that.processCrimeFactor(that.cityDataSave,weights);
-                minCrimeFactor = crimeFactors.minCrimeFactor;
-                maxCrimeFactor = crimeFactors.maxCrimeFactor;
+    var aveCrimeFactor= that.getAveCrimeFactor(that.universityAggregateData,weights)
+    var minCrimeFactor = null, maxCrimeFactor = null;
+    {
+        var crimeFactors = that.processCrimeFactor(that.zipCodeData,weights);
+        minCrimeFactor = crimeFactors.minCrimeFactor;
+        maxCrimeFactor = crimeFactors.maxCrimeFactor;
 
-                var selectedData = []
-                json.features.forEach(function(d){
-                    selectedData.push(d);
-                })
+        console.log(minCrimeFactor,maxCrimeFactor,aveCrimeFactor)
+        var selectedData = []
+        that.statesData.features.forEach(function(d){
+            selectedData.push(d);
+        })
 
-                //Bind data and create one path per GeoJSON feature
-                that.paths = that.svg.selectAll("path")
-                    .data(selectedData)
-                    .enter()
-                    .append("path")
-                    .attr("i",function(d,i){return i })
-                    //.style("fill","#f2f2f2") // function(d, i) {return colors(i)})
-                    .style("fill","#f2f2f2") // function(d, i) {return colors(i)})
-                    .style("stroke", "grey")
-                    .attr("d", that.path)
-                    .on("mouseover",stateIn)
-                    .on("mouseout",stateOut)
+        //Bind data and create one path per GeoJSON feature
+        that.paths = that.svg.selectAll("path")
+            .data(selectedData)
+            .enter()
+            .append("path")
+            .attr("i",function(d,i){return i })
+            .style("fill","#f2f2f2") // function(d, i) {return colors(i)})
+            .style("stroke", "grey")
+            .attr("d", that.path)
+            .on("mouseover",stateIn)
+            .on("mouseout",stateOut)
 
 
-                //Murder	NegM	Forcib	NonForcib	Robbe	AggA	Burgla	Vehic	Arson
+        //Murder	NegM	Forcib	NonForcib	Robbe	AggA	Burgla	Vehic	Arson
 
-                that.paintCircles(aveCrimeFactor,maxCrimeFactor,that.cityDataSave);
+        that.paintCircles(aveCrimeFactor,maxCrimeFactor,that.zipCodeData);
 
-            });
-        });
+    }
+    var rightEdge = $("#mapContainer").position().left+ $("#mapContainer").width();
+    var topEdge = $("#mapContainer").position().top -divPadding;
+    var leftPosition = rightEdge;
+    var widthOfWeightSel = $( "#weightsSelector").width();
+    $( "#weightsSelector" )
+        .css("left", leftPosition -divPadding);
+    $( "#weightsSelector" )
+        .css("top", topEdge);
 
-        var rightEdge = $("#mapContainer").position().left+ $("#mapContainer").width();
-        var topEdge = $("#mapContainer").position().top -divPadding;
-        var leftPosition = rightEdge;
-        var widthOfWeightSel = $( "#weightsSelector").width();
-        $( "#weightsSelector" )
-            .css("left", leftPosition -divPadding);
-        $( "#weightsSelector" )
-            .css("top", topEdge);
+    $( "#weightsSelector" )
+        .css("width", 0);
 
-        $( "#weightsSelector" )
-            .css("width", 0);
-
-        $( "#weightsSelector" )
-            .css("display", "block");
+    $( "#weightsSelector" )
+        .css("display", "block");
 
 
-        weightsContainerViz.showWeightsContainer();
-    });
+    weightsContainerViz.showWeightsContainer();
 
     function stateIn(){
         d3.select(this).style("opacity",".6");
