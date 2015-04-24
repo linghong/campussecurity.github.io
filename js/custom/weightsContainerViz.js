@@ -42,8 +42,9 @@ WeightContainerViz.prototype.getWeights = function(){
     var robberyCrimeFactor = parseInt($("#robbeId").val());
     var burglaryCrimeFactor = parseInt($("#murdId").val());
     var vehicleCrimeFactor = parseInt($("#vehicId").val());
+    var topBottom = parseInt($("#topBottom").val());
 
-
+    $("#topBottomLabel").text(topBottom)
     return {
         murdFactor:murdFactor,
         negligenceFactor:negligenceFactor,
@@ -51,7 +52,8 @@ WeightContainerViz.prototype.getWeights = function(){
         //nonForcibleCrimeFactor:nonForcibleCrimeFactor,
         robberyCrimeFactor:robberyCrimeFactor,
         burglaryCrimeFactor:burglaryCrimeFactor,
-        vehicleCrimeFactor:vehicleCrimeFactor
+        vehicleCrimeFactor:vehicleCrimeFactor,
+        topBottom:topBottom
     }
 }
 
