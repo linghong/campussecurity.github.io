@@ -161,6 +161,33 @@
 
   });
     */
+        var divPadding=20;
+        var mapViz=null;
+        var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
+
+        $("#hide").hover(function(){
+            $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
+            $('#aside').hide();
+            $('#switch').text('Show');
+        });
+        $("#show").hover(function(){
+            $('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
+            $('#aside').show();
+            $('#switch').text('Hide');
+        });
+
+
+
+        queue()
+                .defer(d3.json, 'data/us-states.json')
+                .defer(d3.tsv, 'data/zipCodeData.tsv')
+                .defer(d3.tsv, 'data/countryStatistics.tsv')
+                .await(dataLoaded);
+
+        function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics) {
+            mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics);
+        }
+
     </script>
 </body>
 </html>
