@@ -21,6 +21,7 @@ MapViz = function(_statesData,_zipCodeData, _countryStatistics) {
     this.zipCodeData = _zipCodeData;
     this.countryStatistics = _countryStatistics;
     this.statesData = _statesData;
+    this.totalZips = _zipCodeData.length;
     this.init();
     this.loadData();
 };
@@ -125,7 +126,7 @@ MapViz.prototype.refreshData = function () {
     var crimeFactors = this.processCrimeFactor(this.zipCodeData,weights);
     minCrimeFactor = crimeFactors.minCrimeFactor;
     maxCrimeFactor = crimeFactors.maxCrimeFactor;
-    this.paintCircles(aveCrimeFactor,maxCrimeFactor,this.zipCodeData);
+    this.paintCircles(aveCrimeFactor,maxCrimeFactor,this.zipCodeData,weights.topBottom);
 }
 
 
@@ -176,7 +177,7 @@ MapViz.prototype.processCrimeFactor = function (cityData,weights){
     }
 }
 
-MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData){
+MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData,topBottom){
     var that = this;
 
     var colorScale = d3.scale.linear().domain
@@ -211,19 +212,25 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         })
         .attr("r",function(d,i){
 
+            if (d.rank <topBottom || d.rank> that.totalZips-topBottom){
+
 
             if (d.crimeFactor < aveCrimeFactor){
 
-                return 2+ 2*((aveCrimeFactor- d.crimeFactor)/aveCrimeFactor)
+                return 2+ 5*((aveCrimeFactor- d.crimeFactor)/aveCrimeFactor)
                 //return 1;
                 //return 2 + 2 -(2 *(d.crimeFactor/aveCrimeFactor));
             }
             else{
 
-                return 2+ 10*(d.crimeFactor/( maxCrimeFactor-aveCrimeFactor))
+                return 2+ 5*(d.crimeFactor/( maxCrimeFactor-aveCrimeFactor))
                 //console.log(2*(d.crimeFactor-aveCrimeFactor)/aveCrimeFactor)
                 //return 1;
                 //return 2 *(d.crimeFactor/aveCrimeFactor);
+            }
+            }
+            else{
+                return 0;
             }
 
 
@@ -244,7 +251,7 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
                 return .5
             }
             else {
-                return .3
+                return .5
             }
         })
         .on('mouseover',showCityData)
@@ -282,6 +289,11 @@ MapViz.prototype.loadData = function (){
     var minCrimeFactor = null, maxCrimeFactor = null;
     {
         var crimeFactors = that.processCrimeFactor(that.zipCodeData,weights);
+        that.zipCodeData.sort(function(a,b){return d3.ascending(a.crimeFactor, b.crimeFactor) });
+        that.zipCodeData.forEach(function(d,i){
+            d["rank"]=i;
+        })
+
         minCrimeFactor = crimeFactors.minCrimeFactor;
         maxCrimeFactor = crimeFactors.maxCrimeFactor;
 
@@ -306,7 +318,7 @@ MapViz.prototype.loadData = function (){
 
         //Murder	NegM	Forcib	NonForcib	Robbe	AggA	Burgla	Vehic	Arson
 
-        that.paintCircles(aveCrimeFactor,maxCrimeFactor,that.zipCodeData);
+        that.paintCircles(aveCrimeFactor,maxCrimeFactor,that.zipCodeData,weights.topBottom);
 
     }
     var rightEdge = $("#mapContainer").position().left+ $("#mapContainer").width();
