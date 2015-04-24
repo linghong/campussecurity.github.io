@@ -17,7 +17,6 @@
     <script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/d3.v3.js"></script>
-    <script src="js/queue.js"></script>
 	<script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js">
     </script>
@@ -122,9 +121,8 @@
 	</div> 
 	<script type="text/javascript">
        var divPadding=20;
-       //var mapViz = new MapViz();
-       var mapViz = null;
-       var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
+        var mapViz = new MapViz();
+      var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
 
         $("#hide").hover(function(){
         	$('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
@@ -136,17 +134,7 @@
         	$('#aside').show();
         	$('#switch').text('Hide');      	
         });
-
-       queue()
-               .defer(d3.json, 'data/us-states.json')
-               .defer(d3.tsv, 'data/zipCodeData.tsv')
-               .defer(d3.tsv, 'data/countryStatistics.tsv')
-               .await(dataLoaded);
-
-       function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics) {
-           mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics);
-       }
-
+   
   d3.json("data/collegeaggregrate.json", function(error, data) {
 
       // Parse date string into Javascript objects
