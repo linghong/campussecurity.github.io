@@ -286,7 +286,7 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
                 return .5
             }
         })
-        .on('mouseover',showCityData)
+        .on('mouseover',showDetails)
         .on('click',showDetails);
 
 
