@@ -18,9 +18,9 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/d3.v3.js"></script>
 	<script src="js/queue.js"></script>
+	<script src="js/schoolCrimeData.js"></script>
 	<script src="js/custom/mapViz.js"></script>
-    <script src="js/custom/weightsContainerViz.js">
-    </script>
+    <script src="js/custom/weightsContainerViz.js"></script>
 </head>
 
 <body>
@@ -111,10 +111,16 @@
                             <label class="col-sm-4 control-label">Vehic:<input id="vehicId" type="number" min="0" max="100"  value="100" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
     				    </div>
                         <div class="row form-group name-group">
+                            <label id="debugInfo"></label>
+                        </div>
+                        <div class="row form-group name-group">
+                            <label class="col-sm-4">Bottom:
+                                <input id="bottomCount" type="number" min="100" max="3500"  value="10"
+                                       class="form-control" step="100" onchange="mapViz.refreshData()"></label>
                             <label class="col-sm-4"></label>
-                            <label class="col-sm-4">Top/Bottom:
-                                <input id="topBottom" type="number" min="10" max="3500"  value="10"
-                                       class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4">Top:
+                                <input id="topCount" type="number" min="100" max="3500"  value="10"
+                                       class="form-control" step="100" onchange="mapViz.refreshData()"></label>
                         </div>
                     </form>
                   
@@ -188,10 +194,11 @@
                 .defer(d3.json, 'data/us-states.json')
                 .defer(d3.tsv, 'data/zipCodeData.tsv')
                 .defer(d3.tsv, 'data/countryStatistics.tsv')
+                .defer(d3.tsv, 'data/stateOffsets.tsv')
                 .await(dataLoaded);
 
-        function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics) {
-            mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics);
+        function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics, _stateOffsets) {
+            mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics, _stateOffsets);
         }
 
     </script>

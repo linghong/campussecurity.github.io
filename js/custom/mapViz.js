@@ -1,8 +1,11 @@
 
 //TODO:
 //add parameters - data and width so that it can be passed from outside.
-MapViz = function(_statesData,_zipCodeData, _countryStatistics) {
+MapViz = function(_statesData,_zipCodeData, _countryStatistics,_stateOffsets) {
     this.txt = null;
+    this.txtBox = null;
+    this.stateOffsets=_stateOffsets;
+    this.stateFillColor = "#f2f2f2";
     // get the width of a D3 element
     this.width = $("#map").width();
     this.mapRatio = 0.6;
@@ -14,10 +17,15 @@ MapViz = function(_statesData,_zipCodeData, _countryStatistics) {
     this.paths = null;
     this.scaleFactor = 1.1;
     this.scale = this.scaleFactor * this.width;
+    this.scaleLast = this.scale;
     this.multiplier = 1;
     this.zoomTimer = null;
     this.moveTimer = null;
     this.timerWaitPeriod = 100;
+
+    this.hideCaptionTimer = null;
+    this.hideCaptionWaitPeriod = 2500;
+
     this.zipCodeData = _zipCodeData;
     this.countryStatistics = _countryStatistics;
     this.statesData = _statesData;
@@ -54,7 +62,8 @@ MapViz.prototype.init = function(){
 
         that.scale =   parseFloat(d3.event.scale)* that.width;
 
-        that.zoomTimer = setTimeout(that.moveMap(that.scale), that.timerWaitPeriod);
+
+        that.zoomTimer = setTimeout(that.moveMap(that.scale,true), that.timerWaitPeriod);
     }
 
     function dragMove(){
@@ -66,7 +75,7 @@ MapViz.prototype.init = function(){
             clearTimeout(that.moveTimer);
         }
 
-        that.moveTimer = setTimeout(that.moveMap(that.scale), that.timerWaitPeriod);
+        that.moveTimer = setTimeout(that.moveMap(that.scale,false), that.timerWaitPeriod);
     }
 
 
@@ -84,10 +93,20 @@ MapViz.prototype.init = function(){
 
 }
 
-MapViz.prototype.moveMap = function(scaleIn){
+MapViz.prototype.moveMap = function(scaleIn,reOffset){
     var that = this;
+
+    if(reOffset){
+        that.xOffset *= (that.scaleLast / scaleIn);
+        that.yOffset *= (that.scaleLast / scaleIn);
+
+    }
     that.zoomTimer = null;
     that.moveTimer = null;
+
+    that.scaleLast = scaleIn;
+
+    $("#debugInfo").text(that.scale +", " + that.xOffset +", " + that.yOffset)
 
 
     that.projection.scale([that.scale])
@@ -120,13 +139,16 @@ MapViz.prototype.moveMap = function(scaleIn){
 }
 
 MapViz.prototype.refreshData = function () {
+    this.svg.selectAll("text").remove();
+    this.svg.selectAll("rect").remove();
+
     var weights = weightsContainerViz.getWeights();
     var aveCrimeFactor= this.getAveCrimeFactor(this.universityAggregateData,weights)
     var minCrimeFactor = null, maxCrimeFactor = null;
     var crimeFactors = this.processCrimeFactor(this.zipCodeData,weights);
     minCrimeFactor = crimeFactors.minCrimeFactor;
     maxCrimeFactor = crimeFactors.maxCrimeFactor;
-    this.paintCircles(aveCrimeFactor,maxCrimeFactor,this.zipCodeData,weights.topBottom);
+    this.paintCircles(aveCrimeFactor,maxCrimeFactor,this.zipCodeData,weights.topCount,weights.bottomCount);
 }
 
 
@@ -148,13 +170,17 @@ MapViz.prototype.processCrimeFactor = function (cityData,weights){
     var that = this;
 
     cityData.forEach(function(d){
+
         var crimeFactor = that.multiplier * weights.murdFactor * d.avgMurderCount +
             that.multiplier * weights.negligenceFactor * d.avgNegligentManSlaughter +
             that.multiplier * weights.forcibleCrimeFactor * d.avgForcibleSexOffense +
             that.multiplier * weights.robberyCrimeFactor * d.avgRobbery +
             that.multiplier * weights.burglaryCrimeFactor * d.avgBurglary +
             that.multiplier * weights.vehicleCrimeFactor * d.avgVehicleTheft;
+
         d["crimeFactor"] = crimeFactor;
+        d["cityName"] = d.city + ", " + d.state + "-" + d.zip;
+
 
         if (minCrimeFactor == null){
             minCrimeFactor = crimeFactor;
@@ -177,7 +203,7 @@ MapViz.prototype.processCrimeFactor = function (cityData,weights){
     }
 }
 
-MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData,topBottom){
+MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData,topCount, bottomCount){
     var that = this;
 
     var colorScale = d3.scale.linear().domain
@@ -188,7 +214,9 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         .data(cityData)
         .enter()
         .append("circle")
-        .attr("city", function(d){return d.City})
+        .attr("cityName", function(d){return d.cityName})
+        .attr("zipCodeId", function(d){return d.zipCodeId})
+        .attr("rank", function(d){return d.rank})
         .attr("cx", function(d) {
             var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
@@ -212,27 +240,30 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         })
         .attr("r",function(d,i){
 
-            if (d.rank <topBottom || d.rank> that.totalZips-topBottom){
+            var r;
+            try {
+                if (d.rank <=topCount || d.rank>= that.totalZips-bottomCount ){
+                    if (d.crimeFactor < aveCrimeFactor){
+                        r =  2+ 5*((aveCrimeFactor- d.crimeFactor)/aveCrimeFactor)
+                        if(isNaN(r)){
 
+                            r=10;
+                        }
+                    }
+                    else{
 
-            if (d.crimeFactor < aveCrimeFactor){
+                        r = 2+ 5*(d.crimeFactor/( maxCrimeFactor-aveCrimeFactor))
+                    }
+                }
+                else{
+                    r=0;
+                }
 
-                return 2+ 5*((aveCrimeFactor- d.crimeFactor)/aveCrimeFactor)
-                //return 1;
-                //return 2 + 2 -(2 *(d.crimeFactor/aveCrimeFactor));
             }
-            else{
-
-                return 2+ 5*(d.crimeFactor/( maxCrimeFactor-aveCrimeFactor))
-                //console.log(2*(d.crimeFactor-aveCrimeFactor)/aveCrimeFactor)
-                //return 1;
-                //return 2 *(d.crimeFactor/aveCrimeFactor);
+            catch (e){
+                r=10;
             }
-            }
-            else{
-                return 0;
-            }
-
+            return r;
 
         })
         .style("fill", function(d,i){
@@ -256,23 +287,59 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         })
         .on('mouseover',showCityData)
 
-    d3.selectAll("circle")[0].sort(function(d){return d3.ascending(d.crimeFactor)});
 
-    this.svg.selectAll("txt").remove();
     this.txt = this.svg.append("text")
         .style("visibility", "hidden")
         .attr("class","schoolLabel")
+    that.txtBox = that.svg.insert('rect', 'text');
 
     function showCityData(){
+        if(that.hideCaptionTimer){
+          clearTimeout(that.hideCaptionTimer);
+        }
         var circle = d3.select(this);
+        var caption = "(" +circle.attr("rank")+ " / " + that.totalZips +") "
+            +circle.attr("cityName")
+
+        var zipCodeId = circle.attr("zipCodeId");
+        var zipData = zips[parseInt(zipCodeId)-1];
+
+        if (zipData) {
+            if(zipData.zip.schools.length>1){
+                caption += " (" +zipData.zip.schools.length + " schools)"
+            }
+        }
+
 
         that.txt.style("visibility", "visible")
-            .transition()
-            .delay(100)
-            .text(circle.attr("city"))
-            .attr("x", circle.attr("cx")+5)
-            .attr("y", circle.attr("cy") +5)
+            .text(caption)
+            .attr("x", circle.attr("cx")+ 10)
+            .attr("y", circle.attr("cy") - 10)
+            .attr('class','schoolLabel');
 
+        var padding=5;
+        var ctm = that.txt[0][0].getCTM();
+        var bbox= that.txt[0][0].getBBox()
+        that.txtBox
+            .attr('x', bbox.x-padding).attr('y', bbox.y-padding).attr('width', bbox.width+2*padding)
+            .attr('height', bbox.height+2*padding)
+
+        var deltaX =  parseFloat(that.svg.attr('width')) - (bbox.x +bbox.width);
+        if(deltaX <0){
+            that.txtBox.attr('x',parseFloat(that.txtBox.attr('x')) +deltaX);
+            that.txt.attr('x',parseFloat(that.txt.attr('x')) +deltaX);
+        }
+        that.txtBox.style("visibility", "visible")
+
+        that.hideCaptionTimer = setTimeout(hideCaption, that.hideCaptionWaitPeriod);
+
+    }
+
+    function hideCaption(){
+        that.txt.style("visibility", "hidden")
+        that.txtBox.style("visibility", "hidden")
+
+        that.hideCaptionTimer = null;
     }
 }
 
@@ -291,13 +358,12 @@ MapViz.prototype.loadData = function (){
         var crimeFactors = that.processCrimeFactor(that.zipCodeData,weights);
         that.zipCodeData.sort(function(a,b){return d3.ascending(a.crimeFactor, b.crimeFactor) });
         that.zipCodeData.forEach(function(d,i){
-            d["rank"]=i;
+            d["rank"]=i+1;
         })
 
         minCrimeFactor = crimeFactors.minCrimeFactor;
         maxCrimeFactor = crimeFactors.maxCrimeFactor;
 
-        console.log(minCrimeFactor,maxCrimeFactor,aveCrimeFactor)
         var selectedData = []
         that.statesData.features.forEach(function(d){
             selectedData.push(d);
@@ -309,16 +375,18 @@ MapViz.prototype.loadData = function (){
             .enter()
             .append("path")
             .attr("i",function(d,i){return i })
-            .style("fill","#f2f2f2") // function(d, i) {return colors(i)})
+            .attr("id",function(d,i){return d.id })
+            .style("fill",that.stateFillColor) // function(d, i) {return colors(i)})
             .style("stroke", "grey")
             .attr("d", that.path)
+            .on("click",stateClicked)
             .on("mouseover",stateIn)
             .on("mouseout",stateOut)
 
 
         //Murder	NegM	Forcib	NonForcib	Robbe	AggA	Burgla	Vehic	Arson
 
-        that.paintCircles(aveCrimeFactor,maxCrimeFactor,that.zipCodeData,weights.topBottom);
+        that.paintCircles(aveCrimeFactor,maxCrimeFactor,that.zipCodeData,weights.topCount,weights.bottomCount);
 
     }
     var rightEdge = $("#mapContainer").position().left+ $("#mapContainer").width();
@@ -339,15 +407,31 @@ MapViz.prototype.loadData = function (){
 
     weightsContainerViz.showWeightsContainer();
 
+
+    function stateClicked(){
+        var stateId = d3.select(this).attr("id")
+
+
+        for (var i=0; i<that.stateOffsets.length; i++){
+            if (that.stateOffsets[i].stateId ==stateId ){
+                that.scale = that.stateOffsets[i].scale;
+                that.xOffset = that.stateOffsets[i].xOffset;
+                that.yOffset = that.stateOffsets[i].yOffset;
+                that.moveMap(that.scale,false);
+                break;
+            }
+        }
+    }
+
     function stateIn(){
-        d3.select(this).style("opacity",".6");
+        d3.select(this).style("fill","khaki");
         weightsContainerViz.hideWeightsContainer();
     }
 
     function stateOut(){
         var ctrl = d3.select(this);
         var i=ctrl.attr("i");
-        d3.select(this).style("opacity","1");
+        d3.select(this).style("fill",that.stateFillColor);
     }
 
 }
