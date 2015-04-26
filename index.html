@@ -203,9 +203,11 @@
                 .defer(d3.tsv, 'data/zipCodeData.tsv')
                 .defer(d3.tsv, 'data/countryStatistics.tsv')
                 .defer(d3.tsv, 'data/stateOffsets.tsv')
+                .defer(d3.json, 'data/crimedata.json')
                 .await(dataLoaded);
 
-        function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics, _stateOffsets) {
+        function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics, _stateOffsets,_crimeData) {
+            console.log(_crimeData)
             mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics, _stateOffsets);
         }
 
