@@ -21,6 +21,7 @@ MapViz = function(_statesData,_zipCodeData, _countryStatistics,_stateOffsets) {
     this.multiplier = 1;
     this.zoomTimer = null;
     this.moveTimer = null;
+    this.showDetailTimer=null;
     this.timerWaitPeriod = 100;
 
     this.hideCaptionTimer = null;
@@ -36,6 +37,7 @@ MapViz = function(_statesData,_zipCodeData, _countryStatistics,_stateOffsets) {
 };
 
 MapViz.prototype.init = function(){
+    this.hideDetails();
     var that = this;
     this.projection = d3.geo.albersUsa()
         .translate([this.width/2, this.height/2]).scale([this.scaleFactor*this.width]);
@@ -286,8 +288,8 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
                 return .5
             }
         })
-        .on('mouseover',showDetails)
-        .on('click',showDetails);
+        .on('mouseover',showCityData)
+        .on('mouseout',outFromZipCode)
 
 
     this.txt = this.svg.append("text")
@@ -299,12 +301,18 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         return Math.round(data/100);
     }
 
-    function showDetails(){
+    function outFromZipCode(){
+        if(that.showDetailTimer){
+            clearTimeout(that.showDetailTimer);
+        }
+    }
+    function showDetails(circle){
+        that.showDetailTimer = null;
         if (that.hideDetailTimer){
             clearTimeout(that.hideDetailTimer)
         }
 
-        var circle = d3.select(this);
+
         var caption = "";
 
         var zipCodeId = circle.attr("zipCodeId");
@@ -314,6 +322,11 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
 
             caption = "<p class='univCity'>" + zipData.zip.city + "," + zipData.zip.state + "-" +
                         zipData.zip.zip + "</p>"
+
+            if(zipData.zip.schools.length>1){
+                caption += "&nbsp;&nbsp;" +zipData.zip.schools.length +" Schools<br>"
+            }
+            caption += "&nbsp;&nbsp;Rank: " +circle.attr("rank") + " / " + that.totalZips +"<br>"
 
             zipData.zip.schools.forEach(function(d){
                 caption += "<p class='univName'>" + d.name + "</p>";
@@ -400,7 +413,9 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         }
         that.txtBox.style("visibility", "visible")
 
-        that.hideCaptionTimer = setTimeout(hideCaption, that.hideCaptionWaitPeriod);
+        that.hideCaptionTimer = setTimeout(hideCaption, 1100);
+
+        that.showDetailTimer = setTimeout(function(){showDetails(circle)}, 1000)
 
     }
 
