@@ -1,6 +1,7 @@
 text.schoolLabel
 {
-    color: #ffffff;
+    fill: #ffffff;
+    font-size: 8pt;
 }
 
 input.weightScale{

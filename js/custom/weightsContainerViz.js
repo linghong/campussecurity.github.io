@@ -40,11 +40,11 @@ WeightContainerViz.prototype.getWeights = function(){
     var negligenceFactor = parseInt($("#negId").val());
     var forcibleCrimeFactor = parseInt($("#forcibId").val());
     var robberyCrimeFactor = parseInt($("#robbeId").val());
-    var burglaryCrimeFactor = parseInt($("#murdId").val());
+    var burglaryCrimeFactor = parseInt($("#burgId").val());
     var vehicleCrimeFactor = parseInt($("#vehicId").val());
-    var topBottom = parseInt($("#topBottom").val());
+    var topCount = parseInt($("#topCount").val());
+    var bottomCount = parseInt($("#bottomCount").val());
 
-    $("#topBottomLabel").text(topBottom)
     return {
         murdFactor:murdFactor,
         negligenceFactor:negligenceFactor,
@@ -53,7 +53,8 @@ WeightContainerViz.prototype.getWeights = function(){
         robberyCrimeFactor:robberyCrimeFactor,
         burglaryCrimeFactor:burglaryCrimeFactor,
         vehicleCrimeFactor:vehicleCrimeFactor,
-        topBottom:topBottom
+        topCount:topCount,
+        bottomCount:bottomCount
     }
 }
 
