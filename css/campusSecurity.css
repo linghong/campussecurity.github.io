@@ -13,3 +13,21 @@ input.weightScale{
  a.panel-info-darken:hover {
    background-color: #bde6f2;
 }
+
+ div#univDataDiv{
+     padding: 10px;
+     border: 1px solid gray;
+ }
+
+div#univDataDivText{
+    font-size: 7pt;
+    overflow: scroll;
+}
+
+.univName{
+ font-size: 10pt;
+}
+
+.divCloser{
+    cursor: hand;
+}
