@@ -24,6 +24,14 @@
 </head>
 
 <body>
+    <div id="floatingDiv"
+         style="background-color: #999; z-index: 100;position: absolute;opacity: .2 ">
+    </div>
+    <div id="univDataDiv" style="z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
+        <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
+        <div id="univDataDivText"></div>
+    </div>
+
 	<div class="container">	
 		<!--row1: Site Name-->
 		<header class="row " >

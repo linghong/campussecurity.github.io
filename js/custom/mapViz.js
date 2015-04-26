@@ -24,6 +24,7 @@ MapViz = function(_statesData,_zipCodeData, _countryStatistics,_stateOffsets) {
     this.timerWaitPeriod = 100;
 
     this.hideCaptionTimer = null;
+    this.hideDetailTimer = null;
     this.hideCaptionWaitPeriod = 2500;
 
     this.zipCodeData = _zipCodeData;
@@ -44,10 +45,10 @@ MapViz.prototype.init = function(){
         .attr("width", this.width)
         .attr("height", this.height);
 
-    this.drag = d3.behavior.drag()
-        .on("drag", dragMove);
+    this.drag = d3.behavior.drag().on("drag", dragMove);
     this.svg.call(d3.behavior.zoom().scaleExtent([1, this.scaleFactor*this.width]).on("zoom", zoom));
     this.svg.call(this.drag);
+
     $( window ).resize(function() {
         that.svg.call(resize);
     });
@@ -286,12 +287,80 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
             }
         })
         .on('mouseover',showCityData)
+        .on('click',showDetails);
 
 
     this.txt = this.svg.append("text")
         .style("visibility", "hidden")
         .attr("class","schoolLabel")
     that.txtBox = that.svg.insert('rect', 'text');
+
+    function formatData(data){
+        return Math.round(data/100);
+    }
+
+    function showDetails(){
+        if (that.hideDetailTimer){
+            clearTimeout(that.hideDetailTimer)
+        }
+
+        var circle = d3.select(this);
+        var caption = "";
+
+        var zipCodeId = circle.attr("zipCodeId");
+        var zipData = zips[parseInt(zipCodeId)-1];
+
+        if (zipData) {
+
+            caption = "<p class='univCity'>" + zipData.zip.city + "," + zipData.zip.state + "-" +
+                        zipData.zip.zip + "</p>"
+
+            zipData.zip.schools.forEach(function(d){
+                caption += "<p class='univName'>" + d.name + "</p>";
+
+                caption += "Murders:" + formatData(d.avgMurderCount)+ "<br>"
+                caption += "Negligent Manslaughter:" + formatData(d.avgNegligentManlaughter)+ "<br>"
+                caption += "Forcible Sex Assault:" + formatData(d.avgForcibleSexOffense)+ "<br>"
+                caption += "Non Forcible Sex Assault:" + formatData(d.avgNonForcibleSexOffense)+ "<br>"
+                caption += "Robbery:" + formatData(d.avgRobbery)+ "<br>"
+                caption += "Aggravated Assault:" + formatData(d.avgAggravatedAssault)+ "<br>"
+                caption += "Burglary:" + formatData(d.avgBurglary)+ "<br>"
+                caption += "Vehicle Theft:" + formatData(d.avgVehicleTheft)+ "<br>"
+                caption += "Arson:" + formatData(d.avgArson)+ "<br>"
+                caption += "Weapons Offense:" + formatData(d.avgWeaponOffence)+ "<br>"
+                caption += "Drug Violations:" + formatData(d.avgDrugViolations)+ "<br>"
+                caption += "Liquor Violations:" + formatData(d.avgLiquorViolations)+ "<br>"
+
+
+            })
+        }
+        else{
+            caption = "zip code data for " + zipCodeId +" not found";
+        }
+
+
+        $("#floatingDiv").width(that.svg.attr("width"))
+        $("#floatingDiv").height(that.svg.attr("height"))
+        $("#floatingDiv").css("top",$(that.svg[0][0]).offset().top)
+        $("#floatingDiv").css("left",$(that.svg[0][0]).offset().left)
+
+        var dataHeight = parseFloat(that.svg.attr("height"))/2;
+        var dataWidth = parseFloat(that.svg.attr("width"))/2;
+
+        $("#univDataDiv").css("top",$(that.svg[0][0]).offset().top + dataHeight/2)
+        $("#univDataDiv").css("left",$(that.svg[0][0]).offset().left + dataWidth/2)
+
+        $("#univDataDiv").width(dataWidth)
+        $("#univDataDiv").height(dataHeight)
+        $("#univDataDivText").height(dataHeight-10)
+        $("#univDataDivText").html(caption);
+
+        $("#floatingDiv").show()
+        $("#univDataDiv").show()
+
+        that.hideDetailTimer = setTimeout(that.hideDetails,10*that.hideCaptionWaitPeriod);
+    }
+
 
     function showCityData(){
         if(that.hideCaptionTimer){
@@ -343,6 +412,10 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
     }
 }
 
+MapViz.prototype.hideDetails = function(){
+    $("#floatingDiv").hide()
+    $("#univDataDiv").hide()
+}
 
 
 MapViz.prototype.loadData = function (){
@@ -379,7 +452,7 @@ MapViz.prototype.loadData = function (){
             .style("fill",that.stateFillColor) // function(d, i) {return colors(i)})
             .style("stroke", "grey")
             .attr("d", that.path)
-            .on("click",stateClicked)
+            //.on("click",stateClicked)
             .on("mouseover",stateIn)
             .on("mouseout",stateOut)
 
