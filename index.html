@@ -22,6 +22,7 @@
 	<script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
+    <script src="js/custom/colSectorsViz.js"></script>
 </head>
 
 <body>
@@ -142,10 +143,10 @@
 		 	</aside>
 
 			<section class="col-md-12 col-sm-12 panel-info-darken">
-				<div class="col-md-7 col-sm-12 panel panel-info section" id="usstates">
+				<div class="col-md-8 col-sm-12 panel panel-info section" id="usstates">
 	                        <h4>Distribution of College Crime Data in the 50 United States</h4>
 	            </div>	
-			 	<div class="col-md-5 col-sm-12 panel panel-info section" id="crimehistory">
+			 	<div class="col-md-4 col-sm-12 panel panel-info section" id="crimehistory">
 					<h4>Historical Crime Data By College Secotors(2006-2013)</h4>
 				</div>
 			</section>
@@ -159,33 +160,12 @@
 	</div> 
 
 	<script type="text/javascript">
-        /*
-       var divPadding=20;
-        var mapViz = new MapViz();
-      var weightsContainerViz = new WeightContainerViz($("#aside").width());
-
-        $("#hide").hover(function(){
-        	$('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
-        	$('#aside').hide();
-        	$('#switch').text('Show');
-        });
-        $("#show").hover(function(){
-        	$('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
-        	$('#aside').show();
-        	$('#switch').text('Hide');
-        });
-
-  d3.json("data/collegeaggregrate.json", function(error, data) {
-
-      // Parse date string into Javascript objects
-     console.log(data);
-
-  });
-    */
+ 
         var divPadding=20;
         var mapViz=null;
         var crimeAnalyzer = null;
         var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
+        var colSectorsViz =null;
 
         $("#hide").hover(function(){
             $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
@@ -211,6 +191,7 @@
         function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics, _stateOffsets,_crimeData) {
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
             mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics, _stateOffsets);
+            colSectorsViz =new ColSectorsViz(_crimeData, "weapon");
         }
 
     </script>
