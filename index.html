@@ -21,13 +21,14 @@
 	<script src="js/schoolCrimeData.js"></script>
 	<script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js"></script>
+    <script src="js/custom/crimeDataAnalyzer.js"></script>
 </head>
 
 <body>
     <div id="floatingDiv"
          style="background-color: #999; z-index: 100;position: absolute;opacity: .2 ">
     </div>
-    <div id="univDataDiv" style="z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
+    <div id="univDataDiv" style="display: none; z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
         <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
         <div id="univDataDivText"></div>
     </div>
@@ -183,6 +184,7 @@
     */
         var divPadding=20;
         var mapViz=null;
+        var crimeAnalyzer = null;
         var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
 
         $("#hide").hover(function(){
@@ -207,7 +209,7 @@
                 .await(dataLoaded);
 
         function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics, _stateOffsets,_crimeData) {
-            console.log(_crimeData)
+            crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
             mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics, _stateOffsets);
         }
 

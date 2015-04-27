@@ -42,6 +42,13 @@ WeightContainerViz.prototype.getWeights = function(){
     var robberyCrimeFactor = parseInt($("#robbeId").val());
     var burglaryCrimeFactor = parseInt($("#burgId").val());
     var vehicleCrimeFactor = parseInt($("#vehicId").val());
+
+    var aggravatedAssaultFactor =10;
+    var arsonFactor =10;
+    var weaponFactor =10;
+    var drugFactor =10;
+    var liquorFactor =10;
+
     var topCount = parseInt($("#topCount").val());
     var bottomCount = parseInt($("#bottomCount").val());
 
@@ -54,7 +61,12 @@ WeightContainerViz.prototype.getWeights = function(){
         burglaryCrimeFactor:burglaryCrimeFactor,
         vehicleCrimeFactor:vehicleCrimeFactor,
         topCount:topCount,
-        bottomCount:bottomCount
+        bottomCount:bottomCount,
+        aggravatedAssaultFactor:aggravatedAssaultFactor,
+        arsonFactor:arsonFactor,
+        weaponFactor:weaponFactor,
+        drugFactor:drugFactor,
+        liquorFactor:liquorFactor
     }
 }
 

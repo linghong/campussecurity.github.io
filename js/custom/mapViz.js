@@ -32,6 +32,7 @@ MapViz = function(_statesData,_zipCodeData, _countryStatistics,_stateOffsets) {
     this.countryStatistics = _countryStatistics;
     this.statesData = _statesData;
     this.totalZips = _zipCodeData.length;
+    console.log(crimeAnalyzer.processWeights(weightsContainerViz.getWeights()))
     this.init();
     this.loadData();
 };
