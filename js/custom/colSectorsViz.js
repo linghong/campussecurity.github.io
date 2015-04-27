@@ -18,7 +18,6 @@ ColSectorsViz = function(_data,_crimekey){
 /**
  * Method that sets up the SVG and the variables
  */
-_crimekey="weapon";
 ColSectorsViz.prototype.initVis = function(_crimekey){
 var Data = {
     "2011": [
@@ -48,13 +47,13 @@ var Data = {
 
 
 // A way to look more easily across all 'inner' arrays
-var myDataDrill = d3.values(Data);
+var dataSeries = d3.values(Data);
 
 var x =d3.scale.ordinal()
     .domain([0,1,2,3,4,5,6])
     .rangePoints([this.padding.left, this.width-this.padding.left-this.padding.right]);
 
-var yMax= d3.max( myDataDrill, function(d) { 
+var yMax= d3.max( dataSeries, function(d) { 
       var innermax= d3.max(d, function(v) { 
           return v[_crimekey]; });  
         return innermax;          
@@ -108,6 +107,5 @@ var y = d3.scale.linear()
       .attr("class", "y_axis")
       .attr("transform", "translate("+this.padding.left+",0)")  
       .call(this.yAxis);
-
   }
 
