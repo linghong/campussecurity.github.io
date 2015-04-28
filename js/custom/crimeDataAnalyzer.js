@@ -1,6 +1,13 @@
 
 CrimeDataAnalyzer = function(_crimeData) {
     this.crimeData = _crimeData;
+    this.crimeData["containerForMapVis"] = {
+        minCrimeFactor:null,
+        maxCrimeFactor:null,
+        maxRank:null,
+        countOfSchools:null,
+        averageCrimeFactor:null
+    };
     this.yearCrimeData = {};
     this.allTimeCrimeData =
     {
@@ -44,7 +51,6 @@ CrimeDataAnalyzer.prototype.init = function(){
             weaponOffence: 0,
             drugViolations: 0,
             liquorViolations: 0,
-            crimeFactorForMapVis:0
         }
 
         d.school.yearData.forEach(function (dd, i) {
@@ -63,7 +69,6 @@ CrimeDataAnalyzer.prototype.init = function(){
                     weaponOffence: 0,
                     drugViolations: 0,
                     liquorViolations: 0,
-                    crimeFactorForMapVis:0,
                     count: 0
                 }
             }
@@ -147,6 +152,11 @@ CrimeDataAnalyzer.prototype.init = function(){
 
 CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
     var that = this;
+    that.crimeData.containerForMapVis.minCrimeFactor = null;
+    that.crimeData.containerForMapVis.maxCrimeFactor = null;
+
+    var totalCrimeFactor=0, count=0;
+
     this.crimeData.schools.forEach(function(d,i) {
 
         var container = null;
@@ -157,7 +167,9 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
             container = d.school.allTimeCrimeData;
         }
 
-        container.crimeFactorForMapVis =
+        if(container){
+            count++;
+            d.school.crimeFactorForMapVis =
                 weights.murdFactor * container.murderCount +
                 weights.negligenceFactor * container.negligentManSlaughter +
                 weights.forcibleCrimeFactor * container.forcibleSexOffense +
@@ -170,8 +182,67 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
                 weights.drugFactor * container.drugViolations +
                 weights.liquorFactor * container.liquorViolations;
 
+            totalCrimeFactor += d.school.crimeFactorForMapVis;
 
+            if(that.crimeData.containerForMapVis.minCrimeFactor == null){
+                that.crimeData.containerForMapVis.minCrimeFactor = d.school.crimeFactorForMapVis;
+            }
+            else if(that.crimeData.containerForMapVis.minCrimeFactor >
+                container.crimeFactorForMapVis) {
+                that.crimeData.containerForMapVis.minCrimeFactor = d.school.crimeFactorForMapVis;
+            }
+
+            if(that.crimeData.containerForMapVis.maxCrimeFactor == null){
+                that.crimeData.containerForMapVis.maxCrimeFactor = d.school.crimeFactorForMapVis;
+            }
+            else if(that.crimeData.containerForMapVis.maxCrimeFactor <
+                container.crimeFactorForMapVis) {
+                that.crimeData.containerForMapVis.maxCrimeFactor = d.school.crimeFactorForMapVis;
+            }
+        }
+        else{
+            d.school.crimeFactorForMapVis = null;
+        }
     });
+
+    this.crimeData.schools.sort(
+    function(a,b){
+        return d3.ascending(a.school.crimeFactorForMapVis, a.school.crimeFactorForMapVis)
+    });
+
+
+
+    var rank = 0;
+    var oldCrimeFactor = -1;
+
+    var container = null;
+
+    this.crimeData.schools.forEach(function(d,i){
+        if(year){
+            container = d.school[year]
+        }
+        else {
+            container = d.school.allTimeCrimeData
+        }
+
+        if(container){
+            if(oldCrimeFactor != d.school.crimeFactorForMapVis){
+                d.school["rank"] = ++rank;
+            }
+            else {
+                d.school["rank"] = rank;
+            }
+
+            oldCrimeFactor = d.school.crimeFactorForMapVis;
+        }
+        else {
+            container["rank"] = 0;
+        }
+    })
+
+    this.crimeData.containerForMapVis.maxRank = rank;
+    this.crimeData.containerForMapVis.countOfSchools= count;
+    this.crimeData.containerForMapVis.averageCrimeFactor = totalCrimeFactor/count;
 
     return this.crimeData;
 }
