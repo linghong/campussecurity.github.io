@@ -22,6 +22,7 @@
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
     <script src="js/custom/colSectorsViz.js"></script>
+    <script src="js/custom/dataPrepare.js"></script>
 </head>
 
 <body>
@@ -103,25 +104,25 @@
                             <label class="col-md-4 col-sm-4 control-label">Murd:<input id="murdId" type="number" min="0"
                                                                                        max="100" value="1000" class=" form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="col-sm-4 control-label">Neg:<input id="negId" type="number" min="0" max="100"
-                                                                             value="1000" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                                                                             value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="col-sm-4 control-label">Forcib:<input id="forcibId" type="number" min="0"
-                                                                                max="100"  value="100" class="form-control" step="10"  onchange="mapViz.refreshData()"></label>
+                                                                                max="100"  value="10" class="form-control" step="10"  onchange="mapViz.refreshData()"></label>
                             <!--this category has very low number<label class="control-label">Non-Forcib:<input id="nonForcibId" type="number" min="0" max="100"  value="10"class="form-control"></label>-->
                             <label class="col-sm-4 control-label">Robbe:<input id="robbeId" type="number" min="0"
-                                                                               max="100"  value="50" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                                                                               max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="col-sm-4 control-label">Burg:<input id="burgId" type="number" min="0"
-                                                                              max="100"  value="50" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Vehic:<input id="vehicId" type="number" min="0" max="100"  value="5" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                                                                              max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Vehic:<input id="vehicId" type="number" min="0" max="100"  value="100" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                            <label class="col-sm-4 control-label">Aggr:<input id="aggravatedAssaultFactorId"
-                                                                             type="number" min="0" max="100"  value="100" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                                                                             type="number" min="0" max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="col-sm-4 control-label">Arson:<input id="arsonFactorId" type="number" min="0"
                                                                                max="100"  value="10"class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="col-sm-4 control-label">Weap:<input id="weaponFactorId" type="number" min="0"
-                                                                              max="100"  value="50" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                                                                              max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                            <label class="col-sm-4 control-label">Drug:<input id="drugFactorId" type="number" min="0"
-                                                                             max="100"  value="5" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                                                                             max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="col-sm-4 control-label">Liquor:<input id="liquorFactorId" type="number"
-                                                                                min="0" max="100"  value="5" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                                                                                min="0" max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
     				    </div>
                         <div class="row form-group name-group">
                             <label class="col-sm-4">Bottom:
@@ -129,8 +130,8 @@
                                        class="form-control" step="100" onchange="mapViz.refreshData()"></label>
                             <label class="col-sm-4"></label>
                             <label class="col-sm-4">Top:
-                                <input id="topCount" type="number" min="100" max="3500"  value="0"
-                                       class="form-control" step="1" onchange="mapViz.refreshData()"></label>
+                                <input id="topCount" type="number" min="100" max="3500"  value="10"
+                                       class="form-control" step="100" onchange="mapViz.refreshData()"></label>
                         </div>
                     </form>
                   
@@ -184,13 +185,38 @@
                 .defer(d3.tsv, 'data/countryStatistics.tsv')
                 .defer(d3.tsv, 'data/stateOffsets.tsv')
                 .defer(d3.json, 'data/crimedata.json')
+                .defer(d3.json, 'data/crimedatabackup.json')
                 .await(dataLoaded);
 
-        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeData) {
+        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeData,_crimeDatabackup) {
+            
+            //a flat structure data
+            var schoolCrime=[];
+            _crimeDatabackup.forEach(function(d){
+                d.yearData.forEach(function(c){
+                    schoolCrime.push ({
+                        "schoolId": d.schoolId,
+                        "year":c.yearOfData,
+                        "state": d.state,
+                        "sectorCd": d.sectorCd, 
+                        "murderCount":c.murderCount,
+                        "negligentManSlaughter":c.negligentManSlaughter,
+                        "forcibleSexOffense":c.forcibleSexOffense,
+                        "nonForcibleSexOffense":c.nonForcibleSexOffense,
+                        "robbery":c.robbery,
+                        "aggravatedAssault":c.aggravatedAssault,
+                        "burglary":c.burglary,
+                        "vehicleTheft":c.vehicleTheft,
+                        "arson":c.arson,
+                        "weaponOffence":c.weaponOffence,
+                        "drugViolations":c.drugViolations,
+                        "liquorViolations":c.liquorViolations             
+                    });         
+                }); 
+            }); 
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
             mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
             colSectorsViz =new ColSectorsViz(_crimeData, "weapon");
-            //stateViz = new StateVix(_crimeData);
         }
 
     </script>
