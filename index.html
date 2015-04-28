@@ -18,7 +18,6 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/d3.v3.js"></script>
 	<script src="js/queue.js"></script>
-	<script src="js/schoolCrimeData.js"></script>
 	<script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
@@ -160,7 +159,29 @@
 	</div> 
 
 	<script type="text/javascript">
+        /*
+       var divPadding=20;
+        var mapViz = new MapViz();
+      var weightsContainerViz = new WeightContainerViz($("#aside").width());
 
+        $("#hide").hover(function(){
+        	$('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
+        	$('#aside').hide();
+        	$('#switch').text('Show');
+        });
+        $("#show").hover(function(){
+        	$('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
+        	$('#aside').show();
+        	$('#switch').text('Hide');
+        });
+
+  d3.json("data/collegeaggregrate.json", function(error, data) {
+
+      // Parse date string into Javascript objects
+     console.log(data);
+
+  });
+    */
         var divPadding=20;
         var mapViz=null;
         var crimeAnalyzer = null;
@@ -181,14 +202,14 @@
 
         queue()
                 .defer(d3.json, 'data/us-states.json')
-                .defer(d3.tsv, 'data/zipCodeData.tsv')
                 .defer(d3.tsv, 'data/countryStatistics.tsv')
                 .defer(d3.tsv, 'data/stateOffsets.tsv')
                 .defer(d3.json, 'data/crimedata.json')
                 .await(dataLoaded);
 
-        function dataLoaded (error,_statesData, _zipCodeData, _countryStatistics, _stateOffsets,_crimeData) {
+        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeData) {
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
+            mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
             mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics, _stateOffsets);
             colSectorsViz =new ColSectorsViz(_crimeData, "weapon");
         }

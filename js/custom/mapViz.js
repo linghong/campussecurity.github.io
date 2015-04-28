@@ -1,7 +1,7 @@
 
 //TODO:
 //add parameters - data and width so that it can be passed from outside.
-MapViz = function(_statesData,_zipCodeData, _countryStatistics,_stateOffsets) {
+MapViz = function(_statesData,_countryStatistics,_stateOffsets) {
     this.txt = null;
     this.txtBox = null;
     this.stateOffsets=_stateOffsets;
@@ -28,11 +28,10 @@ MapViz = function(_statesData,_zipCodeData, _countryStatistics,_stateOffsets) {
     this.hideDetailTimer = null;
     this.hideCaptionWaitPeriod = 2500;
 
-    this.zipCodeData = _zipCodeData;
     this.countryStatistics = _countryStatistics;
     this.statesData = _statesData;
-    this.totalZips = _zipCodeData.length;
-    console.log(crimeAnalyzer.processWeights(weightsContainerViz.getWeights()))
+    //this.totalSchools = crimeAnalyzer.schools.length;
+
     this.init();
     this.loadData();
 };
@@ -147,12 +146,10 @@ MapViz.prototype.refreshData = function () {
     this.svg.selectAll("rect").remove();
 
     var weights = weightsContainerViz.getWeights();
-    var aveCrimeFactor= this.getAveCrimeFactor(this.universityAggregateData,weights)
-    var minCrimeFactor = null, maxCrimeFactor = null;
-    var crimeFactors = this.processCrimeFactor(this.zipCodeData,weights);
-    minCrimeFactor = crimeFactors.minCrimeFactor;
-    maxCrimeFactor = crimeFactors.maxCrimeFactor;
-    this.paintCircles(aveCrimeFactor,maxCrimeFactor,this.zipCodeData,weights.topCount,weights.bottomCount);
+
+    var crimeData = crimeAnalyzer.processWeights(weights)
+
+    this.paintCircles(crimeData,"", weights.topCount, weights.bottomCount)
 }
 
 
@@ -207,33 +204,67 @@ MapViz.prototype.processCrimeFactor = function (cityData,weights){
     }
 }
 
-MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData,topCount, bottomCount){
+MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
     var that = this;
 
-    var colorScale = d3.scale.linear().domain
-    ([aveCrimeFactor, maxCrimeFactor]).range(["#8b0000", "#FFF0F0"])
+    var maxRank = crimeData.containerForMapVis.maxRank;
+    var aveCrimeFactor = crimeData.containerForMapVis.averageCrimeFactor;
+    var maxCrimeFactor = crimeData.containerForMapVis.maxCrimeFactor;
 
     this.svg.selectAll("circle").remove();
     this.svg.selectAll("circle")
-        .data(cityData)
+        .data(crimeData.schools)
         .enter()
         .append("circle")
-        .attr("cityName", function(d){return d.cityName})
-        .attr("zipCodeId", function(d){return d.zipCodeId})
-        .attr("rank", function(d){return d.rank})
+        .attr("caption", function(d){
+
+            var caption = "(" + d.school.rank + " / " + maxRank +") "
+            + d.school.name;
+            return caption;
+        })
+        .attr("longCaption", function(d){
+
+            var school = d.school;
+
+            caption = "<p class='univCity'>" + school.name + "</p>"
+
+            caption += "&nbsp;&nbsp;Rank: " + school.rank +"<br>"
+            var container = null;
+
+            if (that.year){
+                container = school.yearData[year];
+            }
+            else {
+                container = school.allTimeCrimeData;
+            }
+
+            caption += "Murders:" + formatData(container.murderCount)+ "<br>"
+            caption += "Negligent Manslaughter:" + formatData(container.negligentManSlaughter)+ "<br>"
+            caption += "Forcible Sex Assault:" + formatData(container.forcibleSexOffense)+ "<br>"
+            caption += "Non Forcible Sex Assault:" + formatData(container.nonForcibleSexOffense)+ "<br>"
+            caption += "Robbery:" + formatData(container.robbery)+ "<br>"
+            caption += "Aggravated Assault:" + formatData(container.aggravatedAssault)+ "<br>"
+            caption += "Burglary:" + formatData(container.burglary)+ "<br>"
+            caption += "Vehicle Theft:" + formatData(container.vehicleTheft)+ "<br>"
+            caption += "Arson:" + formatData(container.arson)+ "<br>"
+            caption += "Weapons Offense:" + formatData(container.weaponOffence)+ "<br>"
+            caption += "Drug Violations:" + formatData(container.drugViolations)+ "<br>"
+            caption += "Liquor Violations:" + formatData(container.liquorViolations)+ "<br>"
+            return caption;
+        })
         .attr("cx", function(d) {
-            var proj = that.projection([d.longitude, d.latitude]);
+            var proj = that.projection([d.school.longitude, d.school.latitude]);
             if(!proj){
                 console.log("Invalid lat /long",d);
                 return null;
             }
             else {
-                return that.projection([d.longitude, d.latitude])[0];
+                return proj[0];
             }
 
         })
         .attr("cy", function(d) {
-            var proj = that.projection([d.longitude, d.latitude]);
+            var proj = that.projection([d.school.longitude, d.school.latitude]);
             if(!proj){
                 console.log("Invalid lat /long",d);
                 return null;
@@ -246,9 +277,9 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
 
             var r;
             try {
-                if (d.rank <=topCount || d.rank>= that.totalZips-bottomCount ){
-                    if (d.crimeFactor < aveCrimeFactor){
-                        r =  2+ 5*((aveCrimeFactor- d.crimeFactor)/aveCrimeFactor)
+                if (d.school.rank <=topCount || d.school.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
+                    if (d.school.crimeFactorForMapVis  < aveCrimeFactor){
+                        r =  2+ 5*((aveCrimeFactor- d.school.crimeFactorForMapVis)/aveCrimeFactor)
                         if(isNaN(r)){
 
                             r=10;
@@ -256,7 +287,7 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
                     }
                     else{
 
-                        r = 2+ 5*(d.crimeFactor/( maxCrimeFactor-aveCrimeFactor))
+                        r = 2+ 5*(d.school.crimeFactorForMapVis/( maxCrimeFactor-aveCrimeFactor))
                     }
                 }
                 else{
@@ -272,7 +303,7 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         })
         .style("fill", function(d,i){
 
-            if (d.crimeFactor > aveCrimeFactor){
+            if (d.school.crimeFactorForMapVis > aveCrimeFactor){
                 return "red";// colorScale(d.crimeFactor)
             }
             else {
@@ -282,7 +313,7 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
 
         })
         .style("opacity", function(d){
-            if (d.crimeFactor > aveCrimeFactor){
+            if (d.school.crimeFactorForMapVis > aveCrimeFactor){
                 return .5
             }
             else {
@@ -314,43 +345,9 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
         }
 
 
-        var caption = "";
-
-        var zipCodeId = circle.attr("zipCodeId");
-        var zipData = zips[parseInt(zipCodeId)-1];
-
-        if (zipData) {
-
-            caption = "<p class='univCity'>" + zipData.zip.city + "," + zipData.zip.state + "-" +
-                        zipData.zip.zip + "</p>"
-
-            if(zipData.zip.schools.length>1){
-                caption += "&nbsp;&nbsp;" +zipData.zip.schools.length +" Schools<br>"
-            }
-            caption += "&nbsp;&nbsp;Rank: " +circle.attr("rank") + " / " + that.totalZips +"<br>"
-
-            zipData.zip.schools.forEach(function(d){
-                caption += "<p class='univName'>" + d.name + "</p>";
-
-                caption += "Murders:" + formatData(d.avgMurderCount)+ "<br>"
-                caption += "Negligent Manslaughter:" + formatData(d.avgNegligentManlaughter)+ "<br>"
-                caption += "Forcible Sex Assault:" + formatData(d.avgForcibleSexOffense)+ "<br>"
-                caption += "Non Forcible Sex Assault:" + formatData(d.avgNonForcibleSexOffense)+ "<br>"
-                caption += "Robbery:" + formatData(d.avgRobbery)+ "<br>"
-                caption += "Aggravated Assault:" + formatData(d.avgAggravatedAssault)+ "<br>"
-                caption += "Burglary:" + formatData(d.avgBurglary)+ "<br>"
-                caption += "Vehicle Theft:" + formatData(d.avgVehicleTheft)+ "<br>"
-                caption += "Arson:" + formatData(d.avgArson)+ "<br>"
-                caption += "Weapons Offense:" + formatData(d.avgWeaponOffence)+ "<br>"
-                caption += "Drug Violations:" + formatData(d.avgDrugViolations)+ "<br>"
-                caption += "Liquor Violations:" + formatData(d.avgLiquorViolations)+ "<br>"
+        var caption = circle.attr("longCaption");
 
 
-            })
-        }
-        else{
-            caption = "zip code data for " + zipCodeId +" not found";
-        }
 
 
         $("#floatingDiv").width(that.svg.attr("width"))
@@ -381,17 +378,8 @@ MapViz.prototype.paintCircles = function (aveCrimeFactor,maxCrimeFactor,cityData
           clearTimeout(that.hideCaptionTimer);
         }
         var circle = d3.select(this);
-        var caption = "(" +circle.attr("rank")+ " / " + that.totalZips +") "
-            +circle.attr("cityName")
 
-        var zipCodeId = circle.attr("zipCodeId");
-        var zipData = zips[parseInt(zipCodeId)-1];
-
-        if (zipData) {
-            if(zipData.zip.schools.length>1){
-                caption += " (" +zipData.zip.schools.length + " schools)"
-            }
-        }
+        var caption = circle.attr("caption");
 
 
         that.txt.style("visibility", "visible")
@@ -443,41 +431,32 @@ MapViz.prototype.loadData = function (){
 
     var aveCrimeFactor= that.getAveCrimeFactor(that.universityAggregateData,weights)
     var minCrimeFactor = null, maxCrimeFactor = null;
-    {
-        var crimeFactors = that.processCrimeFactor(that.zipCodeData,weights);
-        that.zipCodeData.sort(function(a,b){return d3.ascending(a.crimeFactor, b.crimeFactor) });
-        that.zipCodeData.forEach(function(d,i){
-            d["rank"]=i+1;
-        })
+    //var crimeFactors = that.processCrimeFactor(that.zipCodeData,weights);
 
-        minCrimeFactor = crimeFactors.minCrimeFactor;
-        maxCrimeFactor = crimeFactors.maxCrimeFactor;
+    var crimeData = crimeAnalyzer.processWeights(weights);
 
-        var selectedData = []
-        that.statesData.features.forEach(function(d){
-            selectedData.push(d);
-        })
+    var selectedData = []
+    that.statesData.features.forEach(function(d){
+        selectedData.push(d);
+    })
 
-        //Bind data and create one path per GeoJSON feature
-        that.paths = that.svg.selectAll("path")
-            .data(selectedData)
-            .enter()
-            .append("path")
-            .attr("i",function(d,i){return i })
-            .attr("id",function(d,i){return d.id })
-            .style("fill",that.stateFillColor) // function(d, i) {return colors(i)})
-            .style("stroke", "grey")
-            .attr("d", that.path)
-            //.on("click",stateClicked)
-            .on("mouseover",stateIn)
-            .on("mouseout",stateOut)
+    //Bind data and create one path per GeoJSON feature
+    that.paths = that.svg.selectAll("path")
+        .data(selectedData)
+        .enter()
+        .append("path")
+        .attr("i",function(d,i){return i })
+        .attr("id",function(d,i){return d.id })
+        .style("fill",that.stateFillColor) // function(d, i) {return colors(i)})
+        .style("stroke", "grey")
+        .attr("d", that.path)
+        //.on("click",stateClicked)
+        .on("mouseover",stateIn)
+        .on("mouseout",stateOut)
 
 
-        //Murder	NegM	Forcib	NonForcib	Robbe	AggA	Burgla	Vehic	Arson
+    that.paintCircles(crimeData,"",weights.topCount,weights.bottomCount);
 
-        that.paintCircles(aveCrimeFactor,maxCrimeFactor,that.zipCodeData,weights.topCount,weights.bottomCount);
-
-    }
     var rightEdge = $("#mapContainer").position().left+ $("#mapContainer").width();
     var topEdge = $("#mapContainer").position().top -divPadding;
     var leftPosition = rightEdge;
