@@ -32,7 +32,18 @@ div#univDataDivText{
     cursor: hand;
 }
 
-span.captionLabel{
-    width: 40px;
+.captionLabel{
+    width: 120px;
+    padding-right: 4px;
     text-align: right;
+    display: inline-block;
+}
+.captionValue{
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.captionValueHighlight{
+    font-weight: bold;
+    background-color: #ffff00;
 }

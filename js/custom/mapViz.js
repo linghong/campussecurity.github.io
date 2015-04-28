@@ -227,9 +227,8 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
             var school = d.school;
 
             caption = "<p class='univCity'>" + school.name + "</p>"
+            caption += "&nbsp;&nbsp;" + school.address +", " + school.state + "-" +school.zip +"<br><br>"
 
-            caption += "&nbsp;&nbsp;" + school.address +", " + school.state + "-" +school.zip +"<br>"
-            caption += "&nbsp;&nbsp;Rank: " + school.rank +" / " + maxRank +"<br>"
             var container = null;
 
             if(d.school.schoolId =="100663001"){
@@ -244,18 +243,33 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
                 container = school.allTimeCrimeData;
             }
 
-            caption += "<span class='captionLabel'>Murders: </span>" + formatData(container.murderCount)+ "<br>"
-            caption += "Negligent Manslaughter:" + formatData(container.negligentManSlaughter)+ "<br>"
-            caption += "Forcible Sex Assault:" + formatData(container.forcibleSexOffense)+ "<br>"
-            caption += "Non Forcible Sex Assault:" + formatData(container.nonForcibleSexOffense)+ "<br>"
-            caption += "Robbery:" + formatData(container.robbery)+ "<br>"
-            caption += "Aggravated Assault:" + formatData(container.aggravatedAssault)+ "<br>"
-            caption += "Burglary:" + formatData(container.burglary)+ "<br>"
-            caption += "Vehicle Theft:" + formatData(container.vehicleTheft)+ "<br>"
-            caption += "Arson:" + formatData(container.arson)+ "<br>"
-            caption += "Weapons Offense:" + formatData(container.weaponOffence)+ "<br>"
-            caption += "Drug Violations:" + formatData(container.drugViolations)+ "<br>"
-            caption += "Liquor Violations:" + formatData(container.liquorViolations)+ "<br>"
+
+            caption += "<span class='captionLabel'>Rank:</span><span class='captionValueHighlight'>" + school.rank +" / " + maxRank +"</span><br>"
+
+            caption += "<span class='captionLabel'>Murders:</span>" +
+            "<span class='captionValue'>"+formatData(container.murderCount)+ "</span><br>"
+            caption += "<span class='captionLabel'>Negligent Manslaughter:</span>"  +
+            "<span class='captionValue'>"+formatData(container.negligentManSlaughter)+ "</span><br>"
+            caption += "<span class='captionLabel'>Forcible Sex Assault:</span>" +
+            "<span class='captionValue'>"+formatData(container.forcibleSexOffense)+ "</span><br>"
+            caption += "<span class='captionLabel'>Non Forcible Sex Assault:</span>" +
+            "<span class='captionValue'>"+formatData(container.nonForcibleSexOffense)+ "</span><br>"
+            caption += "<span class='captionLabel'>Robbery:</span>" +
+            "<span class='captionValue'>"+formatData(container.robbery)+ "</span><br>"
+            caption += "<span class='captionLabel'>Aggravated Assault:</span>" +
+            "<span class='captionValue'>"+formatData(container.aggravatedAssault)+ "</span><br>"
+            caption += "<span class='captionLabel'>Burglary:</span>"  +
+            "<span class='captionValue'>"+formatData(container.burglary)+ "</span><br>"
+            caption += "<span class='captionLabel'>Vehicle Theft:</span>" +
+            "<span class='captionValue'>"+formatData(container.vehicleTheft)+ "</span><br>"
+            caption += "<span class='captionLabel'>Arson:</span>" +
+            "<span class='captionValue'>"+formatData(container.arson)+ "<br>"
+            caption += "<span class='captionLabel'>Weapons Offense:</span>"  +
+            "<span class='captionValue'>"+formatData(container.weaponOffence)+ "</span><br>"
+            caption += "<span class='captionLabel'>Drug Violations:</span>"  +
+            "<span class='captionValue'>"+formatData(container.drugViolations)+ "</span><br>"
+            caption += "<span class='captionLabel'>Liquor Violations:</span>"  +
+            "<span class='captionValue'>"+formatData(container.liquorViolations)+ "</span><br>"
             return caption;
         })
         .attr("cx", function(d) {
@@ -283,19 +297,16 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
             var r;
 
-            if(d.school.schoolId =="100663001"){
+            /*if(d.school.schoolId =="100663001"){
 
                 console.log(d.school)
                 return 40;
-            }
+            }*/
             try {
                 if (d.school.rank <=topCount || d.school.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
                     if (d.school.crimeFactorForMapVis  < aveCrimeFactor){
-                        r =  2+ ((aveCrimeFactor- d.school.crimeFactorForMapVis)/aveCrimeFactor)
-                        if(isNaN(r)){
+                        r =  1+ ((aveCrimeFactor- d.school.crimeFactorForMapVis)/aveCrimeFactor)
 
-                            r=10;
-                        }
                     }
                     else{
 
@@ -326,10 +337,10 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
         })
         .style("opacity", function(d){
             if (d.school.crimeFactorForMapVis > aveCrimeFactor){
-                return .5
+                return 1
             }
             else {
-                return .5
+                return .3
             }
         })
         .on('mouseover',showCityData)
