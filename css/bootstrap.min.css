@@ -6707,14 +6707,11 @@ fieldset[disabled] .btn-info-darken.active {
   background-color: #7a7a52;
 }
 .main-top {
-  padding: 5px;
+  padding-bottom: 20px;
   text-align: center;
 }
-.main-bottom {
-  height: 260px;
-}
 .main-center {
-  padding: 10px;
+  padding: 20px;
 }
 .aside-top,
 .aside-bottom {
@@ -6722,7 +6719,7 @@ fieldset[disabled] .btn-info-darken.active {
   padding-bottom: 5px;
 }
 .aside-bottom {
-  height: 300px;
+  height: 200px;
   padding-left: 10px;
 }
 .aside-center {
@@ -6731,7 +6728,7 @@ fieldset[disabled] .btn-info-darken.active {
 }
 .section {
   padding: 5px;
-  height: 300px;
+  height: 400px;
 }
 btn-small {
   width: padding:2px;
@@ -6756,4 +6753,34 @@ buttons
 */
 .center {
   text-align: center;
+}
+/*-----------------------------------------------------------------
+barcharts
+-------------------------------------------------------------------
+*/
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 3.5px;
+}
+#series-2011 {
+  fill: red;
+  opacity: 0.6;
+}
+#series-2012 {
+  fill: blue;
+  opacity: 0.4;
+}
+#series-2013 {
+  fill: green;
+  opacity: 0.4;
+}
+.circle {
+  stroke: black;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: steelblue;
+  shape-rendering: crispEdges;
 }
