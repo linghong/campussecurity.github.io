@@ -36,18 +36,18 @@ WeightContainerViz.prototype.hideWeightsContainer = function ()
 }
 
 WeightContainerViz.prototype.getWeights = function(){
-    var murdFactor = parseInt($("#murdId").val());
+    var murdFactor =  parseInt($("#murdId").val());
     var negligenceFactor = parseInt($("#negId").val());
     var forcibleCrimeFactor = parseInt($("#forcibId").val());
     var robberyCrimeFactor = parseInt($("#robbeId").val());
     var burglaryCrimeFactor = parseInt($("#burgId").val());
     var vehicleCrimeFactor = parseInt($("#vehicId").val());
+    var aggravatedAssaultFactor = parseInt($("#aggravatedAssaultFactorId").val());
+    var arsonFactor = parseInt($("#arsonFactorId").val());
+    var weaponFactor = parseInt($("#weaponFactorId").val());
+    var liquorFactor = parseInt($("#liquorFactorId").val());
+    var drugFactor = parseInt($("#drugFactorId").val());
 
-    var aggravatedAssaultFactor =10;
-    var arsonFactor =10;
-    var weaponFactor =10;
-    var drugFactor =10;
-    var liquorFactor =10;
 
     var topCount = parseInt($("#topCount").val());
     var bottomCount = parseInt($("#bottomCount").val());
