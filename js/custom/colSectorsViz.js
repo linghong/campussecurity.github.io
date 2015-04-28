@@ -8,7 +8,7 @@ ColSectorsViz = function(_data,_crimekey){
     // defines constants
     this.padding= {top: 15, right: 15, bottom: 15, left: 25};
     this.width = $("#crimehistory").width();
-    this.height = 0.9*this.width;
+    this.height = 0.8*this.width;
     this.initVis(_crimekey);
 }
 
