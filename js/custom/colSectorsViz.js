@@ -17,34 +17,9 @@ ColSectorsViz = function(_data,_crimekey){
  * Method that sets up the SVG and the variables
  */
 ColSectorsViz.prototype.initVis = function(_crimekey){
- 
-  //a flat structure data
-  var schoolCrime=[];
-  this.data.forEach(function(d){
-    d.yearData.forEach(function(c){
-            schoolCrime.push ({
-            "schoolId": d.schoolId,
-            "year":c.yearOfData,
-            "state": d.state,
-            "sectorCd": d.sectorCd, 
-            "murderCount":c.murderCount,
-            "negligentManSlaughter":c.negligentManSlaughter,
-            "forcibleSexOffense":c.forcibleSexOffense,
-            "nonForcibleSexOffense":c.nonForcibleSexOffense,
-            "robbery":c.robbery,
-            "aggravatedAssault":c.aggravatedAssault,
-            "burglary":c.burglary,
-            "vehicleTheft":c.vehicleTheft,
-            "arson":c.arson,
-            "weaponOffence":c.weaponOffence,
-            "drugViolations":c.drugViolations,
-            "liquorViolations":c.liquorViolations             
-            });         
-          }); 
-      }); 
 
   //get aggregated data
-  ColSectorsViz.prototype.doubleAggregate (schoolCrime, "year", "sectorCd");
+  var dataPrepare = new DataPrepare(this.data, "year", "sectorCd");
 
   //make a data object used for the multi-series scatterplot
   var yearArray=[];
@@ -145,54 +120,3 @@ var y = d3.scale.linear()
       .call(this.yAxis);
   }
 
- /* 
-  * function for aggregating data by keys (two layers) using a flat structure data file.
-  */
-  ColSectorsViz.prototype.doubleAggregate = function (_data, aggKey1, aggKey2){
-    yearSectors = d3.nest()
-          .key(function(d) { 
-            return d[aggKey1]; })
-          .key(function(d) { 
-            return d[aggKey2]; })
-          .rollup(function(leaves) {
-            return {
-            "murderCount":d3.sum(leaves, function(l) {
-                                    return l.murderCount;
-                                 })/leaves.length ,
-            "negligentManSlaughter":d3.sum(leaves, function(l) {
-                                    return l.negligentManSlaughter;
-                                  })/leaves.length,
-            "forcibleSexOffense":d3.sum(leaves, function(l) {
-                                    return l.forcibleSexOffense;
-                                  })/leaves.length,
-            "nonForcibleSexOffense":d3.sum(leaves, function(l) {
-                                    return l.nonForcibleSexOffense;
-                                  })/leaves.length,
-            "robbery":d3.sum(leaves, function(l) {
-                                    return l.robbery;
-                                  })/leaves.length,
-            "aggravatedAssault":d3.sum(leaves, function(l) {
-                                    return l.aggravatedAssault;
-                                  })/leaves.length,
-            "burglary":d3.sum(leaves, function(l) {
-                                    return l.burglary;
-                                  })/leaves.length,
-            "vehicleTheft":d3.sum(leaves, function(l) {
-                                    return l.vehicleTheft;
-                                  })/leaves.length,
-            "arson":d3.sum(leaves, function(l) {
-                                    return l.arson;
-                                  })/leaves.length,
-            "weaponOffence":d3.sum(leaves, function(l) {
-                                    return l.weaponOffence;
-                                  })/leaves.length,
-            "drugViolations":d3.sum(leaves, function(l) {
-                                    return l.drugViolations;
-                                  })/leaves.length,
-            "liquorViolations":d3.sum(leaves, function(l) {
-                                    return l.liquorViolations;
-                                  })/leaves.length     
-            };
-          })
-          .entries(_data); 
-    }

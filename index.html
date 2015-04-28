@@ -22,6 +22,7 @@
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
     <script src="js/custom/colSectorsViz.js"></script>
+    <script src="js/custom/dataPrepare.js"></script>
 </head>
 
 <body>
@@ -188,9 +189,34 @@
                 .await(dataLoaded);
 
         function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeData,_crimeDatabackup) {
+            
+            //a flat structure data
+            var schoolCrime=[];
+            _crimeDatabackup.forEach(function(d){
+                d.yearData.forEach(function(c){
+                    schoolCrime.push ({
+                        "schoolId": d.schoolId,
+                        "year":c.yearOfData,
+                        "state": d.state,
+                        "sectorCd": d.sectorCd, 
+                        "murderCount":c.murderCount,
+                        "negligentManSlaughter":c.negligentManSlaughter,
+                        "forcibleSexOffense":c.forcibleSexOffense,
+                        "nonForcibleSexOffense":c.nonForcibleSexOffense,
+                        "robbery":c.robbery,
+                        "aggravatedAssault":c.aggravatedAssault,
+                        "burglary":c.burglary,
+                        "vehicleTheft":c.vehicleTheft,
+                        "arson":c.arson,
+                        "weaponOffence":c.weaponOffence,
+                        "drugViolations":c.drugViolations,
+                        "liquorViolations":c.liquorViolations             
+                    });         
+                }); 
+            }); 
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
             mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
-            colSectorsViz =new ColSectorsViz(_crimeDatabackup, "weaponOffence");
+            colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
         }
 
     </script>
