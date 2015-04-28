@@ -96,32 +96,33 @@
 				<!--box for user interactive box: make my own security map  -->
 				<div class="col-md-12 col-sm-12 panel panel-info center aside-center" id="weightsselector" >
 
-					<!--user interactive box: make my own security map, switch button -->
-                    <div class="col-md-12 col-sm-6 btn-group" id="map-control-2">
-                        <button class="btn btn-info-darken btn-sm" id="crime">Campus Crime</button>
-                        <button class="btn btn-info-darken btn-sm"id="arrest">Campus Arrest</button>                       
-                    </div >
-
-                    <!--user interactive box: make my own security map, another switch button -->
-                    <div class="col-md-12 col-sm-6 btn-group center" >
-                        <label class="control-label">Safe:<input id="rbSafe" type="radio" name="safeUnSafe" checked="true" onchange="mapViz.refreshData()"></label>
-                        <label class="control-label">Unsafe:<input type="radio" name="safeUnSafe" onchange="mapViz.refreshData()"></label>
-                    </div >
 
                     <!--user interactive box: make my own security map, user input -->
                     <form role="form" class="col-md-12 col-sm-12" >                                            
                         <div class="row form-group name-group">       
-                            <label class="col-md-4 col-sm-4 control-label">Murd:<input id="murdId" type="number" min="0" max="100" value="50" class=" form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Neg:<input id="negId" type="number" min="0" max="100" value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Forcib:<input id="forcibId" type="number" min="0" max="100"  value="10" class="form-control" step="10"  onchange="mapViz.refreshData()"></label>
+                            <label class="col-md-4 col-sm-4 control-label">Murd:<input id="murdId" type="number" min="0"
+                                                                                       max="100" value="1000" class=" form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Neg:<input id="negId" type="number" min="0" max="100"
+                                                                             value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Forcib:<input id="forcibId" type="number" min="0"
+                                                                                max="100"  value="10" class="form-control" step="10"  onchange="mapViz.refreshData()"></label>
                             <!--this category has very low number<label class="control-label">Non-Forcib:<input id="nonForcibId" type="number" min="0" max="100"  value="10"class="form-control"></label>-->
-                            <label class="col-sm-4 control-label">Robbe:<input id="robbeId" type="number" min="0" max="100"  value="20" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Burg:<input id="burgId" type="number" min="0" max="100"  value="25"class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Robbe:<input id="robbeId" type="number" min="0"
+                                                                               max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Burg:<input id="burgId" type="number" min="0"
+                                                                              max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
                             <label class="col-sm-4 control-label">Vehic:<input id="vehicId" type="number" min="0" max="100"  value="100" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                           <label class="col-sm-4 control-label">Aggr:<input id="aggravatedAssaultFactorId"
+                                                                             type="number" min="0" max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Arson:<input id="arsonFactorId" type="number" min="0"
+                                                                               max="100"  value="10"class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Weap:<input id="weaponFactorId" type="number" min="0"
+                                                                              max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                           <label class="col-sm-4 control-label">Drug:<input id="drugFactorId" type="number" min="0"
+                                                                             max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Liquor:<input id="liquorFactorId" type="number"
+                                                                                min="0" max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
     				    </div>
-                        <div class="row form-group name-group">
-                            <label id="debugInfo"></label>
-                        </div>
                         <div class="row form-group name-group">
                             <label class="col-sm-4">Bottom:
                                 <input id="bottomCount" type="number" min="100" max="3500"  value="10"
@@ -188,7 +189,6 @@
         function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeData) {
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
             mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
-            mapViz = new MapViz(_statesData,_zipCodeData, _countryStatistics, _stateOffsets);
             colSectorsViz =new ColSectorsViz(_crimeData, "weapon");
         }
 

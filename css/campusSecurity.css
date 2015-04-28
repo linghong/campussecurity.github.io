@@ -31,3 +31,8 @@ div#univDataDivText{
 .divCloser{
     cursor: hand;
 }
+
+span.captionLabel{
+    width: 40px;
+    text-align: right;
+}

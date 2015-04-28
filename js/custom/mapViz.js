@@ -229,8 +229,13 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
             caption = "<p class='univCity'>" + school.name + "</p>"
 
             caption += "&nbsp;&nbsp;" + school.address +", " + school.state + "-" +school.zip +"<br>"
-            caption += "&nbsp;&nbsp;Rank: " + school.rank +"<br>"
+            caption += "&nbsp;&nbsp;Rank: " + school.rank +" / " + maxRank +"<br>"
             var container = null;
+
+            if(d.school.schoolId =="100663001"){
+
+                console.log(d.school)
+            }
 
             if (that.year){
                 container = school.yearData[year];
@@ -239,7 +244,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
                 container = school.allTimeCrimeData;
             }
 
-            caption += "Murders:" + formatData(container.murderCount)+ "<br>"
+            caption += "<span class='captionLabel'>Murders: </span>" + formatData(container.murderCount)+ "<br>"
             caption += "Negligent Manslaughter:" + formatData(container.negligentManSlaughter)+ "<br>"
             caption += "Forcible Sex Assault:" + formatData(container.forcibleSexOffense)+ "<br>"
             caption += "Non Forcible Sex Assault:" + formatData(container.nonForcibleSexOffense)+ "<br>"
@@ -277,10 +282,16 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
         .attr("r",function(d,i){
 
             var r;
+
+            if(d.school.schoolId =="100663001"){
+
+                console.log(d.school)
+                return 40;
+            }
             try {
                 if (d.school.rank <=topCount || d.school.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
                     if (d.school.crimeFactorForMapVis  < aveCrimeFactor){
-                        r =  2+ 5*((aveCrimeFactor- d.school.crimeFactorForMapVis)/aveCrimeFactor)
+                        r =  2+ ((aveCrimeFactor- d.school.crimeFactorForMapVis)/aveCrimeFactor)
                         if(isNaN(r)){
 
                             r=10;
@@ -331,7 +342,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
     that.txtBox = that.svg.insert('rect', 'text');
 
     function formatData(data){
-        return Math.round(data/100);
+        return Math.round(data);
     }
 
     function outFromZipCode(){

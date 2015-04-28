@@ -113,7 +113,6 @@ CrimeDataAnalyzer.prototype.init = function(){
             d.school.allTimeCrimeData.drugViolations += parseFloat(dd.drugViolations)
             d.school.allTimeCrimeData.liquorViolations += parseFloat(dd.liquorViolations)
 
-
         });
     });
 
@@ -148,6 +147,11 @@ CrimeDataAnalyzer.prototype.init = function(){
     that.allTimeCrimeData.drugViolations *= (1000/that.allTimeCrimeData.count);
     that.allTimeCrimeData.liquorViolations *= (1000/that.allTimeCrimeData.count);
 
+    that.crimeData.schools.forEach(function(d) {
+        if (d.school.schoolId =="100663001"){
+            console.log(d.school);
+        }
+    });
 }
 
 CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
@@ -182,13 +186,16 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
                 weights.drugFactor * container.drugViolations +
                 weights.liquorFactor * container.liquorViolations;
 
+            if(d.school.schoolId =="100663001"){
+                console.log(d.school.crimeFactorForMapVis)
+            }
             totalCrimeFactor += d.school.crimeFactorForMapVis;
 
             if(that.crimeData.containerForMapVis.minCrimeFactor == null){
                 that.crimeData.containerForMapVis.minCrimeFactor = d.school.crimeFactorForMapVis;
             }
             else if(that.crimeData.containerForMapVis.minCrimeFactor >
-                container.crimeFactorForMapVis) {
+                d.school.crimeFactorForMapVis) {
                 that.crimeData.containerForMapVis.minCrimeFactor = d.school.crimeFactorForMapVis;
             }
 
@@ -196,7 +203,7 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
                 that.crimeData.containerForMapVis.maxCrimeFactor = d.school.crimeFactorForMapVis;
             }
             else if(that.crimeData.containerForMapVis.maxCrimeFactor <
-                container.crimeFactorForMapVis) {
+                d.school.crimeFactorForMapVis) {
                 that.crimeData.containerForMapVis.maxCrimeFactor = d.school.crimeFactorForMapVis;
             }
         }
@@ -207,7 +214,7 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
 
     this.crimeData.schools.sort(
     function(a,b){
-        return d3.ascending(a.school.crimeFactorForMapVis, a.school.crimeFactorForMapVis)
+        return d3.ascending(a.school.crimeFactorForMapVis, b.school.crimeFactorForMapVis)
     });
 
 
@@ -236,7 +243,7 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
             oldCrimeFactor = d.school.crimeFactorForMapVis;
         }
         else {
-            container["rank"] = 0;
+            d.school["rank"] = 0;
         }
     })
 
@@ -244,6 +251,7 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
     this.crimeData.containerForMapVis.countOfSchools= count;
     this.crimeData.containerForMapVis.averageCrimeFactor = totalCrimeFactor/count;
 
+    console.log(that.crimeData.containerForMapVis.maxCrimeFactor)
     return this.crimeData;
 }
 
