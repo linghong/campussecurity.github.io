@@ -120,7 +120,7 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
     that.svg.selectAll("circle")
         .attr("cx", function(d) {
 
-            var proj = that.projection([d.longitude, d.latitude]);
+            var proj = that.projection([d.school.longitude, d.school.latitude]);
             if(!proj){
                 return -1;
             }
@@ -130,7 +130,7 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
 
         })
         .attr("cy", function(d) {
-            var proj = that.projection([d.longitude, d.latitude]);
+            var proj = that.projection([d.school.longitude, d.school.latitude]);
             if(!proj){
                 return null;
             }
@@ -228,6 +228,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
             caption = "<p class='univCity'>" + school.name + "</p>"
 
+            caption += "&nbsp;&nbsp;" + school.address +", " + school.state + "-" +school.zip +"<br>"
             caption += "&nbsp;&nbsp;Rank: " + school.rank +"<br>"
             var container = null;
 
@@ -346,9 +347,6 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
 
         var caption = circle.attr("longCaption");
-
-
-
 
         $("#floatingDiv").width(that.svg.attr("width"))
         $("#floatingDiv").height(that.svg.attr("height"))
