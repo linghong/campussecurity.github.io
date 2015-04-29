@@ -72,17 +72,17 @@
                 	<!--map bottom crime button -->
 					<div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-1" >
 						<div class="btn-group">
-	                        <button class="btn btn-info-darken btn-sm" id="weapon">WEAPON</button>
-	                        <button class="btn btn-info-darken btn-sm"id="drug">DRUG</button>
-	                        <button class="btn btn-info-darken btn-sm" id="liquor">LIQUOR</button>
-	                        <button class="btn btn-info-darken btn-sm" id="murd">MURD</button>
-	                        <button class="btn btn-info-darken btn-sm" id="forcib">FORCIB</button>
-	                        <button class="btn btn-info-darken btn-sm" id="nonfor">NONFOR</button>
-	                        <button class="btn btn-info-darken btn-sm" id="robbe">ROBBE</button>
-	                        <button class="btn btn-info-darken btn-sm" id="agg">AGG</button>
-	                        <button class="btn btn-info-darken btn-sm" id="burgla">BURGLA</button>
-	                        <button class="btn btn-info-darken btn-sm" id="vehic">VEHIC</button>
-	                        <button class="btn btn-info-darken btn-sm" id="arson">ARSON</button>
+	                        <button class="btn btn-info-darken btn-sm" id="weapon" value="weaponOffence">WEAPON</button>
+	                        <button class="btn btn-info-darken btn-sm"id="drug" value="drugViolations">DRUG</button>
+	                        <button class="btn btn-info-darken btn-sm" id="liquor" value="liquorViolations">LIQUOR</button>
+	                        <button class="btn btn-info-darken btn-sm" id="murd" value="murderCount">MURD</button>
+	                        <button class="btn btn-info-darken btn-sm" id="forcib" value="forcibleSexOffense">FORCIB</button>
+	                        <button class="btn btn-info-darken btn-sm" id="nonfor" value="nonForcibleSexOffense">NONFOR</button>
+	                        <button class="btn btn-info-darken btn-sm" id="robbe" value="robbery">ROBBE</button>
+	                        <button class="btn btn-info-darken btn-sm" id="agg" value="aggravatedAssault">AGG</button>
+	                        <button class="btn btn-info-darken btn-sm" id="burgla" value="burglary">BURGLA</button>
+	                        <button class="btn btn-info-darken btn-sm" id="vehic" value="vehicleTheft">VEHIC</button>
+	                        <button class="btn btn-info-darken btn-sm" id="arson" value="arson">ARSON</button>
                     	</div >
 					</div>
 
@@ -173,6 +173,11 @@
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
             mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
+
+            $("#map-control-1 button").click(function(){
+               var crimeKey=$(this).val();
+                colSectorsViz.onSelectionChange(crimeKey);
+            });
         }
 
     </script>

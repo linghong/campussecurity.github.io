@@ -43,10 +43,10 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
   var yearArray=[];
   for (var y=0; y<6;y++){
 
-    for (var s=0; s<yearSectors[y].values.length;s++){
+    for (var s=0; s<aggregratedData[y].values.length;s++){
       yearArray.push({
-        "sectorCd": yearSectors[y].values[s].key,
-        "key":yearSectors[y].values[s].values[_crimekey]*100,    
+        "sectorCd": aggregratedData[y].values[s].key,
+        "key":aggregratedData[y].values[s].values[_crimekey]*100,    
       });
     }          
   }
@@ -62,7 +62,9 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
 
 }
 
-
+/**
+ * Method to updata Viz. 
+ */
 ColSectorsViz.prototype.updateViz = function(){
 
 // a data series
@@ -132,6 +134,6 @@ var y = d3.scale.linear()
  * aggregation is done by the function "aggregate(filter)". Filter has to
  * be defined here.
  */
-ColSectorsViz.prototype.onSelectionChange= function (selection){
-    this.updateViz();
+ColSectorsViz.prototype.onSelectionChange= function (_crimekey){
+    this.updateViz(_crimekey);
 }
