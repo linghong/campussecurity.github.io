@@ -6,9 +6,9 @@
 ColSectorsViz = function(_data,_crimekey){
     this.data = _data;
     // defines constants
-    this.padding= {top: 15, right: 15, bottom: 15, left: 45};
-    this.width = $("#crimehistory").width();
-    this.height = 0.8*this.width;
+    this.padding= {top: 15, right: 5, bottom: 15, left: 45};
+    this.width = $("#yearsectors").width();
+    this.height = 0.55*this.width;
     this.initVis(_crimekey);
 }
 
@@ -20,7 +20,7 @@ ColSectorsViz.prototype.initVis = function(_crimekey){
   var that = this; // read about the this
 
   // constructs SVG layout
-  this.svg = d3.select("#crimehistory").append("svg")
+  this.svg = d3.select("#yearsectors").append("svg")
     .attr("width", this.width)
     .attr("height", this.height)
     .append("g");
@@ -102,7 +102,7 @@ var y = d3.scale.linear()
     series.enter()    
     // create a container for each series
     .append("g")
-    .attr( "id", function(d) { return "series-" + d.key } );
+    .attr( "class", function(d) { return "series-" + d.key } );
     
   var circle=series.selectAll( "circle" )
         // do a data join for each series' values
@@ -139,8 +139,15 @@ var y = d3.scale.linear()
  * aggregation is done by the function "aggregate(filter)". Filter has to
  * be defined here.
  */
-ColSectorsViz.prototype.onSelectionChange= function (_crimekey){
+ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
     this.wrangleData(_crimekey);
     this.updateViz(_crimekey);
 
 }
+
+ColSectorsViz.prototype.onYearChange= function (_slideryear){
+  console.log(".series-" + _slideryear);
+$(".series-" + _slideryear).css({"background-color":"blue"});
+
+}
+ 
