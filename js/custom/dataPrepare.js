@@ -3,7 +3,7 @@
 *@_data  a flat structure data with all crime prameters
 */
 
-var aggregratedData;
+var aggregatedData;
 
 DataPrepare = function(_data,_aggKey1, _aggKey2){
     this.data = _data;
@@ -17,7 +17,7 @@ DataPrepare = function(_data,_aggKey1, _aggKey2){
   * function for aggregating data by keys (two layers) using a flat structure data file.
   */
 DataPrepare.prototype.doubleAggregate = function ( _aggKey1, _aggKey2){
-    aggregratedData = d3.nest()
+    aggregatedData = d3.nest()
           .key(function(d) { 
             return d[_aggKey1]; })
           .key(function(d) { 
@@ -64,6 +64,4 @@ DataPrepare.prototype.doubleAggregate = function ( _aggKey1, _aggKey2){
             };
           })
         .entries(this.data); 
-
-    return aggregratedData;
 }
