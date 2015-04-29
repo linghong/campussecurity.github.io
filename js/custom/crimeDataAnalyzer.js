@@ -50,7 +50,7 @@ CrimeDataAnalyzer.prototype.init = function(){
             arson: 0,
             weaponOffence: 0,
             drugViolations: 0,
-            liquorViolations: 0,
+            liquorViolations: 0
         }
 
         d.school.yearData.forEach(function (dd, i) {
@@ -147,11 +147,7 @@ CrimeDataAnalyzer.prototype.init = function(){
     that.allTimeCrimeData.drugViolations *= (1000/that.allTimeCrimeData.count);
     that.allTimeCrimeData.liquorViolations *= (1000/that.allTimeCrimeData.count);
 
-    that.crimeData.schools.forEach(function(d) {
-        if (d.school.schoolId =="100663001"){
-            console.log(d.school);
-        }
-    });
+
 }
 
 CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
@@ -186,9 +182,7 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
                 weights.drugFactor * container.drugViolations +
                 weights.liquorFactor * container.liquorViolations;
 
-            if(d.school.schoolId =="100663001"){
-                console.log(d.school.crimeFactorForMapVis)
-            }
+
             totalCrimeFactor += d.school.crimeFactorForMapVis;
 
             if(that.crimeData.containerForMapVis.minCrimeFactor == null){
@@ -251,7 +245,6 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
     this.crimeData.containerForMapVis.countOfSchools= count;
     this.crimeData.containerForMapVis.averageCrimeFactor = totalCrimeFactor/count;
 
-    console.log(that.crimeData.containerForMapVis.maxCrimeFactor)
     return this.crimeData;
 }
 
