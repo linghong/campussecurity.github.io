@@ -58,6 +58,6 @@ DataPrepare.prototype.doubleAggregate = function ( _aggKey1, _aggKey2){
             };
           })
         .entries(this.data); 
-        console.log(yearSectors);
+
     return yearSectors;
 }
