@@ -6,7 +6,7 @@
 ColSectorsViz = function(_data,_crimekey){
     this.data = _data;
     // defines constants
-    this.padding= {top: 15, right: 15, bottom: 15, left: 25};
+    this.padding= {top: 15, right: 15, bottom: 15, left: 45};
     this.width = $("#crimehistory").width();
     this.height = 0.8*this.width;
     this.initVis(_crimekey);
@@ -43,14 +43,14 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
   var yearArray=[];
   for (var y=0; y<6;y++){
 
-    for (var s=0; s<aggregratedData[y].values.length;s++){
+    for (var s=0; s<aggregatedData[y].values.length;s++){
       yearArray.push({
-        "sectorCd": aggregratedData[y].values[s].key,
-        "key":aggregratedData[y].values[s].values[_crimekey]*100,    
+        "sectorCd": aggregatedData[y].values[s].key,
+        "key":aggregatedData[y].values[s].values[_crimekey]*100,    
       });
     }          
   }
-
+     
     this.ySecCrime={
       "2008": yearArray.slice(0,9),
       "2009": yearArray.slice(9,18),
@@ -59,7 +59,7 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
       "2012": yearArray.slice(36,45),
       "2013": yearArray.slice(45,54)
     }  
-
+ console.log(this.ySecCrime);
 }
 
 /**
@@ -98,20 +98,24 @@ var y = d3.scale.linear()
   var series = this.svg.selectAll( "g" )
     // convert the object to an array of d3 entries
     .data( d3.map(this.ySecCrime).entries())
-    .enter()    
+    
+    series.enter()    
     // create a container for each series
     .append("g")
     .attr( "id", function(d) { return "series-" + d.key } );
     
-  series.selectAll( "circle" )
+  var circle=series.selectAll( "circle" )
         // do a data join for each series' values
-        .data( function(d) { return d.value } )
-        .enter()
-        .append("circle")
-        .attr( "cx", function(d) { return x(d.sectorCd) } )
+        .data( function(d) { return d.value } );
+
+  circle.enter()
+        .append("circle");
+  circle.attr( "cx", function(d) { return x(d.sectorCd) } )
         .attr( "r", "6" )
         .attr( "cy", function(d) { return y(d.key)-5} );
-
+  
+  series.exit().remove(); 
+  circle.exit().remove();  
 
     // Add axes visual elements
     this.svg
@@ -125,7 +129,8 @@ var y = d3.scale.linear()
       .attr("class", "y_axis")
       .attr("transform", "translate("+this.padding.left+",0)")  
       .call(this.yAxis);
-
+    series.exit().remove();
+    circle.exit().remove();
   }
 
 
@@ -135,5 +140,7 @@ var y = d3.scale.linear()
  * be defined here.
  */
 ColSectorsViz.prototype.onSelectionChange= function (_crimekey){
+    this.wrangleData(_crimekey);
     this.updateViz(_crimekey);
+
 }

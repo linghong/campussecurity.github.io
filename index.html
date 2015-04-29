@@ -175,14 +175,13 @@
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
 
             //click the button below the map, make updates for maps, and the viz in three boxes.
-            $("#map-control-1 button").click(function(){
+            $("#map-control-1 button").click(function() {
+
                 //get the clicked button value
                var crimeKey=$(this).val();
 
-               //update the mapViz and the three other Vizs 
+               //update the mapViz and the three other Viz 
                 colSectorsViz.onSelectionChange(crimeKey);
-
-
 
             });
         }
