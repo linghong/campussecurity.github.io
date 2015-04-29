@@ -6,7 +6,7 @@
 StateSectorsViz = function(_data,_crimekey){
     this.data = _data;
     // defines constants
-    this.padding= {top: 15, right: 5, bottom: 15, left: 45};
+    this.padding= {top: 15, right: 5, bottom: 15, left: 50};
     this.width = $("#statessectors").width();
     this.height = 0.55*this.width;
     this.initVis(_crimekey);
@@ -52,18 +52,15 @@ StateSectorsViz.prototype.wrangleData= function(_crimekey){
     for (var s=0; s<aggregatedData[y].values.length;s++){
       firstKeyArray.push({
         "aggKey2": aggregatedData[y].values[s].key,
-        "key":aggregatedData[y].values[s].values[_crimekey]*100,    
+        "key":aggregatedData[y].values[s].values[_crimekey],    
       });
     }          
   }
-  console.log("firstKeyArray");
-console.log(firstKeyArray);
+
     this.ySecCrime ={};
       for (i=0;i<aggregatedData.length;i++){
          this.ySecCrime[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
       }
-      console.log("this.ySecCrime" );
-    console.log(this.ySecCrime );
 }
 
 /**
@@ -81,7 +78,8 @@ var x =d3.scale.ordinal()
 
 var yMax= d3.max( dataSeries, function(d) { 
       var innermax= d3.max(d, function(v) { 
-          return v.key; });  
+          return v.key; });
+ 
         return innermax;          
       } );
 
@@ -101,8 +99,9 @@ var y = d3.scale.linear()
   var series = this.svg.selectAll( "g" )
     // convert the object to an array of d3 entries
     .data( d3.map(this.ySecCrime).entries())
-    console.log(this.ySecCrime);
-    
+    console.log("series");
+    console.log(series);
+
     series.enter()    
     // create a container for each series
     .append("g")

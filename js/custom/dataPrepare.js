@@ -25,6 +25,7 @@ DataPrepare.prototype.doubleAggregate = function ( _aggKey1, _aggKey2){
           .sortKeys(d3.ascending) 
           .rollup(function(leaves) {
             return {
+
             "murderCount":d3.sum(leaves, function(l) {
                                     return l.murderCount;
                                  })/leaves.length ,
