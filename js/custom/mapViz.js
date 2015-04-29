@@ -150,6 +150,7 @@ MapViz.prototype.refreshData = function () {
     var crimeData = crimeAnalyzer.processWeights(weights)
 
     this.paintCircles(crimeData,"", weights.topCount, weights.bottomCount)
+    crimeDistrViz.wrangleData(crimeData)
 }
 
 
