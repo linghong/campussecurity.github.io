@@ -6565,11 +6565,19 @@ h1 {
   text-align: center;
   padding: 13px;
 }
+.minititle {
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+}
 p {
   font-size: 18px;
   height: auto;
   padding: 5px;
   text-align: justify;
+}
+#slidertime {
+  width: 100px;
 }
 /*-----------------------------------------------------------------
 Header and footer
@@ -6636,23 +6644,15 @@ Boxes and Panel
 .panel {
   padding: 5px;
 }
-.edge-width {
-  margin-left: -15px;
-  margin-right: -15px;
-}
-.edge-height {
-  margin-top: -17px;
-  margin-bottom: -10px;
-}
 .panel-info {
-  border: 1px solid #5c5c3e;
+  border: 1px solid #89895c;
   background-color: #f8fcfe;
 }
 a.panel-info:hover {
   background-color: #ceecf5;
 }
 .panel-info-darken {
-  background-color: #e7f6fa;
+  background-color: #53A68D;
 }
 a.panel-info-darken:hover {
   background-color: #bde6f2;
@@ -6715,13 +6715,15 @@ fieldset[disabled] .btn-info-darken.active {
 }
 .aside-top {
   padding: 5px;
-  height: 80px;
+  height: 40px;
 }
 .aside-bottom {
   padding: 5px;
+  height: 230px;
 }
 .aside-center {
   padding-left: 5px;
+  height: 230px;
 }
 .section {
   padding: 5px;
@@ -6729,6 +6731,11 @@ fieldset[disabled] .btn-info-darken.active {
 }
 btn-small {
   width: padding:2px;
+}
+.btn-sm,
+.btn-group-sm > .btn {
+  padding-left: 2px;
+  padding-right: 2px;
 }
 /*-----------------------------------------------------------------
 Title , subtitle
@@ -6745,16 +6752,19 @@ subtitle {
   font-size: 22px;
 }
 /*-----------------------------------------------------------------
-buttons
+positions
 -------------------------------------------------------------------
 */
 .center {
   text-align: center;
 }
-.btn-sm,
-.btn-group-sm > .btn {
-  padding-left: 2px;
-  padding-right: 2px;
+.edge-width {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.edge-height {
+  margin-top: -17px;
+  margin-bottom: -10px;
 }
 /*-----------------------------------------------------------------
 styles for barcharts
@@ -6765,27 +6775,27 @@ styles for barcharts
   stroke: steelblue;
   stroke-width: 3.5px;
 }
-#series-2008 {
+.series-2008 {
   fill: pink;
   opacity: 0.6;
 }
-#series-2009 {
+.series-2009 {
   fill: orange;
   opacity: 0.6;
 }
-#series-2010 {
+.series-2010 {
   fill: violet;
   opacity: 0.6;
 }
-#series-2011 {
+.series-2011 {
   fill: red;
   opacity: 0.6;
 }
-#series-2012 {
+.series-2012 {
   fill: blue;
   opacity: 0.6;
 }
-#series-2013 {
+.series-2013 {
   fill: green;
   opacity: 0.6;
 }
@@ -6808,12 +6818,6 @@ text.schoolLabel {
 }
 input.weightScale {
   width: 44px;
-}
-.panel-info-darken {
-  background-color: #53A68D;
-}
-a.panel-info-darken:hover {
-  background-color: #bde6f2;
 }
 div#univDataDiv {
   padding: 10px;
