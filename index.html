@@ -174,9 +174,16 @@
             mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
 
+            //click the button below the map, make updates for maps, and the viz in three boxes.
             $("#map-control-1 button").click(function(){
+                //get the clicked button value
                var crimeKey=$(this).val();
+
+               //update the mapViz and the three other Vizs 
                 colSectorsViz.onSelectionChange(crimeKey);
+
+
+
             });
         }
 
