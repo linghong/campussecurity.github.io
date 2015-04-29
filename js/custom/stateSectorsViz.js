@@ -8,7 +8,7 @@ StateSectorsViz = function(_data,_crimekey){
     // defines constants
     this.padding= {top: 15, right: 5, bottom: 15, left: 45};
     this.width = $("#statessectors").width();
-    this.height = 0.55*this.width;
+    this.height = 0.6*this.width;
     this.initVis(_crimekey);
 }
 
