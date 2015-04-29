@@ -3,11 +3,11 @@
  * @param _data -- the data array
  * @constructor
  */
-ColSectorsViz = function(_data,_crimekey){
+StateSectorsViz = function(_data,_crimekey){
     this.data = _data;
     // defines constants
     this.padding= {top: 15, right: 5, bottom: 15, left: 45};
-    this.width = $("#yearsectors").width();
+    this.width = $("#statessectors").width();
     this.height = 0.55*this.width;
     this.initVis(_crimekey);
 }
@@ -16,11 +16,11 @@ ColSectorsViz = function(_data,_crimekey){
 /**
  * Method that sets up the SVG and the variables
  */
-ColSectorsViz.prototype.initVis = function(_crimekey){
+StateSectorsViz.prototype.initVis = function(_crimekey){
   var that = this; // read about the this
 
   // constructs SVG layout
-  this.svg = d3.select("#yearsectors").append("svg")
+  this.svg = d3.select("#statessectors").append("svg")
     .attr("width", this.width)
     .attr("height", this.height)
     .append("g");
@@ -34,11 +34,17 @@ ColSectorsViz.prototype.initVis = function(_crimekey){
  * Method to wrangle the data. In this case it takes an options object
  * @param _filterFunction - a function that filters data or "null" if none
  */
-ColSectorsViz.prototype.wrangleData= function(_crimekey){
+StateSectorsViz.prototype.wrangleData= function(_crimekey){
 
+  //group data as year basis
+  var yearData = d3.nest()
+          .key(function(d) { 
+            return d.year; })
+          .entries(this.data);
+ 
   //get aggregated data
-  var dataPrepare = new DataPrepare(this.data, "year", "sectorCd");
-
+  var dataPrepare = new DataPrepare(yearData[0].values, "state", "sectorCd");
+   
   //make a data object used for the multi-series scatterplot
   var firstKeyArray=[];
   for (var y=0; y<aggregatedData.length;y++){
@@ -50,17 +56,20 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
       });
     }          
   }
-     
+  console.log("firstKeyArray");
+console.log(firstKeyArray);
     this.ySecCrime ={};
       for (i=0;i<aggregatedData.length;i++){
          this.ySecCrime[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
       }
+      console.log("this.ySecCrime" );
+    console.log(this.ySecCrime );
 }
 
 /**
  * Method to updata Viz. 
  */
-ColSectorsViz.prototype.updateViz = function(){
+StateSectorsViz.prototype.updateViz = function(){
 
 // a data series
 var dataSeries = d3.values(this.ySecCrime);
@@ -106,7 +115,7 @@ var y = d3.scale.linear()
   circle.enter()
         .append("circle");
   circle.attr( "cx", function(d) { return x(d.aggKey2) } )
-        .attr( "r", "6" )
+        .attr( "r", "5" )
         .attr( "cy", function(d) { return y(d.key)-5} );
   
   series.exit().remove(); 
@@ -134,15 +143,15 @@ var y = d3.scale.linear()
  * aggregation is done by the function "aggregate(filter)". Filter has to
  * be defined here.
  */
-ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
+StateSectorsViz.prototype.onCrimeChange= function (_crimekey){
     this.wrangleData(_crimekey);
     this.updateViz(_crimekey);
 
 }
 
-ColSectorsViz.prototype.onYearChange= function (_slideryear){
+StateSectorsViz.prototype.onYearChange= function (_slideryear){
   console.log(".series-" + _slideryear);
-$(".series-" + _slideryear).css({"background-color":"blue"});
+
 
 }
  

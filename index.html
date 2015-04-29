@@ -17,11 +17,13 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/d3.v3.js"></script>
 	<script src="js/queue.js"></script>
+    <script src="js/custom/dataPrepare.js"></script>
 	<script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
     <script src="js/custom/colSectorsViz.js"></script>
-    <script src="js/custom/dataPrepare.js"></script>
+    <script src="js/custom/stateSectorsViz.js"></script>
+   
 </head>
 
 <body>
@@ -105,9 +107,9 @@
                     color indicates different years.
                 </div> 
                 <!--box for user interactive box: make my own security map  -->
-                <div class="col-md-12 col-sm-12 panel-info center aside-bottom" id="statesSectors">
+                <div class="col-md-12 col-sm-12 panel-info center aside-bottom" id="statessectors">
                   
-                    color indicates different regions.
+                    color indicates different states.
                 </div>                					
 		 	</aside>
             <section class="col-md-12 col-sm-12 panel-info-darken">
@@ -182,6 +184,7 @@
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
             mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
+            stateSectorsViz =new StateSectorsViz(schoolCrime, "weaponOffence");
 
             //click the button below the map, make updates for maps, and the viz in three boxes.
             $("#map-control-1 button").click(function() {
@@ -191,6 +194,8 @@
 
                //update the mapViz and the three other Viz 
                 colSectorsViz.onCrimeChange(crimeKey);
+                //update the mapViz and the three other Viz 
+                stateSectorsViz.onCrimeChange(crimeKey);
 
             });
         }
