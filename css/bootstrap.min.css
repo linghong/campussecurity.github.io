@@ -4047,7 +4047,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar {
   position: relative;
-  min-height: 50px;
   margin-bottom: 20px;
   border: 1px solid transparent;
 }
@@ -6577,7 +6576,7 @@ Header and footer
 -------------------------------------------------------------------
 */
 header {
-  padding: 10px;
+  padding: 5px;
   background-color: #7a3e00;
 }
 aheader:hover {
@@ -6595,13 +6594,15 @@ afooter:hover {
   background-color: #ceecf5;
 }
 main {
-  margin-top: 10px;
-  padding: 1%;
+  margin-top: 5px;
+  padding-top: 5px;
+  border: black;
 }
 aside {
-  margin-top: 10px;
-  padding: 1%;
+  margin-top: 5px;
+  padding-top: 5px;
   text-align: center;
+  border: black;
 }
 .nav > li {
   background: white;
@@ -6609,13 +6610,17 @@ aside {
 .nav > li > a:hover,
 .nav > li > a:focus {
   background-color: #522900;
+  height: 37px;
 }
 .navbar-default .navbar-nav > li > a {
   background-color: #7A7A52;
   color: white;
+  padding-top: 8px;
+  height: 35px ;
 }
 .navbar {
   background-color: #A3A375;
+  height: 37px ;
 }
 .navbar-toggle {
   background-color: #7A7A52;
@@ -6629,14 +6634,14 @@ Boxes and Panel
 -------------------------------------------------------------------
 */
 .panel {
-  padding: 15px;
+  padding: 5px;
 }
 .edge-width {
   margin-left: -15px;
   margin-right: -15px;
 }
 .edge-height {
-  margin-top: -15px;
+  margin-top: -17px;
   margin-bottom: -10px;
 }
 .panel-info {
@@ -6708,18 +6713,15 @@ fieldset[disabled] .btn-info-darken.active {
 .main-top {
   text-align: center;
 }
-.main-center {
-  padding: 10px;
-}
 .aside-top {
-  padding: 10px;
+  padding: 5px;
   height: 80px;
 }
 .aside-bottom {
-  padding: 10px;
+  padding: 5px;
 }
 .aside-center {
-  padding-left: 10px;
+  padding-left: 5px;
 }
 .section {
   padding: 5px;

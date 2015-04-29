@@ -17,46 +17,56 @@ ColSectorsViz = function(_data,_crimekey){
  * Method that sets up the SVG and the variables
  */
 ColSectorsViz.prototype.initVis = function(_crimekey){
+  var that = this; // read about the this
+
+  // constructs SVG layout
+  this.svg = d3.select("#crimehistory").append("svg")
+    .attr("width", this.width)
+    .attr("height", this.height)
+    .append("g");
+
+    this.wrangleData(_crimekey);
+    // call the update method
+    this.updateViz(_crimekey);
+}
+
+/**
+ * Method to wrangle the data. In this case it takes an options object
+ * @param _filterFunction - a function that filters data or "null" if none
+ */
+ColSectorsViz.prototype.wrangleData= function(_crimekey){
 
   //get aggregated data
   var dataPrepare = new DataPrepare(this.data, "year", "sectorCd");
 
   //make a data object used for the multi-series scatterplot
   var yearArray=[];
-  var yearObject={};
-  var index;
   for (var y=0; y<6;y++){
 
     for (var s=0; s<yearSectors[y].values.length;s++){
       yearArray.push({
         "sectorCd": yearSectors[y].values[s].key,
-        "murderCount":yearSectors[y].values[s].values.murderCount*100,
-        "negligentManSlaughter":yearSectors[y].values[s].values.negligentManSlaughter*100,
-        "forcibleSexOffense":yearSectors[y].values[s].values.forcibleSexOffense*100,
-        "nonForcibleSexOffense":yearSectors[y].values[s].values.nonForcibleSexOffense*100,
-        "robbery":yearSectors[y].values[s].values.robbery*100,
-        "aggravatedAssault":yearSectors[y].values[s].values.aggravatedAssault*100,
-        "burglary":yearSectors[y].values[s].values.burglary*100,
-        "vehicleTheft":yearSectors[y].values[s].values.vehicleTheft*100,
-        "arson":yearSectors[y].values[s].values.arson*100,
-        "weaponOffence":yearSectors[y].values[s].values.weaponOffence*100,
-        "drugViolations":yearSectors[y].values[s].values.drugViolations*100,
-        "liquorViolations":yearSectors[y].values[s].values.liquorViolations*100 
+        "key":yearSectors[y].values[s].values[_crimekey]*100,    
       });
     }          
+  }
+
+    this.ySecCrime={
+      "2008": yearArray.slice(0,9),
+      "2009": yearArray.slice(9,18),
+      "2010": yearArray.slice(18,27),
+      "2011": yearArray.slice(27,36),
+      "2012": yearArray.slice(36,45),
+      "2013": yearArray.slice(45,54)
+    }  
+
 }
 
-var ySecCrime={
-  "2008": yearArray.slice(0,9),
-  "2009": yearArray.slice(9,18),
-  "2010": yearArray.slice(18,27),
-  "2011": yearArray.slice(27,36),
-  "2012": yearArray.slice(36,45),
-  "2013": yearArray.slice(45,54)
-}
+
+ColSectorsViz.prototype.updateViz = function(){
 
 // a data series
-var dataSeries = d3.values(ySecCrime);
+var dataSeries = d3.values(this.ySecCrime);
 
 //scales
 var x =d3.scale.ordinal()
@@ -65,7 +75,7 @@ var x =d3.scale.ordinal()
 
 var yMax= d3.max( dataSeries, function(d) { 
       var innermax= d3.max(d, function(v) { 
-          return v[_crimekey]; });  
+          return v.key; });  
         return innermax;          
       } );
 
@@ -83,40 +93,45 @@ var y = d3.scale.linear()
       .ticks(5)
       .orient("left");
   
-  // constructs SVG layout
-  var svg = d3.select("#crimehistory").append("svg")
-    .attr("width", this.width)
-    .attr("height", this.height)
-    .append("g");
-
-  var series = svg.selectAll( "g" )
+  var series = this.svg.selectAll( "g" )
     // convert the object to an array of d3 entries
-    .data( d3.map(ySecCrime).entries())
-    .enter()
+    .data( d3.map(this.ySecCrime).entries())
+    .enter()    
     // create a container for each series
     .append("g")
     .attr( "id", function(d) { return "series-" + d.key } );
     
-    series.selectAll( "circle" )
+  series.selectAll( "circle" )
         // do a data join for each series' values
         .data( function(d) { return d.value } )
         .enter()
         .append("circle")
         .attr( "cx", function(d) { return x(d.sectorCd) } )
-        .attr( "r", "5" )
-        .attr( "cy", function(d) { return y(d[_crimekey])-5} );
- 
+        .attr( "r", "6" )
+        .attr( "cy", function(d) { return y(d.key)-5} );
+
+
     // Add axes visual elements
-    svg
+    this.svg
       .append("g")
       .attr("class", "x_axis")
       .attr("transform", "translate(0," + (this.height - this.padding.bottom-this.padding.top) + ")") 
       .call(this.xAxis);
 
-    svg
+    this.svg
       .append("g")
       .attr("class", "y_axis")
       .attr("transform", "translate("+this.padding.left+",0)")  
       .call(this.yAxis);
+
   }
 
+
+/**
+ * Gets called by event handler and should create new aggregated data
+ * aggregation is done by the function "aggregate(filter)". Filter has to
+ * be defined here.
+ */
+ColSectorsViz.prototype.onSelectionChange= function (selection){
+    this.updateViz();
+}
