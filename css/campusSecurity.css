@@ -1,7 +1,6 @@
 text.schoolLabel
 {
-    fill: #ffffff;
-    font-size: 7pt;
+    color: #ffffff;
 }
 
 input.weightScale{
@@ -12,50 +11,4 @@ input.weightScale{
  }
  a.panel-info-darken:hover {
    background-color: #bde6f2;
-}
-
- div#univDataDiv{
-     padding: 10px;
-     border: 1px solid gray;
- }
-
-div#univDataDivText{
-    font-size: 7pt;
-    overflow: scroll;
-}
-
-.univName{
- font-size: 10pt;
-}
-
-.divCloser{
-    cursor: hand;
-}
-
-.captionLabel{
-    width: 120px;
-    padding-right: 4px;
-    text-align: right;
-    display: inline-block;
-}
-.captionValue{
-    font-weight: bold;
-    font-size: 10px;
-}
-
-.captionValueHighlight{
-    font-weight: bold;
-    background-color: #ffff00;
-}
-
-.axis path,
-.axis line {
-    fill: none;
-    stroke: black;
-    shape-rendering: crispEdges;
-}
-
-.axis text {
-    font-family: sans-serif;
-    font-size: 11px;
 }
