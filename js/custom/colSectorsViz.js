@@ -46,7 +46,7 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
     for (var s=0; s<aggregatedData[y].values.length;s++){
       firstKeyArray.push({
         "aggKey2": aggregatedData[y].values[s].key,
-        "key":aggregatedData[y].values[s].values[_crimekey]*100,    
+        "key":aggregatedData[y].values[s].values[_crimekey],    
       });
     }          
   }
