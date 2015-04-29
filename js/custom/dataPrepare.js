@@ -1,3 +1,8 @@
+/*
+* a function to aggregate data with two aggregators
+*@_data  a flat structure data with all crime prameters
+*/
+
 var aggregratedData;
 
 DataPrepare = function(_data,_aggKey1, _aggKey2){
@@ -17,6 +22,7 @@ DataPrepare.prototype.doubleAggregate = function ( _aggKey1, _aggKey2){
             return d[_aggKey1]; })
           .key(function(d) { 
             return d[_aggKey2]; })
+          .sortKeys(d3.ascending) 
           .rollup(function(leaves) {
             return {
             "murderCount":d3.sum(leaves, function(l) {
