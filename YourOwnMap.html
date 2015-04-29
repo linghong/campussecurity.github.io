@@ -12,6 +12,7 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
     
     <script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -50,9 +51,9 @@
 			</div>
 			<div class="collapse navbar-collapse" id="collapse">
 				<ul class="nav navbar-nav">
-					<li><a href='index.html'>Research Security Pattern</a></li>
-                    <li><a href='YourOwnMap.html'>Make Your Own Map</a></li>
-                    <li><a href=''>Watch Video</a></li>          
+					<li><a href='index.html'>Check Security Pattern</a></li>
+                    <li><a href=''>Make Your Own Security Map</a></li>
+					<li><a href=''>Watch Video</a></li>    
                     <li><a href='#' id="hide">Hide</a></li>
                     <li><a href='#' id="show">Show</a></li>
 				</ul>
@@ -68,54 +69,60 @@
 					<!--map -->
 					<div class="col-md-12 col-sm-12 panel-calm main-center" id="map">  
                 	</div>
-
-                	<!--map bottom crime button -->
-					<div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-1" >
-						<div class="btn-group">
-	                        <button class="btn btn-info-darken btn-sm" id="weapon">WEAPON</button>
-	                        <button class="btn btn-info-darken btn-sm"id="drug">DRUG</button>
-	                        <button class="btn btn-info-darken btn-sm" id="liquor">LIQUOR</button>
-	                        <button class="btn btn-info-darken btn-sm" id="murd">MURD</button>
-	                        <button class="btn btn-info-darken btn-sm" id="forcib">FORCIB</button>
-	                        <button class="btn btn-info-darken btn-sm" id="nonfor">NONFOR</button>
-	                        <button class="btn btn-info-darken btn-sm" id="robbe">ROBBE</button>
-	                        <button class="btn btn-info-darken btn-sm" id="agg">AGG</button>
-	                        <button class="btn btn-info-darken btn-sm" id="burgla">BURGLA</button>
-	                        <button class="btn btn-info-darken btn-sm" id="vehic">VEHIC</button>
-	                        <button class="btn btn-info-darken btn-sm" id="arson">ARSON</button>
-                    	</div >
-					</div>
-
 				</div>							
 			</main>
 
 			<!--top right column -->
 			<aside class="col-md-4 col-sm-12 panel-info-darken " id="aside">
-                <!--box for crime distribution across school sectors-->
-                 <div class="col-md-12 col-sm-12 panel panel-info aside-top" id="box2">
-                   Add Legend Here.
-                </div>      
-				<!--box for user interactive box: make my own security map  -->
-				<div class="col-md-12 col-sm-12 panel panel-info center aside-center" id="crimehistory">
-                  <h4>College Crime by School Sectors(cases/per 100 schools)</h4>
-                    color indicates different years.
-                </div>               					
-		 	</aside>
 
-			<section class="col-md-12 col-sm-12 panel-info-darken">
-				<div class="col-md-8 col-sm-12 panel panel-info section" id="usstates">
-	                        <h4>Distribution of College Crime Data in the 50 United States</h4>
-	            </div>	
-                <div class="col-md-4 col-sm-12 panel panel-info section" id="usstates">
-                            <h4>Historical Crime Data By College Secotors(2006-2013)</h4>
-                </div>      			 	
-			</section>
+				<!--box for user interactive box: make my own security map  -->
+				<div class="col-md-12 col-sm-12 panel panel-info center aside-center" id="weightsselector" >
+
+                        <h4>Enter Your Number Here</h4>
+                    <!--user interactive box: make my own security map, user input -->
+                    <form role="form" class="col-md-12 col-sm-12" >                                            
+                        <div class="row form-group name-group">       
+                            <label class="col-md-4 col-sm-4 control-label">Murd:<input id="murdId" type="number" min="0"
+                                                                                       max="100" value="1000" class=" form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Neg:<input id="negId" type="number" min="0" max="100"
+                                                                             value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Forcib:<input id="forcibId" type="number" min="0"
+                                                                                max="100"  value="10" class="form-control" step="10"  onchange="mapViz.refreshData()"></label>
+                            <!--this category has very low number<label class="control-label">Non-Forcib:<input id="nonForcibId" type="number" min="0" max="100"  value="10"class="form-control"></label>-->
+                            <label class="col-sm-4 control-label">Robbe:<input id="robbeId" type="number" min="0"
+                                                                               max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Burg:<input id="burgId" type="number" min="0"
+                                                                              max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Vehic:<input id="vehicId" type="number" min="0" max="100"  value="100" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                           <label class="col-sm-4 control-label">Aggr:<input id="aggravatedAssaultFactorId"
+                                                                             type="number" min="0" max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Arson:<input id="arsonFactorId" type="number" min="0"
+                                                                               max="100"  value="10"class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Weap:<input id="weaponFactorId" type="number" min="0"
+                                                                              max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                           <label class="col-sm-4 control-label">Drug:<input id="drugFactorId" type="number" min="0"
+                                                                             max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4 control-label">Liquor:<input id="liquorFactorId" type="number"
+                                                                                min="0" max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
+    				    </div>
+                        <div class="row form-group name-group">
+                            <label class="col-sm-4">Bottom:
+                                <input id="bottomCount" type="number" min="100" max="3500"  value="10"
+                                       class="form-control" step="100" onchange="mapViz.refreshData()"></label>
+                            <label class="col-sm-4"></label>
+                            <label class="col-sm-4">Top:
+                                <input id="topCount" type="number" min="100" max="3500"  value="10"
+                                       class="form-control" step="100" onchange="mapViz.refreshData()"></label>
+                        </div>
+                    </form>
+                </div>						
+		 	</aside>	
 
 		</div>
 		
 		<!-- footer-->	
 		<footer class="edge-width">
-			<a href="home.html">Home</a>|<a href="">About</a>|<a href=''>Contact</a>|<a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a>|<a href='/doc/PressBook.md'>PressBook</a>|<a href=''>Video</a>|   
+			|<a href="">About</a>|<a href=''>Contact</a>|<a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a>|<a href='/doc/PressBook.md'>PressBook</a>|<a href=''>Video</a>|   
 		</footer>
 	</div> 
 
@@ -173,7 +180,6 @@
             }); 
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
             mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
-            colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
         }
 
     </script>

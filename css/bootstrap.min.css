@@ -6706,27 +6706,24 @@ fieldset[disabled] .btn-info-darken.active {
   background-color: #7a7a52;
 }
 .main-top {
-  padding-bottom: 10px;
   text-align: center;
 }
 .main-center {
   padding: 10px;
 }
-.aside-top,
+.aside-top {
+  padding: 10px;
+  height: 80px;
+}
 .aside-bottom {
   padding: 10px;
 }
-.aside-bottom {
-  height: 130px;
-  padding-left: 10px;
-}
 .aside-center {
   padding-left: 10px;
-  padding-bottom: 5px;
 }
 .section {
   padding: 5px;
-  height: 380px;
+  height: 260px;
 }
 btn-small {
   width: padding:2px;
@@ -6751,6 +6748,11 @@ buttons
 */
 .center {
   text-align: center;
+}
+.btn-sm,
+.btn-group-sm > .btn {
+  padding-left: 2px;
+  padding-right: 2px;
 }
 /*-----------------------------------------------------------------
 styles for barcharts
