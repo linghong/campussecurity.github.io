@@ -6601,7 +6601,6 @@ main {
 aside {
   margin-top: 10px;
   padding: 1%;
-  height: 605px;
   text-align: center;
 }
 .nav > li {
@@ -6707,19 +6706,18 @@ fieldset[disabled] .btn-info-darken.active {
   background-color: #7a7a52;
 }
 .main-top {
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   text-align: center;
 }
 .main-center {
-  padding: 20px;
+  padding: 10px;
 }
 .aside-top,
 .aside-bottom {
   padding: 10px;
-  padding-bottom: 5px;
 }
 .aside-bottom {
-  height: 200px;
+  height: 130px;
   padding-left: 10px;
 }
 .aside-center {
@@ -6728,7 +6726,7 @@ fieldset[disabled] .btn-info-darken.active {
 }
 .section {
   padding: 5px;
-  height: 400px;
+  height: 380px;
 }
 btn-small {
   width: padding:2px;
@@ -6755,7 +6753,7 @@ buttons
   text-align: center;
 }
 /*-----------------------------------------------------------------
-barcharts
+styles for barcharts
 -------------------------------------------------------------------
 */
 .line {
@@ -6763,17 +6761,29 @@ barcharts
   stroke: steelblue;
   stroke-width: 3.5px;
 }
+#series-2008 {
+  fill: pink;
+  opacity: 0.6;
+}
+#series-2009 {
+  fill: orange;
+  opacity: 0.6;
+}
+#series-2010 {
+  fill: violet;
+  opacity: 0.6;
+}
 #series-2011 {
   fill: red;
   opacity: 0.6;
 }
 #series-2012 {
   fill: blue;
-  opacity: 0.4;
+  opacity: 0.6;
 }
 #series-2013 {
   fill: green;
-  opacity: 0.4;
+  opacity: 0.6;
 }
 .circle {
   stroke: black;
@@ -6783,4 +6793,39 @@ barcharts
   fill: none;
   stroke: steelblue;
   shape-rendering: crispEdges;
+}
+/*-----------------------------------------------------------------
+ styles for map
+-------------------------------------------------------------------
+*/
+text.schoolLabel {
+  fill: #ffffff;
+  font-size: 7pt;
+}
+input.weightScale {
+  width: 44px;
+}
+.panel-info-darken {
+  background-color: #53A68D;
+}
+a.panel-info-darken:hover {
+  background-color: #bde6f2;
+}
+div#univDataDiv {
+  padding: 10px;
+  border: 1px solid gray;
+}
+div#univDataDivText {
+  font-size: 7pt;
+  overflow: scroll;
+}
+.univName {
+  font-size: 10pt;
+}
+.divCloser {
+  cursor: hand;
+}
+span.captionLabel {
+  width: 40px;
+  text-align: right;
 }
