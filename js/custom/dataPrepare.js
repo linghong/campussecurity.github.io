@@ -1,4 +1,4 @@
-var yearSectors;
+var aggregratedData;
 
 DataPrepare = function(_data,_aggKey1, _aggKey2){
     this.data = _data;
@@ -12,7 +12,7 @@ DataPrepare = function(_data,_aggKey1, _aggKey2){
   * function for aggregating data by keys (two layers) using a flat structure data file.
   */
 DataPrepare.prototype.doubleAggregate = function ( _aggKey1, _aggKey2){
-    yearSectors = d3.nest()
+    aggregratedData = d3.nest()
           .key(function(d) { 
             return d[_aggKey1]; })
           .key(function(d) { 
@@ -59,5 +59,5 @@ DataPrepare.prototype.doubleAggregate = function ( _aggKey1, _aggKey2){
           })
         .entries(this.data); 
 
-    return yearSectors;
+    return aggregratedData;
 }
