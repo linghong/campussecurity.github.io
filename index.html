@@ -22,6 +22,7 @@
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
     <script src="js/custom/colSectorsViz.js"></script>
+    <script src="js/custom/dataPrepare.js"></script>
 </head>
 
 <body>
@@ -147,7 +148,8 @@
 	                        <h4>Distribution of College Crime Data in the 50 United States</h4>
 	            </div>	
 			 	<div class="col-md-4 col-sm-12 panel panel-info section" id="crimehistory">
-					<h4>College Crime Categorized by School Sectors</h4>
+					<h4>College Crime Categorized by School Sectors(cases/per 100 schools)</h4>
+                    color indicates different years.
 				</div>
 			</section>
 
@@ -184,12 +186,38 @@
                 .defer(d3.tsv, 'data/countryStatistics.tsv')
                 .defer(d3.tsv, 'data/stateOffsets.tsv')
                 .defer(d3.json, 'data/crimedata.json')
+                .defer(d3.json, 'data/crimedatabackup.json')
                 .await(dataLoaded);
 
-        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeData) {
+        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeData,_crimeDatabackup) {
+            
+            //a flat structure data
+            var schoolCrime=[];
+            _crimeDatabackup.forEach(function(d){
+                d.yearData.forEach(function(c){
+                    schoolCrime.push ({
+                        "schoolId": d.schoolId,
+                        "year":c.yearOfData,
+                        "state": d.state,
+                        "sectorCd": d.sectorCd, 
+                        "murderCount":c.murderCount,
+                        "negligentManSlaughter":c.negligentManSlaughter,
+                        "forcibleSexOffense":c.forcibleSexOffense,
+                        "nonForcibleSexOffense":c.nonForcibleSexOffense,
+                        "robbery":c.robbery,
+                        "aggravatedAssault":c.aggravatedAssault,
+                        "burglary":c.burglary,
+                        "vehicleTheft":c.vehicleTheft,
+                        "arson":c.arson,
+                        "weaponOffence":c.weaponOffence,
+                        "drugViolations":c.drugViolations,
+                        "liquorViolations":c.liquorViolations             
+                    });         
+                }); 
+            }); 
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
             mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
-            colSectorsViz =new ColSectorsViz(_crimeData, "weapon");
+            colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
         }
 
     </script>

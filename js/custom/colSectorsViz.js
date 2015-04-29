@@ -6,12 +6,10 @@
 ColSectorsViz = function(_data,_crimekey){
     this.data = _data;
     // defines constants
-    this.padding= {top: 15, right: 15, bottom: 15, left: 25},
+    this.padding= {top: 15, right: 15, bottom: 15, left: 25};
     this.width = $("#crimehistory").width();
-    this.height = 0.9*this.width;
+    this.height = 0.8*this.width;
     this.initVis(_crimekey);
-    console.log("this.width");
-    console.log(this.width);
 }
 
 
@@ -19,38 +17,50 @@ ColSectorsViz = function(_data,_crimekey){
  * Method that sets up the SVG and the variables
  */
 ColSectorsViz.prototype.initVis = function(_crimekey){
-var Data = {
-    "2011": [
-             {"sect_cd":"1", "weapon":52.9264214},
-             {"sect_cd":"2", "weapon":5.657370518},
-             {"sect_cd":"3", "weapon":1.315789474},
-             {"sect_cd":"4", "weapon":12.02290076},
-             {"sect_cd":"5", "weapon":4.191616766},
-             {"sect_cd":"6", "weapon":1.011122346}
-         ],
-    "2012": [
-             {"sect_cd":"1", "weapon":51.6722408},
-             {"sect_cd":"2", "weapon":5.61752988},
-             {"sect_cd":"3", "weapon":1.315789474},
-             {"sect_cd":"4", "weapon":12.40458015},
-             {"sect_cd":"5", "weapon":3.592814371},
-             {"sect_cd":"6", "weapon":0.910010111}
-         ],
-    "2013": [
-             {"sect_cd":"1", "weapon":53.84615385},
-             {"sect_cd":"2", "weapon":6.573705179},
-             {"sect_cd":"3", "weapon":1.435406699},
-             {"sect_cd":"4", "weapon":11.30725191},
-             {"sect_cd":"5", "weapon":3.592814371},
-             {"sect_cd":"6", "weapon":0.707785642}
-    ]};
 
+  //get aggregated data
+  var dataPrepare = new DataPrepare(this.data, "year", "sectorCd");
 
-// A way to look more easily across all 'inner' arrays
-var dataSeries = d3.values(Data);
+  //make a data object used for the multi-series scatterplot
+  var yearArray=[];
+  var yearObject={};
+  var index;
+  for (var y=0; y<6;y++){
 
+    for (var s=0; s<yearSectors[y].values.length;s++){
+      yearArray.push({
+        "sectorCd": yearSectors[y].values[s].key,
+        "murderCount":yearSectors[y].values[s].values.murderCount*100,
+        "negligentManSlaughter":yearSectors[y].values[s].values.negligentManSlaughter*100,
+        "forcibleSexOffense":yearSectors[y].values[s].values.forcibleSexOffense*100,
+        "nonForcibleSexOffense":yearSectors[y].values[s].values.nonForcibleSexOffense*100,
+        "robbery":yearSectors[y].values[s].values.robbery*100,
+        "aggravatedAssault":yearSectors[y].values[s].values.aggravatedAssault*100,
+        "burglary":yearSectors[y].values[s].values.burglary*100,
+        "vehicleTheft":yearSectors[y].values[s].values.vehicleTheft*100,
+        "arson":yearSectors[y].values[s].values.arson*100,
+        "weaponOffence":yearSectors[y].values[s].values.weaponOffence*100,
+        "drugViolations":yearSectors[y].values[s].values.drugViolations*100,
+        "liquorViolations":yearSectors[y].values[s].values.liquorViolations*100 
+      });
+    }          
+}
+
+var ySecCrime={
+  "2008": yearArray.slice(0,9),
+  "2009": yearArray.slice(9,18),
+  "2010": yearArray.slice(18,27),
+  "2011": yearArray.slice(27,36),
+  "2012": yearArray.slice(36,45),
+  "2013": yearArray.slice(45,54)
+}
+
+// a data series
+var dataSeries = d3.values(ySecCrime);
+
+//scales
 var x =d3.scale.ordinal()
-    .domain([0,1,2,3,4,5,6])
+    .domain([0,1,2,3,4,5,6,7,8,9,10])
     .rangePoints([this.padding.left, this.width-this.padding.left-this.padding.right]);
 
 var yMax= d3.max( dataSeries, function(d) { 
@@ -63,6 +73,7 @@ var y = d3.scale.linear()
     .domain([0, yMax])
     .range([this.height-this.padding.top-this.padding.bottom, this.padding.bottom]);
 
+//x and y axis
     this.xAxis = d3.svg.axis()
       .scale(x)
       .orient("bottom");
@@ -80,7 +91,7 @@ var y = d3.scale.linear()
 
   var series = svg.selectAll( "g" )
     // convert the object to an array of d3 entries
-    .data( d3.map(Data).entries())
+    .data( d3.map(ySecCrime).entries())
     .enter()
     // create a container for each series
     .append("g")
@@ -91,7 +102,7 @@ var y = d3.scale.linear()
         .data( function(d) { return d.value } )
         .enter()
         .append("circle")
-        .attr( "cx", function(d) { return x(d.sect_cd) } )
+        .attr( "cx", function(d) { return x(d.sectorCd) } )
         .attr( "r", "5" )
         .attr( "cy", function(d) { return y(d[_crimekey])-5} );
  
