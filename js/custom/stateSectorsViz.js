@@ -8,7 +8,7 @@ StateSectorsViz = function(_data,_crimekey){
     // defines constants
     this.padding= {top: 15, right: 5, bottom: 15, left: 45};
     this.width = $("#statessectors").width();
-    this.height = 0.6*this.width;
+    this.height = 0.55*this.width;
     this.initVis(_crimekey);
 }
 
@@ -89,7 +89,6 @@ var y = d3.scale.linear()
     .domain([0, yMax])
     .range([this.height-this.padding.top-this.padding.bottom, this.padding.bottom]);
 
-//x and y axis
     this.xAxis = d3.svg.axis()
       .scale(x)
       .orient("bottom");
@@ -102,14 +101,16 @@ var y = d3.scale.linear()
   var series = this.svg.selectAll( "g" )
     // convert the object to an array of d3 entries
     .data( d3.map(this.ySecCrime).entries())
+    console.log(this.ySecCrime);
     
     series.enter()    
     // create a container for each series
     .append("g")
-    .attr( "class", function(d) { return "series-" + d.key } );
-    
-  var circle=series.selectAll( "circle" )
-        // do a data join for each series' values
+    .attr( "class", function(d) { return "series-" + d.key } )
+   ;
+  
+  // do a data join for each series' values
+  var circle=series.selectAll( "circle" )      
         .data( function(d) { return d.value } );
 
   circle.enter()

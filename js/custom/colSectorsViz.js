@@ -8,7 +8,7 @@ ColSectorsViz = function(_data,_crimekey){
     // defines constants
     this.padding= {top: 15, right: 5, bottom: 15, left: 45};
     this.width = $("#yearsectors").width();
-    this.height = 0.6*this.width;
+    this.height = 0.55*this.width;
     this.initVis(_crimekey);
 }
 
@@ -143,6 +143,6 @@ ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
 ColSectorsViz.prototype.onYearChange= function (_slideryear){
   console.log(".series-" + _slideryear);
 $(".series-" + _slideryear).css({"background-color":"blue"});
-
+//$(".series-" + _slideryear).classed('clicked', true);
 }
  
