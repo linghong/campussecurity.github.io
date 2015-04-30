@@ -23,7 +23,8 @@
     <script src="js/custom/crimeDataAnalyzer.js"></script>
     <script src="js/custom/colSectorsViz.js"></script>
     <script src="js/custom/stateSectorsViz.js"></script>
-   
+    <script src="js/custom/categorySelectionViz.js"></script>
+
 </head>
 
 <body>
@@ -130,12 +131,11 @@
 	</div> 
 
 	<script type="text/javascript">
-
+        var myEventHandler = new Object();
         var divPadding=20;
         var mapViz=null;
         var crimeAnalyzer = null;
-        var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
-
+        var categorySelectionViz = new CategorySelectionViz();
         $("#hide").hover(function(){
             $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
             $('#aside').hide();
@@ -151,11 +151,10 @@
                 .defer(d3.json, 'data/us-states.json')
                 .defer(d3.tsv, 'data/countryStatistics.tsv')
                 .defer(d3.tsv, 'data/stateOffsets.tsv')
-                .defer(d3.json, 'data/crimedata.json')
                 .defer(d3.json, 'data/crimedatabackup.json')
                 .await(dataLoaded);
 
-        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeData,_crimeDatabackup) {
+        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeDatabackup) {
             
             //a flat structure data
             var schoolCrime=[];
@@ -181,9 +180,13 @@
                     });         
                 }); 
             }); 
-            crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
-            mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
+            crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
+            mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets, categorySelectionViz, myEventHandler);
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
+
+            $(myEventHandler).on('changed', function () {
+                mapViz.wrangleData();
+            });
             stateSectorsViz =new StateSectorsViz(schoolCrime, "weaponOffence");
 
             //click the button below the map, make updates for maps, and the viz in three boxes.
@@ -196,6 +199,9 @@
                 colSectorsViz.onCrimeChange(crimeKey);
                 //update the mapViz and the three other Viz 
                 stateSectorsViz.onCrimeChange(crimeKey);
+
+                categorySelectionViz.onCrimeChange(crimeKey);
+                mapViz.wrangleData();
 
             });
         }

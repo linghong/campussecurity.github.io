@@ -35,9 +35,9 @@ CrimeDataAnalyzer.prototype.init = function(){
 
     var maxCrimeData = {};
 
-    this.crimeData.schools.forEach(function(d,i) {
+    this.crimeData.forEach(function(d,i) {
 
-        d.school["allTimeCrimeData"] =
+        d["allTimeCrimeData"] =
         {
             murderCount: 0,
             negligentManSlaughter: 0,
@@ -53,7 +53,7 @@ CrimeDataAnalyzer.prototype.init = function(){
             liquorViolations: 0
         }
 
-        d.school.yearData.forEach(function (dd, i) {
+        d.yearData.forEach(function (dd, i) {
             if (!that.yearCrimeData[dd.yearOfData]) {
                 that.yearCrimeData[dd.yearOfData] =
                 {
@@ -72,6 +72,8 @@ CrimeDataAnalyzer.prototype.init = function(){
                     count: 0
                 }
             }
+
+
             that.yearCrimeData[dd.yearOfData].murderCount += parseFloat(dd.murderCount);
             that.yearCrimeData[dd.yearOfData].negligentManSlaughter += parseFloat(dd.negligentManSlaughter);
             that.yearCrimeData[dd.yearOfData].forcibleSexOffense += parseFloat(dd.forcibleSexOffense);
@@ -100,18 +102,18 @@ CrimeDataAnalyzer.prototype.init = function(){
             that.allTimeCrimeData.liquorViolations += parseFloat(dd.liquorViolations)
             that.allTimeCrimeData.count++;
 
-            d.school.allTimeCrimeData.murderCount += parseFloat(dd.murderCount);
-            d.school.allTimeCrimeData.negligentManSlaughter += parseFloat(dd.negligentManSlaughter);
-            d.school.allTimeCrimeData.forcibleSexOffense += parseFloat(dd.forcibleSexOffense);
-            d.school.allTimeCrimeData.nonForcibleSexOffense += parseFloat(dd.nonForcibleSexOffense);
-            d.school.allTimeCrimeData.robbery += parseFloat(dd.robbery);
-            d.school.allTimeCrimeData.aggravatedAssault += parseFloat(dd.aggravatedAssault);
-            d.school.allTimeCrimeData.burglary += parseFloat(dd.burglary);
-            d.school.allTimeCrimeData.vehicleTheft += parseFloat(dd.vehicleTheft);
-            d.school.allTimeCrimeData.arson += parseFloat(dd.arson)
-            d.school.allTimeCrimeData.weaponOffence += parseFloat(dd.weaponOffence)
-            d.school.allTimeCrimeData.drugViolations += parseFloat(dd.drugViolations)
-            d.school.allTimeCrimeData.liquorViolations += parseFloat(dd.liquorViolations)
+            d.allTimeCrimeData.murderCount += parseFloat(dd.murderCount);
+            d.allTimeCrimeData.negligentManSlaughter += parseFloat(dd.negligentManSlaughter);
+            d.allTimeCrimeData.forcibleSexOffense += parseFloat(dd.forcibleSexOffense);
+            d.allTimeCrimeData.nonForcibleSexOffense += parseFloat(dd.nonForcibleSexOffense);
+            d.allTimeCrimeData.robbery += parseFloat(dd.robbery);
+            d.allTimeCrimeData.aggravatedAssault += parseFloat(dd.aggravatedAssault);
+            d.allTimeCrimeData.burglary += parseFloat(dd.burglary);
+            d.allTimeCrimeData.vehicleTheft += parseFloat(dd.vehicleTheft);
+            d.allTimeCrimeData.arson += parseFloat(dd.arson)
+            d.allTimeCrimeData.weaponOffence += parseFloat(dd.weaponOffence)
+            d.allTimeCrimeData.drugViolations += parseFloat(dd.drugViolations)
+            d.allTimeCrimeData.liquorViolations += parseFloat(dd.liquorViolations)
 
         });
     });
@@ -157,19 +159,18 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
 
     var totalCrimeFactor=0, count=0;
 
-    this.crimeData.schools.forEach(function(d,i) {
+    this.crimeData.forEach(function(d,i) {
 
         var container = null;
         if(year){
-            container = d.school.yearData[year];
+            container = d.yearData[year];
         }
         else {
-            container = d.school.allTimeCrimeData;
+            container = d.allTimeCrimeData;
         }
-
-        if(container){
+        if(container && weights["sectId"+ d.sectorCd]){
             count++;
-            d.school.crimeFactorForMapVis =
+            d.crimeFactorForMapVis =
                 weights.murdFactor * container.murderCount +
                 weights.negligenceFactor * container.negligentManSlaughter +
                 weights.forcibleCrimeFactor * container.forcibleSexOffense +
@@ -183,32 +184,32 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
                 weights.liquorFactor * container.liquorViolations;
 
 
-            totalCrimeFactor += d.school.crimeFactorForMapVis;
+            totalCrimeFactor += d.crimeFactorForMapVis;
 
             if(that.crimeData.containerForMapVis.minCrimeFactor == null){
-                that.crimeData.containerForMapVis.minCrimeFactor = d.school.crimeFactorForMapVis;
+                that.crimeData.containerForMapVis.minCrimeFactor = d.crimeFactorForMapVis;
             }
             else if(that.crimeData.containerForMapVis.minCrimeFactor >
-                d.school.crimeFactorForMapVis) {
-                that.crimeData.containerForMapVis.minCrimeFactor = d.school.crimeFactorForMapVis;
+                d.crimeFactorForMapVis) {
+                that.crimeData.containerForMapVis.minCrimeFactor = d.crimeFactorForMapVis;
             }
 
             if(that.crimeData.containerForMapVis.maxCrimeFactor == null){
-                that.crimeData.containerForMapVis.maxCrimeFactor = d.school.crimeFactorForMapVis;
+                that.crimeData.containerForMapVis.maxCrimeFactor = d.crimeFactorForMapVis;
             }
             else if(that.crimeData.containerForMapVis.maxCrimeFactor <
-                d.school.crimeFactorForMapVis) {
-                that.crimeData.containerForMapVis.maxCrimeFactor = d.school.crimeFactorForMapVis;
+                d.crimeFactorForMapVis) {
+                that.crimeData.containerForMapVis.maxCrimeFactor = d.crimeFactorForMapVis;
             }
         }
         else{
-            d.school.crimeFactorForMapVis = null;
+            d.crimeFactorForMapVis = null;
         }
     });
 
-    this.crimeData.schools.sort(
+    this.crimeData.sort(
     function(a,b){
-        return d3.ascending(a.school.crimeFactorForMapVis, b.school.crimeFactorForMapVis)
+        return d3.ascending(a.crimeFactorForMapVis, b.crimeFactorForMapVis)
     });
 
 
@@ -218,26 +219,26 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
 
     var container = null;
 
-    this.crimeData.schools.forEach(function(d,i){
+    this.crimeData.forEach(function(d,i){
         if(year){
-            container = d.school[year]
+            container = d[year]
         }
         else {
-            container = d.school.allTimeCrimeData
+            container = d.allTimeCrimeData
         }
 
         if(container){
-            if(oldCrimeFactor != d.school.crimeFactorForMapVis){
-                d.school["rank"] = ++rank;
+            if(oldCrimeFactor != d.crimeFactorForMapVis){
+                d["rank"] = ++rank;
             }
             else {
-                d.school["rank"] = rank;
+                d["rank"] = rank;
             }
 
-            oldCrimeFactor = d.school.crimeFactorForMapVis;
+            oldCrimeFactor = d.crimeFactorForMapVis;
         }
         else {
-            d.school["rank"] = 0;
+            d["rank"] = 0;
         }
     })
 
@@ -246,6 +247,8 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
     this.crimeData.containerForMapVis.averageCrimeFactor = totalCrimeFactor/count;
 
     return this.crimeData;
+
+
 }
 
 CrimeDataAnalyzer.prototype.getData = function(){
