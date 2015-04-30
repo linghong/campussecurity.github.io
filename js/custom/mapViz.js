@@ -1,7 +1,8 @@
 
 //TODO:
 //add parameters - data and width so that it can be passed from outside.
-MapViz = function(_statesData,_countryStatistics,_stateOffsets) {
+MapViz = function(_statesData,_countryStatistics,_stateOffsets,_eventHandler) {
+    this.eventHandler = _eventHandler;
     this.txt = null;
     this.txtBox = null;
     this.stateOffsets=_stateOffsets;
@@ -120,7 +121,7 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
     that.svg.selectAll("circle")
         .attr("cx", function(d) {
 
-            var proj = that.projection([d.school.longitude, d.school.latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 return -1;
             }
@@ -130,7 +131,7 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
 
         })
         .attr("cy", function(d) {
-            var proj = that.projection([d.school.longitude, d.school.latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 return null;
             }
@@ -141,16 +142,15 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
 
 }
 
-MapViz.prototype.refreshData = function () {
+MapViz.prototype.wrangleData = function () {
     this.svg.selectAll("text").remove();
     this.svg.selectAll("rect").remove();
 
     var weights = weightsContainerViz.getWeights();
-
+    console.log(weights)
     var crimeData = crimeAnalyzer.processWeights(weights)
 
     this.paintCircles(crimeData,"", weights.topCount, weights.bottomCount)
-    crimeDistrViz.wrangleData(crimeData)
 }
 
 
@@ -214,28 +214,23 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
     this.svg.selectAll("circle").remove();
     this.svg.selectAll("circle")
-        .data(crimeData.schools)
+        .data(crimeData)
         .enter()
         .append("circle")
         .attr("caption", function(d){
 
-            var caption = "(" + d.school.rank + " / " + maxRank +") "
-            + d.school.name;
+            var caption = "(" + d.rank + " / " + maxRank +") "
+            + d.name;
             return caption;
         })
         .attr("longCaption", function(d){
 
-            var school = d.school;
+            var school = d;
 
             caption = "<p class='univCity'>" + school.name + "</p>"
             caption += "&nbsp;&nbsp;" + school.address +", " + school.state + "-" +school.zip +"<br><br>"
 
             var container = null;
-
-            if(d.school.schoolId =="100663001"){
-
-                console.log(d.school)
-            }
 
             if (that.year){
                 container = school.yearData[year];
@@ -274,7 +269,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
             return caption;
         })
         .attr("cx", function(d) {
-            var proj = that.projection([d.school.longitude, d.school.latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 console.log("Invalid lat /long",d);
                 return null;
@@ -285,7 +280,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
         })
         .attr("cy", function(d) {
-            var proj = that.projection([d.school.longitude, d.school.latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 console.log("Invalid lat /long",d);
                 return null;
@@ -298,25 +293,21 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
             var r;
 
-            /*if(d.school.schoolId =="100663001"){
 
-                console.log(d.school)
-                return 40;
-            }*/
             try {
-                if (d.school.rank <=topCount || d.school.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
-                    if (d.school.crimeFactorForMapVis  < aveCrimeFactor){
-                        r =  1+ ((aveCrimeFactor- d.school.crimeFactorForMapVis)/aveCrimeFactor)
+                //if (d.rank <=topCount || d.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
+                    if (d.crimeFactorForMapVis  < aveCrimeFactor){
+                        r =  1+ ((aveCrimeFactor- d.crimeFactorForMapVis)/aveCrimeFactor)
 
                     }
                     else{
 
-                        r = 2+ 5*(d.school.crimeFactorForMapVis/( maxCrimeFactor-aveCrimeFactor))
+                        r = 2+ 6*(d.crimeFactorForMapVis/( maxCrimeFactor-aveCrimeFactor))
                     }
-                }
-                else{
-                    r=0;
-                }
+                //}
+                //else{
+                  //  r=0;
+                //}
 
             }
             catch (e){
@@ -327,7 +318,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
         })
         .style("fill", function(d,i){
 
-            if (d.school.crimeFactorForMapVis > aveCrimeFactor){
+            if (d.crimeFactorForMapVis > aveCrimeFactor){
                 return "red";// colorScale(d.crimeFactor)
             }
             else {
@@ -337,11 +328,11 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
         })
         .style("opacity", function(d){
-            if (d.school.crimeFactorForMapVis > aveCrimeFactor){
-                return 1
+            if (d.crimeFactorForMapVis > aveCrimeFactor){
+                return .5
             }
             else {
-                return .3
+                return .5
             }
         })
         .on('mouseover',showCityData)
@@ -494,8 +485,6 @@ MapViz.prototype.loadData = function (){
         .css("display", "block");
 
 
-    weightsContainerViz.showWeightsContainer();
-
 
     function stateClicked(){
         var stateId = d3.select(this).attr("id")
@@ -514,7 +503,6 @@ MapViz.prototype.loadData = function (){
 
     function stateIn(){
         d3.select(this).style("fill","khaki");
-        weightsContainerViz.hideWeightsContainer();
     }
 
     function stateOut(){

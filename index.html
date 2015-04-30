@@ -34,7 +34,7 @@
         <div id="univDataDivText"></div>
     </div>
 
-	<div class="container">	
+	<div class="container">	u
 		<!--row1: Site Name-->
 		<header class="row " >
 		</header>
@@ -93,54 +93,39 @@
 
 			<!--top right column -->
 			<aside class="col-md-4 col-sm-12 panel-info-darken " id="aside">
-
+                <div id="paramsContainer">
 				<!--box for user interactive box: make my own security map  -->
-				<div class="col-md-12 col-sm-12 panel panel-info center aside-center" id="weightsselector" >
+                    <h5>How Important Is A Crime Type To Me?</h5>
+                    <div  id="weightsSelector">
 
-
-                    <!--user interactive box: make my own security map, user input -->
-                    <form role="form" class="col-md-12 col-sm-12" >                                            
-                        <div class="row form-group name-group">       
-                            <label class="col-md-4 col-sm-4 control-label">Murd:<input id="murdId" type="number" min="0"
-                                                                                       max="100" value="1000" class=" form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Neg:<input id="negId" type="number" min="0" max="100"
-                                                                             value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Forcib:<input id="forcibId" type="number" min="0"
-                                                                                max="100"  value="10" class="form-control" step="10"  onchange="mapViz.refreshData()"></label>
-                            <!--this category has very low number<label class="control-label">Non-Forcib:<input id="nonForcibId" type="number" min="0" max="100"  value="10"class="form-control"></label>-->
-                            <label class="col-sm-4 control-label">Robbe:<input id="robbeId" type="number" min="0"
-                                                                               max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Burg:<input id="burgId" type="number" min="0"
-                                                                              max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Vehic:<input id="vehicId" type="number" min="0" max="100"  value="100" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                           <label class="col-sm-4 control-label">Aggr:<input id="aggravatedAssaultFactorId"
-                                                                             type="number" min="0" max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Arson:<input id="arsonFactorId" type="number" min="0"
-                                                                               max="100"  value="10"class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Weap:<input id="weaponFactorId" type="number" min="0"
-                                                                              max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                           <label class="col-sm-4 control-label">Drug:<input id="drugFactorId" type="number" min="0"
-                                                                             max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4 control-label">Liquor:<input id="liquorFactorId" type="number"
-                                                                                min="0" max="100"  value="10" class="form-control" step="10" onchange="mapViz.refreshData()"></label>
-    				    </div>
-                        <div class="row form-group name-group">
-                            <label class="col-sm-4">Bottom:
-                                <input id="bottomCount" type="number" min="100" max="3500"  value="10"
-                                       class="form-control" step="100" onchange="mapViz.refreshData()"></label>
-                            <label class="col-sm-4"></label>
-                            <label class="col-sm-4">Top:
-                                <input id="topCount" type="number" min="100" max="3500"  value="10"
-                                       class="form-control" step="100" onchange="mapViz.refreshData()"></label>
-                        </div>
-                    </form>
-                  
+                    </div>
+                    <br>
+                    <div style="font-size: 10px">
+                        <label><input id="sectId1" type="checkbox" value="1" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 4+ years</label>
+                        <label><input id="sectId2" type="checkbox" value="2" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit, 4+ years</label>
+                        <label><input id="sectId3" type="checkbox" value="3" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 4+ years</label>
+                        <label><input id="sectId4" type="checkbox" value="4" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 2 years</label>
+                        <label><input id="sectId5" type="checkbox" value="5" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit 2 years</label>
+                        <label><input id="sectId6" type="checkbox" value="6" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 2 years</label>
+                        <label><input id="sectId7" type="checkbox" value="7" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public <2 years</label>
+                        <label><input id="sectId8" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit <2 years</label>
+                        <label><input id="sectId9" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private <2 years</label>
+                    </div>
+                    <div class="row form-group name-group">
+                        <label class="col-sm-4">Bottom:
+                            <input id="bottomCount" type="number" min="100" max="3500"  value="10"
+                                   class="form-control" step="100" onchange="mapViz.refreshData()"></label>
+                        <label class="col-sm-4"></label>
+                        <label class="col-sm-4">Top:
+                            <input id="topCount" type="number" min="100" max="3500"  value="10"
+                                   class="form-control" step="100" onchange="mapViz.refreshData()"></label>
+                    </div>
                 </div>
-
                 <!--box for crime distribution across school sectors-->
                  <div class="col-md-12 col-sm-12 panel panel-info aside-bottom" id="box2">
 					<h4>Historical Crime Data By College Secotors(2006-2013)</h4>
-				</div>							
+				</div>
+
 		 	</aside>
 
 			<section class="col-md-12 col-sm-12 panel-info-darken">
@@ -162,11 +147,11 @@
 	</div> 
 
 	<script type="text/javascript">
-
+        var myEventHandler = new Object();
         var divPadding=20;
         var mapViz=null;
         var crimeAnalyzer = null;
-        var weightsContainerViz = new WeightContainerViz($( "#weightsSelector").width());
+        var weightsContainerViz = new WeightContainerViz("weightsSelector",myEventHandler);
 
         $("#hide").hover(function(){
             $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
@@ -179,17 +164,14 @@
             $('#switch').text('Hide');
         });
 
-
-
         queue()
                 .defer(d3.json, 'data/us-states.json')
                 .defer(d3.tsv, 'data/countryStatistics.tsv')
                 .defer(d3.tsv, 'data/stateOffsets.tsv')
-                .defer(d3.json, 'data/crimedata.json')
                 .defer(d3.json, 'data/crimedatabackup.json')
                 .await(dataLoaded);
 
-        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeData,_crimeDatabackup) {
+        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeDatabackup) {
             
             //a flat structure data
             var schoolCrime=[];
@@ -215,9 +197,13 @@
                     });         
                 }); 
             }); 
-            crimeAnalyzer = new CrimeDataAnalyzer(_crimeData);
-            mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets);
+            crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
+            mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets, myEventHandler);
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
+
+            $(myEventHandler).on('changed', function () {
+                mapViz.wrangleData();
+            });
         }
 
     </script>
