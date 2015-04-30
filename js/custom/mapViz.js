@@ -1,7 +1,8 @@
 
 //TODO:
 //add parameters - data and width so that it can be passed from outside.
-MapViz = function(_statesData,_countryStatistics,_stateOffsets) {
+MapViz = function(_statesData,_countryStatistics,_stateOffsets,_weightControl, _eventHandler) {
+    this.eventHandler = _eventHandler;
     this.txt = null;
     this.txtBox = null;
     this.stateOffsets=_stateOffsets;
@@ -23,6 +24,7 @@ MapViz = function(_statesData,_countryStatistics,_stateOffsets) {
     this.moveTimer = null;
     this.showDetailTimer=null;
     this.timerWaitPeriod = 100;
+    this.weightControl = _weightControl;
 
     this.hideCaptionTimer = null;
     this.hideDetailTimer = null;
@@ -120,7 +122,7 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
     that.svg.selectAll("circle")
         .attr("cx", function(d) {
 
-            var proj = that.projection([d.school.longitude, d.school.latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 return -1;
             }
@@ -130,7 +132,7 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
 
         })
         .attr("cy", function(d) {
-            var proj = that.projection([d.school.longitude, d.school.latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 return null;
             }
@@ -141,14 +143,12 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
 
 }
 
-MapViz.prototype.refreshData = function () {
+MapViz.prototype.wrangleData = function () {
     this.svg.selectAll("text").remove();
     this.svg.selectAll("rect").remove();
 
-    var weights = weightsContainerViz.getWeights();
-
+    var weights = this.weightControl.getWeights();
     var crimeData = crimeAnalyzer.processWeights(weights)
-
     this.paintCircles(crimeData,"", weights.topCount, weights.bottomCount)
 }
 
@@ -213,29 +213,23 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
     this.svg.selectAll("circle").remove();
     this.svg.selectAll("circle")
-        .data(crimeData.schools)
+        .data(crimeData)
         .enter()
         .append("circle")
         .attr("caption", function(d){
 
-            var caption = "(" + d.school.rank + " / " + maxRank +") "
-            + d.school.name;
+            var caption = "(" + d.rank + " / " + maxRank +") "
+            + d.name;
             return caption;
         })
         .attr("longCaption", function(d){
 
-            var school = d.school;
+            var school = d;
 
             caption = "<p class='univCity'>" + school.name + "</p>"
+            caption += "&nbsp;&nbsp;" + school.address +", " + school.state + "-" +school.zip +"<br><br>"
 
-            caption += "&nbsp;&nbsp;" + school.address +", " + school.state + "-" +school.zip +"<br>"
-            caption += "&nbsp;&nbsp;Rank: " + school.rank +" / " + maxRank +"<br>"
             var container = null;
-
-            if(d.school.schoolId =="100663001"){
-
-                console.log(d.school)
-            }
 
             if (that.year){
                 container = school.yearData[year];
@@ -244,22 +238,37 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
                 container = school.allTimeCrimeData;
             }
 
-            caption += "<span class='captionLabel'>Murders: </span>" + formatData(container.murderCount)+ "<br>"
-            caption += "Negligent Manslaughter:" + formatData(container.negligentManSlaughter)+ "<br>"
-            caption += "Forcible Sex Assault:" + formatData(container.forcibleSexOffense)+ "<br>"
-            caption += "Non Forcible Sex Assault:" + formatData(container.nonForcibleSexOffense)+ "<br>"
-            caption += "Robbery:" + formatData(container.robbery)+ "<br>"
-            caption += "Aggravated Assault:" + formatData(container.aggravatedAssault)+ "<br>"
-            caption += "Burglary:" + formatData(container.burglary)+ "<br>"
-            caption += "Vehicle Theft:" + formatData(container.vehicleTheft)+ "<br>"
-            caption += "Arson:" + formatData(container.arson)+ "<br>"
-            caption += "Weapons Offense:" + formatData(container.weaponOffence)+ "<br>"
-            caption += "Drug Violations:" + formatData(container.drugViolations)+ "<br>"
-            caption += "Liquor Violations:" + formatData(container.liquorViolations)+ "<br>"
+
+            caption += "<span class='captionLabel'>Rank:</span><span class='captionValueHighlight'>" + school.rank +" / " + maxRank +"</span><br>"
+
+            caption += "<span class='captionLabel'>Murders:</span>" +
+            "<span class='captionValue'>"+formatData(container.murderCount)+ "</span><br>"
+            caption += "<span class='captionLabel'>Negligent Manslaughter:</span>"  +
+            "<span class='captionValue'>"+formatData(container.negligentManSlaughter)+ "</span><br>"
+            caption += "<span class='captionLabel'>Forcible Sex Assault:</span>" +
+            "<span class='captionValue'>"+formatData(container.forcibleSexOffense)+ "</span><br>"
+            caption += "<span class='captionLabel'>Non Forcible Sex Assault:</span>" +
+            "<span class='captionValue'>"+formatData(container.nonForcibleSexOffense)+ "</span><br>"
+            caption += "<span class='captionLabel'>Robbery:</span>" +
+            "<span class='captionValue'>"+formatData(container.robbery)+ "</span><br>"
+            caption += "<span class='captionLabel'>Aggravated Assault:</span>" +
+            "<span class='captionValue'>"+formatData(container.aggravatedAssault)+ "</span><br>"
+            caption += "<span class='captionLabel'>Burglary:</span>"  +
+            "<span class='captionValue'>"+formatData(container.burglary)+ "</span><br>"
+            caption += "<span class='captionLabel'>Vehicle Theft:</span>" +
+            "<span class='captionValue'>"+formatData(container.vehicleTheft)+ "</span><br>"
+            caption += "<span class='captionLabel'>Arson:</span>" +
+            "<span class='captionValue'>"+formatData(container.arson)+ "<br>"
+            caption += "<span class='captionLabel'>Weapons Offense:</span>"  +
+            "<span class='captionValue'>"+formatData(container.weaponOffence)+ "</span><br>"
+            caption += "<span class='captionLabel'>Drug Violations:</span>"  +
+            "<span class='captionValue'>"+formatData(container.drugViolations)+ "</span><br>"
+            caption += "<span class='captionLabel'>Liquor Violations:</span>"  +
+            "<span class='captionValue'>"+formatData(container.liquorViolations)+ "</span><br>"
             return caption;
         })
         .attr("cx", function(d) {
-            var proj = that.projection([d.school.longitude, d.school.latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 console.log("Invalid lat /long",d);
                 return null;
@@ -270,7 +279,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
         })
         .attr("cy", function(d) {
-            var proj = that.projection([d.school.longitude, d.school.latitude]);
+            var proj = that.projection([d.longitude, d.latitude]);
             if(!proj){
                 console.log("Invalid lat /long",d);
                 return null;
@@ -283,28 +292,21 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
             var r;
 
-            if(d.school.schoolId =="100663001"){
 
-                console.log(d.school)
-                return 40;
-            }
             try {
-                if (d.school.rank <=topCount || d.school.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
-                    if (d.school.crimeFactorForMapVis  < aveCrimeFactor){
-                        r =  2+ ((aveCrimeFactor- d.school.crimeFactorForMapVis)/aveCrimeFactor)
-                        if(isNaN(r)){
+                //if (d.rank <=topCount || d.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
+                    if (d.crimeFactorForMapVis  < aveCrimeFactor){
+                        r =  1+ ((aveCrimeFactor- d.crimeFactorForMapVis)/aveCrimeFactor)
 
-                            r=10;
-                        }
                     }
                     else{
 
-                        r = 2+ 5*(d.school.crimeFactorForMapVis/( maxCrimeFactor-aveCrimeFactor))
+                        r = 2+ 6*(d.crimeFactorForMapVis/( maxCrimeFactor-aveCrimeFactor))
                     }
-                }
-                else{
-                    r=0;
-                }
+                //}
+                //else{
+                  //  r=0;
+                //}
 
             }
             catch (e){
@@ -315,7 +317,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
         })
         .style("fill", function(d,i){
 
-            if (d.school.crimeFactorForMapVis > aveCrimeFactor){
+            if (d.crimeFactorForMapVis > aveCrimeFactor){
                 return "red";// colorScale(d.crimeFactor)
             }
             else {
@@ -325,7 +327,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
         })
         .style("opacity", function(d){
-            if (d.school.crimeFactorForMapVis > aveCrimeFactor){
+            if (d.crimeFactorForMapVis > aveCrimeFactor){
                 return .5
             }
             else {
@@ -435,7 +437,7 @@ MapViz.prototype.loadData = function (){
 
     var that = this;
 
-    var weights = weightsContainerViz.getWeights();
+    var weights = that.weightControl.getWeights();
     that.universityAggregateData = that.countryStatistics[0];
 
     var aveCrimeFactor= that.getAveCrimeFactor(that.universityAggregateData,weights)
@@ -482,8 +484,6 @@ MapViz.prototype.loadData = function (){
         .css("display", "block");
 
 
-    weightsContainerViz.showWeightsContainer();
-
 
     function stateClicked(){
         var stateId = d3.select(this).attr("id")
@@ -502,7 +502,6 @@ MapViz.prototype.loadData = function (){
 
     function stateIn(){
         d3.select(this).style("fill","khaki");
-        weightsContainerViz.hideWeightsContainer();
     }
 
     function stateOut(){

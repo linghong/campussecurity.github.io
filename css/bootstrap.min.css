@@ -4047,7 +4047,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar {
   position: relative;
-  min-height: 50px;
   margin-bottom: 20px;
   border: 1px solid transparent;
 }
@@ -6572,12 +6571,15 @@ p {
   padding: 5px;
   text-align: justify;
 }
+#slidertime {
+  width: 100px;
+}
 /*-----------------------------------------------------------------
 Header and footer
 -------------------------------------------------------------------
 */
 header {
-  padding: 10px;
+  padding: 5px;
   background-color: #7a3e00;
 }
 aheader:hover {
@@ -6595,13 +6597,15 @@ afooter:hover {
   background-color: #ceecf5;
 }
 main {
-  margin-top: 10px;
-  padding: 1%;
+  margin-top: 5px;
+  padding-top: 5px;
+  border: black;
 }
 aside {
-  margin-top: 10px;
-  padding: 1%;
+  margin-top: 5px;
+  padding-top: 5px;
   text-align: center;
+  border: black;
 }
 .nav > li {
   background: white;
@@ -6609,13 +6613,17 @@ aside {
 .nav > li > a:hover,
 .nav > li > a:focus {
   background-color: #522900;
+  height: 37px;
 }
 .navbar-default .navbar-nav > li > a {
   background-color: #7A7A52;
   color: white;
+  padding-top: 8px;
+  height: 35px ;
 }
 .navbar {
   background-color: #A3A375;
+  height: 37px ;
 }
 .navbar-toggle {
   background-color: #7A7A52;
@@ -6629,25 +6637,20 @@ Boxes and Panel
 -------------------------------------------------------------------
 */
 .panel {
-  padding: 15px;
-}
-.edge-width {
-  margin-left: -15px;
-  margin-right: -15px;
-}
-.edge-height {
-  margin-top: -15px;
-  margin-bottom: -10px;
+  padding: 5px;
 }
 .panel-info {
-  border: 1px solid #5c5c3e;
   background-color: #f8fcfe;
 }
 a.panel-info:hover {
   background-color: #ceecf5;
 }
+.panel-info-lightdarken {
+  border: 3px solid #f8fcfe;
+  background-color: #53A68D;
+}
 .panel-info-darken {
-  background-color: #e7f6fa;
+  background-color: #53A68D;
 }
 a.panel-info-darken:hover {
   background-color: #bde6f2;
@@ -6706,30 +6709,31 @@ fieldset[disabled] .btn-info-darken.active {
   background-color: #7a7a52;
 }
 .main-top {
-  padding-bottom: 10px;
   text-align: center;
 }
-.main-center {
-  padding: 10px;
-}
-.aside-top,
-.aside-bottom {
-  padding: 10px;
+.aside-top {
+  padding: 5px;
+  height: 40px;
 }
 .aside-bottom {
-  height: 130px;
-  padding-left: 10px;
+  padding: 5px;
+  height: 240px;
 }
 .aside-center {
-  padding-left: 10px;
-  padding-bottom: 5px;
+  padding-left: 5px;
+  height: 240px;
 }
 .section {
   padding: 5px;
-  height: 380px;
+  height: 260px;
 }
 btn-small {
   width: padding:2px;
+}
+.btn-sm,
+.btn-group-sm > .btn {
+  padding-left: 2px;
+  padding-right: 2px;
 }
 /*-----------------------------------------------------------------
 Title , subtitle
@@ -6745,12 +6749,26 @@ Title , subtitle
 subtitle {
   font-size: 22px;
 }
+.minititle {
+  text-align: center;
+  font-weight: bold;
+  font-size: 11px;
+  color: white;
+}
 /*-----------------------------------------------------------------
-buttons
+positions
 -------------------------------------------------------------------
 */
 .center {
   text-align: center;
+}
+.edge-width {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.edge-height {
+  margin-top: -17px;
+  margin-bottom: -10px;
 }
 /*-----------------------------------------------------------------
 styles for barcharts
@@ -6761,28 +6779,232 @@ styles for barcharts
   stroke: steelblue;
   stroke-width: 3.5px;
 }
-#series-2008 {
+.series-2008 {
   fill: pink;
   opacity: 0.6;
 }
-#series-2009 {
+.series-2009 {
   fill: orange;
   opacity: 0.6;
 }
-#series-2010 {
+.series-2010 {
   fill: violet;
   opacity: 0.6;
 }
-#series-2011 {
+.series-2011 {
   fill: red;
   opacity: 0.6;
 }
-#series-2012 {
+.series-2012 {
   fill: blue;
   opacity: 0.6;
 }
-#series-2013 {
+.series-2013 {
   fill: green;
+  opacity: 0.6;
+}
+.series-AL {
+  fill: #175b70;
+  opacity: 0.6;
+}
+.series-AK {
+  fill: #c5e9f3;
+  opacity: 0.6;
+}
+.series-AZ {
+  fill: #9bd8eb;
+  opacity: 0.6;
+}
+.series-AR {
+  fill: #70c8e2;
+  opacity: 0.6;
+}
+.series-CA {
+  fill: #0c1d2c;
+  opacity: 0.6;
+}
+.series-CO {
+  fill: #8cb8df;
+  opacity: 0.6;
+}
+.series-CT {
+  fill: #64a0d3;
+  opacity: 0.6;
+}
+.series-DE {
+  fill: #3c87c8;
+  opacity: 0.6;
+}
+.series-FL {
+  fill: #1e441e;
+  opacity: 0.6;
+}
+.series-GA {
+  fill: #b5dfb5;
+  opacity: 0.6;
+}
+.series-HI {
+  fill: #91cf91;
+  opacity: 0.6;
+}
+.series-ID {
+  fill: #6ec06e;
+  opacity: 0.6;
+}
+.series-IL {
+  fill: darkenen(#f0ad4e, 35%);
+  opacity: 0.6;
+}
+.series-IN {
+  fill: #fae3c4;
+  opacity: 0.6;
+}
+.series-IA {
+  fill: #f6ce95;
+  opacity: 0.6;
+}
+.series-KS {
+  fill: #f2b866;
+  opacity: 0.6;
+}
+.series-KY {
+  fill: #4d0f00;
+  opacity: 0.6;
+}
+.series-LA {
+  fill: #ff9980;
+  opacity: 0.6;
+}
+.series-ME {
+  fill: #ff704d;
+  opacity: 0.6;
+}
+.series-MD {
+  fill: #004d00;
+  opacity: 0.6;
+}
+.series-MA {
+  fill: #ffff80;
+  opacity: 0.6;
+}
+.series-MI {
+  fill: #ffff4d;
+  opacity: 0.6;
+}
+.series-MN {
+  fill: #ffff1a;
+  opacity: 0.6;
+}
+.series-MS {
+  fill: #4d4d00;
+  opacity: 0.6;
+}
+.series-MO {
+  fill: #ffffff;
+  opacity: 0.6;
+}
+.series-MT {
+  fill: #f7f2fc;
+  opacity: 0.6;
+}
+.series-NE {
+  fill: #dec7f4;
+  opacity: 0.6;
+}
+.series-NV {
+  fill: #7827c8;
+  opacity: 0.6;
+}
+.series-NH {
+  fill: #f0b9b8;
+  opacity: 0.6;
+}
+.series-NJ {
+  fill: #e7908e;
+  opacity: 0.6;
+}
+.series-NM {
+  fill: #de6764;
+  opacity: 0.6;
+}
+.series-NY {
+  fill: #611715;
+  opacity: 0.6;
+}
+.series-NC {
+  fill: #00b300;
+  opacity: 0.6;
+}
+.series-ND .series-OH {
+  fill: #ff80ff;
+  opacity: 0.6;
+}
+.series-OK {
+  fill: #ffe6ff;
+  opacity: 0.6;
+}
+.series-OR {
+  fill: #ff1aff;
+  opacity: 0.6;
+}
+.series-PA {
+  fill: #c76500;
+  opacity: 0.6;
+}
+.series-RI {
+  fill: #934b00;
+  opacity: 0.6;
+}
+.series-SC {
+  fill: #613100;
+  opacity: 0.6;
+}
+.series-SD {
+  fill: #000000;
+  opacity: 0.6;
+}
+.series-TN {
+  fill: #b7b794;
+  opacity: 0.6;
+}
+.series-TX {
+  fill: #a3a376;
+  opacity: 0.6;
+}
+.series-UT {
+  fill: #89895c;
+  opacity: 0.6;
+}
+.series-VT {
+  fill: #0f0f0a;
+  opacity: 0.6;
+}
+.series-VA {
+  fill: #b06d0f;
+  opacity: 0.6;
+}
+.series-WA {
+  fill: #4c4c33;
+  opacity: 0.6;
+}
+.series-WV {
+  fill: #2e1700;
+  opacity: 0.6;
+}
+.series-WI {
+  fill: #0f0f61;
+  opacity: 0.6;
+}
+.series-WY {
+  fill: #5656e5;
+  opacity: 0.6;
+}
+.series-AS {
+  fill: #2a2ade;
+  opacity: 0.6;
+}
+.series-DC {
+  fill: #b52b27;
   opacity: 0.6;
 }
 .circle {
@@ -6805,12 +7027,6 @@ text.schoolLabel {
 input.weightScale {
   width: 44px;
 }
-.panel-info-darken {
-  background-color: #53A68D;
-}
-a.panel-info-darken:hover {
-  background-color: #bde6f2;
-}
 div#univDataDiv {
   padding: 10px;
   border: 1px solid gray;
@@ -6829,3 +7045,33 @@ span.captionLabel {
   width: 40px;
   text-align: right;
 }
+
+div#paramsContainer {
+    background-color: #ffffff;
+    padding-top: 10px;
+}
+
+.noSelect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+text.schoolLabel
+{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #ffffff;
+}
+
+div#univDataDivText{
+
+}
+
