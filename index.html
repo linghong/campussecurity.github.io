@@ -12,17 +12,18 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
     
     <script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/d3.v3.js"></script>
 	<script src="js/queue.js"></script>
+    <script src="js/custom/dataPrepare.js"></script>
 	<script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
     <script src="js/custom/colSectorsViz.js"></script>
-    <script src="js/custom/dataPrepare.js"></script>
+    <script src="js/custom/stateSectorsViz.js"></script>
+   
 </head>
 
 <body>
@@ -34,7 +35,7 @@
         <div id="univDataDivText"></div>
     </div>
 
-	<div class="container">	u
+	<div class="container">	
 		<!--row1: Site Name-->
 		<header class="row " >
 		</header>
@@ -51,10 +52,9 @@
 			</div>
 			<div class="collapse navbar-collapse" id="collapse">
 				<ul class="nav navbar-nav">
-					<li><a href='index.html'>Home</a></li>
-					<li><a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a></li>
-					<li><a href='/doc/PressBook.md'>PressBook</a></li>
-                    <li><a href=''>Video</a></li>          
+					<li><a href='index.html'>Research Security Pattern</a></li>
+                    <li><a href='YourOwnMap.html'>Make Your Own Map</a></li>
+                    <li><a href=''>Watch Video</a></li>          
                     <li><a href='#' id="hide">Hide</a></li>
                     <li><a href='#' id="show">Show</a></li>
 				</ul>
@@ -73,76 +73,59 @@
 
                 	<!--map bottom crime button -->
 					<div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-1" >
-						<div class="btn-group">
-	                        <button class="btn btn-info-darken btn-sm" id="weapon">WEAPON</button>
-	                        <button class="btn btn-info-darken btn-sm"id="drug">DRUG</button>
-	                        <button class="btn btn-info-darken btn-sm" id="liquor">LIQUOR</button>
-	                        <button class="btn btn-info-darken btn-sm" id="murd">MURD</button>
-	                        <button class="btn btn-info-darken btn-sm" id="forcib">FORCIB</button>
-	                        <button class="btn btn-info-darken btn-sm" id="nonfor">NONFOR</button>
-	                        <button class="btn btn-info-darken btn-sm" id="robbe">ROBBE</button>
-	                        <button class="btn btn-info-darken btn-sm" id="agg">AGG</button>
-	                        <button class="btn btn-info-darken btn-sm" id="burgla">BURGLA</button>
-	                        <button class="btn btn-info-darken btn-sm" id="vehic">VEHIC</button>
-	                        <button class="btn btn-info-darken btn-sm" id="arson">ARSON</button>
+                        <div class="col-md-4 col-sm-6">
+                            <!--for time-->
+                            2006<label ><input type="range" name="yearslider" min="2008" max="2013" step="1" value="2013" id="slidertime" ></label>2013    
+                        </div>
+						<div class="btn-group col-md-8 col-sm-6">
+	                        <button class="btn btn-info-darken btn-sm" id="weapon" value="weaponOffence">WEAPON</button>
+	                        <button class="btn btn-info-darken btn-sm" id="drug" value="drugViolations">DRUG</button>
+	                        <button class="btn btn-info-darken btn-sm" id="liquor" value="liquorViolations">LIQUOR</button>
+	                        <button class="btn btn-info-darken btn-sm" id="murd" value="murderCount">MURD</button>
+	                        <button class="btn btn-info-darken btn-sm" id="forcib" value="forcibleSexOffense">FORCIB</button>	                       
+	                        <button class="btn btn-info-darken btn-sm" id="robbe" value="robbery">ROBBE</button>
+	                        <button class="btn btn-info-darken btn-sm" id="agg" value="aggravatedAssault">AGG</button>
+	                        <button class="btn btn-info-darken btn-sm" id="burgla" value="burglary">BURGLA</button>
+	                        <button class="btn btn-info-darken btn-sm" id="vehic" value="vehicleTheft">VEHIC</button>
+	                        <button class="btn btn-info-darken btn-sm" id="arson" value="arson">ARSON</button>
                     	</div >
+
 					</div>
 
 				</div>							
 			</main>
 
 			<!--top right column -->
-			<aside class="col-md-4 col-sm-12 panel-info-darken " id="aside">
-                <div id="paramsContainer">
-				<!--box for user interactive box: make my own security map  -->
-                    <h5>How Important Is A Crime Type To Me?</h5>
-                    <div  id="weightsSelector">
-
-                    </div>
-                    <br>
-                    <div style="font-size: 10px">
-                        <label><input id="sectId1" type="checkbox" value="1" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 4+ years</label>
-                        <label><input id="sectId2" type="checkbox" value="2" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit, 4+ years</label>
-                        <label><input id="sectId3" type="checkbox" value="3" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 4+ years</label>
-                        <label><input id="sectId4" type="checkbox" value="4" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 2 years</label>
-                        <label><input id="sectId5" type="checkbox" value="5" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit 2 years</label>
-                        <label><input id="sectId6" type="checkbox" value="6" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 2 years</label>
-                        <label><input id="sectId7" type="checkbox" value="7" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public <2 years</label>
-                        <label><input id="sectId8" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit <2 years</label>
-                        <label><input id="sectId9" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private <2 years</label>
-                    </div>
-                    <div class="row form-group name-group">
-                        <label class="col-sm-4">Bottom:
-                            <input id="bottomCount" type="number" min="100" max="3500"  value="10"
-                                   class="form-control" step="100" onchange="mapViz.refreshData()"></label>
-                        <label class="col-sm-4"></label>
-                        <label class="col-sm-4">Top:
-                            <input id="topCount" type="number" min="100" max="3500"  value="10"
-                                   class="form-control" step="100" onchange="mapViz.refreshData()"></label>
-                    </div>
-                </div>
+			<aside class="col-md-4 col-sm-12 panel  panel-info-darken " id="aside">
                 <!--box for crime distribution across school sectors-->
-                 <div class="col-md-12 col-sm-12 panel panel-info aside-bottom" id="box2">
-					<h4>Historical Crime Data By College Secotors(2006-2013)</h4>
-				</div>
-
+                 <div class="col-md-12 col-sm-12 panel-info-lightdarken aside-top" id="box2">
+                  <span class="minititle">College Crime by School Sectors </span>
+                </div>      
+				<!--box for user interactive box: make my own security map  -->
+				<div class="col-md-12 col-sm-12 panel-info center aside-center" id="yearsectors">
+                  
+                    color indicates crime nmuber per US college in different years in the U.S.
+                </div> 
+                <!--box for user interactive box: make my own security map  -->
+                <div class="col-md-12 col-sm-12 panel-info center aside-bottom" id="statessectors">
+                  
+                    color indicates crime number per college in different states in a given year
+                </div>                					
 		 	</aside>
-
-			<section class="col-md-12 col-sm-12 panel-info-darken">
-				<div class="col-md-8 col-sm-12 panel panel-info section" id="usstates">
-	                        <h4>Distribution of College Crime Data in the 50 United States</h4>
-	            </div>	
-			 	<div class="col-md-4 col-sm-12 panel panel-info section" id="crimehistory">
-					<h4>College Crime Categorized by School Sectors(cases/per 100 schools)</h4>
-                    color indicates different years.
-				</div>
-			</section>
+            <section class="col-md-12 col-sm-12 panel-info-darken">
+                <div class="col-md-8 col-sm-12 panel panel-info section" id="usstates">
+                            <h4>Distribution of College Crime Data in the 50 United States</h4>
+                </div>  
+                <div class="col-md-4 col-sm-12 panel panel-info section" id="usstates">
+                            <h4>Historical Crime Data By College Secotors(2006-2013)</h4>
+                </div>                      
+            </section>
 
 		</div>
 		
 		<!-- footer-->	
 		<footer class="edge-width">
-			<a href="home.html">Home</a>|<a href="">About</a>|<a href=''>Contact</a>|
+			<a href="home.html">Home</a>|<a href="">About</a>|<a href=''>Contact</a>|<a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a>|<a href='/doc/PressBook.md'>PressBook</a>|<a href=''>Video</a>|   
 		</footer>
 	</div> 
 
@@ -204,7 +187,31 @@
             $(myEventHandler).on('changed', function () {
                 mapViz.wrangleData();
             });
+            stateSectorsViz =new StateSectorsViz(schoolCrime, "weaponOffence");
+
+            //click the button below the map, make updates for maps, and the viz in three boxes.
+            $("#map-control-1 button").click(function() {
+
+                //get the clicked button value
+               var crimeKey=$(this).val();
+
+               //update the mapViz and the three other Viz 
+                colSectorsViz.onCrimeChange(crimeKey);
+                //update the mapViz and the three other Viz 
+                stateSectorsViz.onCrimeChange(crimeKey);
+
+            });
         }
+
+        //move the time sliders below the map, make updates for maps, and the viz in three boxes.
+         d3.selectAll('input[type="range"]').on('input', function() {
+        //get year in the range slider
+          var slideryear=this.value;
+
+        //update the mapViz and the three other Viz 
+            colSectorsViz.onYearChange(slideryear);
+         
+        });
 
     </script>
 </body>
