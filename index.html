@@ -23,7 +23,8 @@
     <script src="js/custom/crimeDataAnalyzer.js"></script>
     <script src="js/custom/colSectorsViz.js"></script>
     <script src="js/custom/stateSectorsViz.js"></script>
-   
+    <script src="js/custom/categorySelectionViz.js"></script>
+
 </head>
 
 <body>
@@ -134,8 +135,7 @@
         var divPadding=20;
         var mapViz=null;
         var crimeAnalyzer = null;
-        var weightsContainerViz = new WeightContainerViz("weightsSelector",myEventHandler);
-
+        var categorySelectionViz = new CategorySelectionViz();
         $("#hide").hover(function(){
             $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
             $('#aside').hide();
@@ -181,7 +181,7 @@
                 }); 
             }); 
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
-            mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets, myEventHandler);
+            mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets, categorySelectionViz, myEventHandler);
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
 
             $(myEventHandler).on('changed', function () {
@@ -199,6 +199,9 @@
                 colSectorsViz.onCrimeChange(crimeKey);
                 //update the mapViz and the three other Viz 
                 stateSectorsViz.onCrimeChange(crimeKey);
+
+                categorySelectionViz.onCrimeChange(crimeKey);
+                mapViz.wrangleData();
 
             });
         }

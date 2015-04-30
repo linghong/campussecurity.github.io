@@ -1,7 +1,7 @@
 
 //TODO:
 //add parameters - data and width so that it can be passed from outside.
-MapViz = function(_statesData,_countryStatistics,_stateOffsets,_eventHandler) {
+MapViz = function(_statesData,_countryStatistics,_stateOffsets,_weightControl, _eventHandler) {
     this.eventHandler = _eventHandler;
     this.txt = null;
     this.txtBox = null;
@@ -24,6 +24,7 @@ MapViz = function(_statesData,_countryStatistics,_stateOffsets,_eventHandler) {
     this.moveTimer = null;
     this.showDetailTimer=null;
     this.timerWaitPeriod = 100;
+    this.weightControl = _weightControl;
 
     this.hideCaptionTimer = null;
     this.hideDetailTimer = null;
@@ -146,10 +147,8 @@ MapViz.prototype.wrangleData = function () {
     this.svg.selectAll("text").remove();
     this.svg.selectAll("rect").remove();
 
-    var weights = weightsContainerViz.getWeights();
-    console.log(weights)
+    var weights = this.weightControl.getWeights();
     var crimeData = crimeAnalyzer.processWeights(weights)
-
     this.paintCircles(crimeData,"", weights.topCount, weights.bottomCount)
 }
 
@@ -438,7 +437,7 @@ MapViz.prototype.loadData = function (){
 
     var that = this;
 
-    var weights = weightsContainerViz.getWeights();
+    var weights = that.weightControl.getWeights();
     that.universityAggregateData = that.countryStatistics[0];
 
     var aveCrimeFactor= that.getAveCrimeFactor(that.universityAggregateData,weights)
