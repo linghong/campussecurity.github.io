@@ -6808,11 +6808,11 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-AK {
-  fill: #c5e9f3;
+  fill: #28a1c5;
   opacity: 0.6;
 }
 .series-AZ {
-  fill: #9bd8eb;
+  fill: #B22400;
   opacity: 0.6;
 }
 .series-AR {
@@ -6824,27 +6824,27 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-CO {
-  fill: #8cb8df;
+  fill: #23527c;
   opacity: 0.6;
 }
 .series-CT {
-  fill: #64a0d3;
+  fill: #1A4C33;
   opacity: 0.6;
 }
 .series-DE {
-  fill: #3c87c8;
+  fill: #FF0000;
   opacity: 0.6;
 }
 .series-FL {
-  fill: #1e441e;
+  fill: #B800E6;
   opacity: 0.6;
 }
 .series-GA {
-  fill: #b5dfb5;
+  fill: #3d8b3d;
   opacity: 0.6;
 }
 .series-HI {
-  fill: #91cf91;
+  fill: #00B88A;
   opacity: 0.6;
 }
 .series-ID {
@@ -6852,19 +6852,19 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-IL {
-  fill: darkenen(#f0ad4e, 35%);
+  fill: #81500b;
   opacity: 0.6;
 }
 .series-IN {
-  fill: #fae3c4;
+  fill: #df8a13;
   opacity: 0.6;
 }
 .series-IA {
-  fill: #f6ce95;
+  fill: #2E5C8A;
   opacity: 0.6;
 }
 .series-KS {
-  fill: #f2b866;
+  fill: #19A3A3;
   opacity: 0.6;
 }
 .series-KY {
@@ -6872,7 +6872,7 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-LA {
-  fill: #ff9980;
+  fill: #B85CE6;
   opacity: 0.6;
 }
 .series-ME {
@@ -6884,11 +6884,11 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-MA {
-  fill: #ffff80;
+  fill: #E62E00;
   opacity: 0.6;
 }
 .series-MI {
-  fill: #ffff4d;
+  fill: #b2b300;
   opacity: 0.6;
 }
 .series-MN {
@@ -6896,15 +6896,15 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-MS {
-  fill: #4d4d00;
+  fill: #CC3300;
   opacity: 0.6;
 }
 .series-MO {
-  fill: #ffffff;
+  fill: #ab72e4;
   opacity: 0.6;
 }
 .series-MT {
-  fill: #f7f2fc;
+  fill: #005252;
   opacity: 0.6;
 }
 .series-NE {
@@ -6916,11 +6916,11 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-NH {
-  fill: #f0b9b8;
+  fill: #FF66FF;
   opacity: 0.6;
 }
 .series-NJ {
-  fill: #e7908e;
+  fill: #1947D1;
   opacity: 0.6;
 }
 .series-NM {
@@ -6932,11 +6932,11 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-NC {
-  fill: #00b300;
+  fill: #000000;
   opacity: 0.6;
 }
 .series-ND .series-OH {
-  fill: #ff80ff;
+  fill: #FF9900;
   opacity: 0.6;
 }
 .series-OK {
@@ -6948,11 +6948,11 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-PA {
-  fill: #c76500;
+  fill: #000000;
   opacity: 0.6;
 }
 .series-RI {
-  fill: #934b00;
+  fill: #FF00FF;
   opacity: 0.6;
 }
 .series-SC {
@@ -6960,19 +6960,19 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-SD {
-  fill: #000000;
+  fill: #1F4C2E;
   opacity: 0.6;
 }
 .series-TN {
-  fill: #b7b794;
+  fill: #4c4c33;
   opacity: 0.6;
 }
 .series-TX {
-  fill: #a3a376;
+  fill: #006600;
   opacity: 0.6;
 }
 .series-UT {
-  fill: #89895c;
+  fill: #FF0066;
   opacity: 0.6;
 }
 .series-VT {
@@ -6980,7 +6980,7 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-VA {
-  fill: #b06d0f;
+  fill: #df8a13;
   opacity: 0.6;
 }
 .series-WA {
@@ -6996,7 +6996,7 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-WY {
-  fill: #5656e5;
+  fill: #33FFD6;
   opacity: 0.6;
 }
 .series-AS {
@@ -7045,33 +7045,3 @@ span.captionLabel {
   width: 40px;
   text-align: right;
 }
-
-div#paramsContainer {
-    background-color: #ffffff;
-    padding-top: 10px;
-}
-
-.noSelect {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-text.schoolLabel
-{
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    color: #ffffff;
-}
-
-div#univDataDivText{
-
-}
-
