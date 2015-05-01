@@ -92,14 +92,9 @@
                         <label><input id="sectId8" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit <2 years</label>
                         <label><input id="sectId9" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private <2 years</label>
                     </div>
-                    <div class="row form-group name-group">
-                        <label class="col-sm-4">Bottom:
-                            <input id="bottomCount" type="number" min="100" max="3500"  value="10"
-                                   class="form-control" step="100" onchange="mapViz.refreshData()"></label>
-                        <label class="col-sm-4"></label>
-                        <label class="col-sm-4">Top:
-                            <input id="topCount" type="number" min="100" max="3500"  value="10"
-                                   class="form-control" step="100" onchange="mapViz.refreshData()"></label>
+                    <div style="font-size: 10px">
+                        <label><input id="cbxHideSafeSchools" type="checkbox"
+                                      checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Hide Safe Schools</label>
                     </div>
                 </div>
                 <!--box for crime distribution across school sectors-->

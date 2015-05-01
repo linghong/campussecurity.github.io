@@ -67,7 +67,6 @@ MapViz.prototype.init = function(){
 
         that.scale =   parseFloat(d3.event.scale)* that.width;
 
-
         that.zoomTimer = setTimeout(that.moveMap(that.scale,true), that.timerWaitPeriod);
     }
 
@@ -110,10 +109,8 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
     that.moveTimer = null;
 
     that.scaleLast = scaleIn;
-
-    $("#debugInfo").text(that.scale +", " + that.xOffset +", " + that.yOffset)
-
-
+    var radiusScale = that.scale/800;
+    console.log(radiusScale)
     that.projection.scale([that.scale])
         .translate([that.width/2 + parseInt(that.xOffset) ,that.height/2 + parseInt(that.yOffset)]);
     that.path.projection(that.projection)
@@ -140,6 +137,9 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
                 return proj[1];
             }
         })
+        /*.attr("r", function (d){
+            return parseFloat(d3.select(this).attr("originalR"))* (.5* radiusScale) ;
+        })*/;
 
 }
 
@@ -149,7 +149,7 @@ MapViz.prototype.wrangleData = function () {
 
     var weights = this.weightControl.getWeights();
     var crimeData = crimeAnalyzer.processWeights(weights)
-    this.paintCircles(crimeData,"", weights.topCount, weights.bottomCount)
+    this.paintCircles(crimeData,"", weights.hideSafeSchools)
 }
 
 
@@ -204,8 +204,10 @@ MapViz.prototype.processCrimeFactor = function (cityData,weights){
     }
 }
 
-MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
+MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
     var that = this;
+
+    var topCount=1000, bottomCount=1000
 
     var maxRank = crimeData.containerForMapVis.maxRank;
     var aveCrimeFactor = crimeData.containerForMapVis.averageCrimeFactor;
@@ -227,7 +229,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
             var school = d;
 
             caption = "<p class='univCity'>" + school.name + "</p>"
-            caption += "&nbsp;&nbsp;" + school.address +", " + school.state + "-" +school.zip +"<br><br>"
+            caption += "<div class='univCity'>" + school.address +", " + school.state + "-" +school.zip +"</div><br><br>"
 
             var container = null;
 
@@ -294,19 +296,24 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
 
 
             try {
-                //if (d.rank <=topCount || d.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
-                    if (d.crimeFactorForMapVis  < aveCrimeFactor){
-                        r =  1+ ((aveCrimeFactor- d.crimeFactorForMapVis)/aveCrimeFactor)
+                if (d.rank <=topCount || d.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
 
+                    if (d.crimeFactorForMapVis  < aveCrimeFactor){
+                       if(hideSafeSchools){
+                           r =0;
+                       }
+                       else{
+                           r =  1+ ((aveCrimeFactor- d.crimeFactorForMapVis)/aveCrimeFactor)
+                       }
                     }
                     else{
 
                         r = 2+ 6*(d.crimeFactorForMapVis/( maxCrimeFactor-aveCrimeFactor))
                     }
-                //}
-                //else{
-                  //  r=0;
-                //}
+                }
+                else{
+                  r=0;
+                }
 
             }
             catch (e){
@@ -314,6 +321,9 @@ MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount){
             }
             return r;
 
+        })
+        .attr("originalR", function(d){
+            return d3.select(this).attr("r");
         })
         .style("fill", function(d,i){
 
@@ -466,7 +476,7 @@ MapViz.prototype.loadData = function (){
         .on("mouseout",stateOut)
 
 
-    that.paintCircles(crimeData,"",weights.topCount,weights.bottomCount);
+    that.paintCircles(crimeData,"",weights.hideSafeSchools);
 
     var rightEdge = $("#mapContainer").position().left+ $("#mapContainer").width();
     var topEdge = $("#mapContainer").position().top -divPadding;
