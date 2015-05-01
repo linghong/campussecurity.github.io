@@ -6,7 +6,7 @@
 StateSectorsViz = function(_data,_crimekey){
     this.data = _data;
     // defines constants
-    this.padding= {top: 15, right: 5, bottom: 15, left: 50};
+    this.padding= {top:20, right: 5, bottom: 25, left: 70};
     this.width = $("#statessectors").width();
     this.height = 0.55*this.width;
     this.initVis(_crimekey);
@@ -28,6 +28,24 @@ StateSectorsViz.prototype.initVis = function(_crimekey){
     this.wrangleData(_crimekey);
     // call the update method
     this.updateViz(_crimekey);
+    
+    // Add the text label for the Y axis
+    this.svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 20)
+        .attr("x", -92)
+        .attr("dy", "0.08em")
+        .style("text-anchor", "middle")
+        .text("Crime Number Per College");
+
+     // Add the text label for the x axis
+    this.svg.append("text")
+        .attr("y", this.height-12)
+        .attr("x", 200)
+        .attr("dy", "0.08em")
+        .style("text-anchor", "middle")
+        .text("Nine US College Categories");   
+
 }
 
 /**
@@ -73,8 +91,8 @@ var dataSeries = d3.values(this.ySecCrime);
 
 //scales
 var x =d3.scale.ordinal()
-    .domain([0,1,2,3,4,5,6,7,8,9,10])
-    .rangePoints([this.padding.left, this.width-this.padding.left-this.padding.right]);
+    .domain(["",1,2,3,4,5,6,7,8,9,"."])
+    .rangePoints([this.padding.left-6, this.width-this.padding.left-this.padding.right]);
 
 var yMax= d3.max( dataSeries, function(d) { 
       var innermax= d3.max(d, function(v) { 
@@ -85,7 +103,7 @@ var yMax= d3.max( dataSeries, function(d) {
 
 var y = d3.scale.linear()
     .domain([0, yMax])
-    .range([this.height-this.padding.top-this.padding.bottom, this.padding.bottom]);
+    .range([this.height-this.padding.top-this.padding.bottom, this.padding.top]);
 
     this.xAxis = d3.svg.axis()
       .scale(x)
@@ -117,9 +135,7 @@ var y = d3.scale.linear()
   circle.attr( "cx", function(d) { return x(d.aggKey2) } )
         .attr( "r", "5" )
         .attr( "cy", function(d) { return y(d.key)-5} );
-  
-  series.exit().remove(); 
-  circle.exit().remove();  
+ 
 
     // Add axes visual elements
     this.svg
@@ -133,6 +149,7 @@ var y = d3.scale.linear()
       .attr("class", "y_axis")
       .attr("transform", "translate("+this.padding.left+",0)")  
       .call(this.yAxis);
+
     series.exit().remove();
     circle.exit().remove();
   }
