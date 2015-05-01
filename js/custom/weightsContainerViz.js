@@ -265,8 +265,6 @@ WeightContainerViz = function(_theDiv,_eventHandler){
 
 WeightContainerViz.prototype.getWeights = function(){
 
-    var topCount = parseInt($("#topCount").val());
-    var bottomCount = parseInt($("#bottomCount").val());
     return {
         murdFactor: (this.weights[0].checked) ? Math.pow(10,this.weights[0].weight) : 0,
         negligenceFactor: (this.weights[1].checked) ?Math.pow(10,this.weights[1].weight) : 0,
@@ -274,8 +272,6 @@ WeightContainerViz.prototype.getWeights = function(){
         robberyCrimeFactor: (this.weights[3].checked) ?Math.pow(10,this.weights[3].weight) : 0,
         burglaryCrimeFactor: (this.weights[4].checked) ?Math.pow(10,this.weights[4].weight) : 0,
         vehicleCrimeFactor: (this.weights[5].checked) ?Math.pow(10,this.weights[5].weight) : 0,
-        topCount:topCount,
-        bottomCount:bottomCount,
         aggravatedAssaultFactor: (this.weights[6].checked) ?Math.pow(10,this.weights[6].weight) : 0,
         arsonFactor: (this.weights[7].checked) ?Math.pow(10,this.weights[7].weight) : 0,
         weaponFactor: (this.weights[8].checked) ?Math.pow(10,this.weights[8].weight) : 0,
@@ -289,6 +285,7 @@ WeightContainerViz.prototype.getWeights = function(){
         sectId6:$('#sectId6').is(':checked'),
         sectId7:$('#sectId7').is(':checked'),
         sectId8:$('#sectId8').is(':checked'),
-        sectId9:$('#sectId9').is(':checked')
+        sectId9:$('#sectId9').is(':checked'),
+        hideSafeSchools:$('#cbxHideSafeSchools').is(':checked')
     }
 }

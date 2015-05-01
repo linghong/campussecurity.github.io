@@ -149,7 +149,7 @@ MapViz.prototype.wrangleData = function () {
 
     var weights = this.weightControl.getWeights();
     var crimeData = crimeAnalyzer.processWeights(weights)
-    this.paintCircles(crimeData,"", weights.topCount, weights.bottomCount, weights.hideSafeSchools)
+    this.paintCircles(crimeData,"", weights.hideSafeSchools)
 }
 
 
@@ -204,9 +204,10 @@ MapViz.prototype.processCrimeFactor = function (cityData,weights){
     }
 }
 
-MapViz.prototype.paintCircles = function (crimeData,year,topCount, bottomCount,hideSafeSchools){
+MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
     var that = this;
 
+    var topCount=1000, bottomCount=1000
 
     var maxRank = crimeData.containerForMapVis.maxRank;
     var aveCrimeFactor = crimeData.containerForMapVis.averageCrimeFactor;
@@ -475,7 +476,7 @@ MapViz.prototype.loadData = function (){
         .on("mouseout",stateOut)
 
 
-    that.paintCircles(crimeData,"",weights.topCount,weights.bottomCount, weights.hideSafeSchools);
+    that.paintCircles(crimeData,"",weights.hideSafeSchools);
 
     var rightEdge = $("#mapContainer").position().left+ $("#mapContainer").width();
     var topEdge = $("#mapContainer").position().top -divPadding;
