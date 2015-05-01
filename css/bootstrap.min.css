@@ -7032,7 +7032,7 @@ div#univDataDiv {
   border: 1px solid gray;
 }
 div#univDataDivText {
-  font-size: 7pt;
+  font-size: 8pt;
   overflow: scroll;
 }
 .univName {
@@ -7042,8 +7042,10 @@ div#univDataDivText {
   cursor: hand;
 }
 span.captionLabel {
-  width: 40px;
+  width: 150px;
+    display: inline-table;
   text-align: right;
+    padding-right: 5px;
 }
 
 div#paramsContainer {
@@ -7071,6 +7073,9 @@ text.schoolLabel
     color: #ffffff;
 }
 
+.univCity{
+    text-align: center;
+}
 div#univDataDivText{
 
 }
