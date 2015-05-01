@@ -6755,6 +6755,10 @@ subtitle {
   font-size: 11px;
   color: white;
 }
+.schooltext {
+  font-size: 9px;
+  font-weight: bold;
+}
 /*-----------------------------------------------------------------
 positions
 -------------------------------------------------------------------
@@ -6769,6 +6773,9 @@ positions
 .edge-height {
   margin-top: -17px;
   margin-bottom: -10px;
+}
+.left {
+  text-align: left;
 }
 /*-----------------------------------------------------------------
 styles for barcharts
@@ -7032,7 +7039,7 @@ div#univDataDiv {
   border: 1px solid gray;
 }
 div#univDataDivText {
-  font-size: 8pt;
+  font-size: 7pt;
   overflow: scroll;
 }
 .univName {
@@ -7042,44 +7049,6 @@ div#univDataDivText {
   cursor: hand;
 }
 span.captionLabel {
-  width: 150px;
-    display: inline-table;
+  width: 40px;
   text-align: right;
-    padding-right: 5px;
 }
-<<<<<<< HEAD
-=======
-
-div#paramsContainer {
-    background-color: #ffffff;
-    padding-top: 10px;
-}
-
-.noSelect {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-text.schoolLabel
-{
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    color: #ffffff;
-}
-
-.univCity{
-    text-align: center;
-}
-div#univDataDivText{
-
-}
-
->>>>>>> upstream/master
