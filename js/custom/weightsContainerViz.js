@@ -4,7 +4,6 @@
 
 WeightContainerViz = function(_theDiv,_eventHandler){
     this.eventHandler = _eventHandler;
-    this.visible = false;
     var that = this;
     var width=200;
     var labelWidth=120;
@@ -19,7 +18,7 @@ WeightContainerViz = function(_theDiv,_eventHandler){
     this.txtBox = null;
 
 
-    this.colorScale = d3.scale.linear().domain([0,this.MAX]).range(["lightgreen","red"]);
+    this.colorScale = d3.scale.linear().domain([0,this.MAX]).range(["lightgreen","orange"]);
     var initialWeights = [4,3,2,.5,.5,.2,1,.2,.1,.1,.1]
     var labels = ['Murder','Negl. Manslaughter', 'Forcible Sex Offence', 'Robbery', 'Burglary',
         'Vehicle Theft', 'Aggravated Assault', 'Arson', 'Weapons Offence', 'Drug Offence', 'Liquor Offence']

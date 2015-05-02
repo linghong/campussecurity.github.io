@@ -6839,7 +6839,7 @@ styles for barcharts
   opacity: 0.6;
 }
 .series-DE {
-  fill: #FF0000;
+  fill: #3c87c8;
   opacity: 0.6;
 }
 .series-FL {
@@ -7049,6 +7049,76 @@ div#univDataDivText {
   cursor: hand;
 }
 span.captionLabel {
+    width: 150px;
+    display: inline-table;
+    text-align: right;
+    padding-right: 5px;
   width: 40px;
   text-align: right;
 }
+
+span.captionValue {
+    width: 25px;
+    display: inline-table;
+    text-align: right;
+}
+span.captionValueHighlight{
+    background-color: #ffff00;
+
+}
+
+div#paramsContainer {
+    background-color: #ffffff;
+    padding-top: 10px;
+}
+
+.noSelect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+text.schoolLabel
+{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #ffffff;
+}
+
+.univCity{
+    text-align: center;
+}
+div#univDataDivText{
+
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #bbb;
+    stroke-width: 1;
+}
+
+.axis text {
+    display: none;
+}
+polyline{
+    fill:none;
+    stroke:blue;
+    stroke-width:2;
+    opacity:.5
+}
+.axiscaption
+{
+    color: #bbb;
+    text-anchor:end;
+    font-size: 10px;
+}
+

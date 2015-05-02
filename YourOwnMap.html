@@ -23,6 +23,8 @@
     <script src="js/custom/crimeDataAnalyzer.js"></script>
     <script src="js/custom/colSectorsViz.js"></script>
     <script src="js/custom/dataPrepare.js"></script>
+    <script src="js/custom/parallelCoordViz.js"></script>
+    <script src="js/custom/stateParallelCoordViz.js"></script>
 </head>
 
 <body>
@@ -69,19 +71,37 @@
 					<!--map -->
 					<div class="col-md-12 col-sm-12 panel-calm main-center" id="map">  
                 	</div>
-				</div>							
+                    <label>2008</label>
+                    <input type="radio" value="2008" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                    this.value)">
+                     <label>2009</label>
+                    <input type="radio" value="2009" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                    this.value)">
+                     <label>2010</label>
+                    <input type="radio" value="2010" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                    this.value)">
+                     <label>2011</label>
+                    <input type="radio" value="2011" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                    this.value)">
+                     <label>2012</label>
+                    <input type="radio" value="2012" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                    this.value)">
+                     <label>2013</label>
+                    <input type="radio" value="2013" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                    this.value)">
+                   </div>
 			</main>
 
             <!--top right column -->
-            <aside class="col-md-4 col-sm-12 panel panel-info " id="aside">
-                <div class="col-md-12 col-sm-12  panel-info-darken "  id="paramsContainer">
+            <aside class="col-md-4 col-sm-12 panel-info-darken " id="aside">
+                <div id="paramsContainer">
                     <!--box for user interactive box: make my own security map  -->
                     <h5>How Important Is A Crime Type To Me?</h5>
                     <div  id="weightsSelector">
 
                     </div>
                     <br>
-                    <div style="font-size: 10px">
+                    <div style="display:none;font-size: 10px">
                         <label><input id="sectId1" type="checkbox" value="1" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 4+ years</label>
                         <label><input id="sectId2" type="checkbox" value="2" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit, 4+ years</label>
                         <label><input id="sectId3" type="checkbox" value="3" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 4+ years</label>
@@ -97,10 +117,16 @@
                                       checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Hide Safe Schools</label>
                     </div>
                 </div>
+                <div style="background-color: #ffffff">
+                    <label>State</label><input type="radio" checked name="divSelector" value="state" onchange="rbClicked(this)">
+                    <label>School Type</label><input type="radio" name="divSelector" value="type" onchange="rbClicked(this)">
+                </div>
+                <div id="parallelCoordinateBox" style="display: none">
+                </div>
+                <div id="parallelCoordinateStateBox">
+                </div>
 
             </aside>
-
-
         </div>
 		
 		<!-- footer-->	
@@ -110,9 +136,15 @@
 	</div>
 
     <script type="text/javascript">
+
+        function updateYear(){
+            //)
+        }
         var myEventHandler = new Object();
         var divPadding=20;
         var mapViz=null;
+        var parallelCoordinateViz = null;
+        var stateParallelCoordinateViz = null;
         var crimeAnalyzer = null;
         var weightsContainerViz = new WeightContainerViz("weightsSelector",myEventHandler);
 
@@ -162,11 +194,28 @@
             });
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
             mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets,weightsContainerViz, myEventHandler);
+            parallelCoordinateViz = new ParallelCoordinateViz('parallelCoordinateBox',myEventHandler)
+            stateParallelCoordinateViz = new StateParallelCoordinateViz('parallelCoordinateStateBox',myEventHandler)
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
 
             $(myEventHandler).on('changed', function () {
                 mapViz.wrangleData();
+                parallelCoordinateViz.wrangleData(2013)
             });
+            $(myEventHandler).on('yearChanged', function (e,year) {
+                parallelCoordinateViz.wrangleData(year)
+                stateParallelCoordinateViz.wrangleData(year)
+            });
+        }
+        function rbClicked(ctrl){
+            if('type' == ctrl.value){
+               $('#parallelCoordinateBox').show()
+               $('#parallelCoordinateStateBox').hide()
+            }
+            else{
+                $('#parallelCoordinateBox').hide()
+                $('#parallelCoordinateStateBox').show()
+            }
         }
 
     </script>
