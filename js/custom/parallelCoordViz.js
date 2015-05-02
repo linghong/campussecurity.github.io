@@ -179,7 +179,7 @@ ParallelCoordinateViz.prototype.init = function () {
 
     function unHighlight(){
         d3.select(this).style("stroke-width",2)
-        d3.select(this).style("opacity",.5)
+        d3.select(this).style("opacity",.3)
         that.txtBox.style("visibility", "hidden")
         that.txt.style("visibility", "hidden")
 
