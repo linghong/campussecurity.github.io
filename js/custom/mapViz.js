@@ -47,7 +47,6 @@ MapViz.prototype.init = function(){
         .attr("height", this.height);
 
     this.drag = d3.behavior.drag().on("drag", dragMove);
-    //this.svg.call(d3.behavior.zoom().scaleExtent([1, this.scaleFactor*this.width]).on("zoom", zoom));
     this.svg.call(this.drag);
 
     $( window ).resize(function() {
@@ -141,7 +140,7 @@ MapViz.prototype.wrangleSectorIn = function (sectorCd) {
         var ctrl = d3.select(d);
         ctrl.attr('origOpacity',ctrl.attr('opacity'));
         ctrl.style('stroke', 'black')
-        ctrl.style('stroke-width', '3px')
+        ctrl.style('stroke-width', '2px')
         ctrl.style('opacity', '1')
     })
 }
@@ -339,7 +338,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
         .style("fill", function(d,i){
 
             if (d.crimeFactorForMapVis > aveCrimeFactor){
-                return "red";// colorScale(d.crimeFactor)
+                return "brown";// colorScale(d.crimeFactor)
             }
             else {
                 return "green"
@@ -349,7 +348,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
         })
         .style("opacity", function(d){
             if (d.crimeFactorForMapVis > aveCrimeFactor){
-                return .5
+                return .6
             }
             else {
                 return .5
