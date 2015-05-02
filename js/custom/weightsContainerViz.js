@@ -230,7 +230,7 @@ WeightContainerViz = function(_theDiv,_eventHandler){
         that.txt.style("visibility", "visible")
             .text(caption)
             .attr("x", parseFloat(rectangle.attr("x")) + parseFloat(rectangle.attr("width")) + 10)
-            .attr("y", parseFloat(rectangle.attr("y"))+10)
+            .attr("y", parseFloat(rectangle.attr("y"))+20)
             .attr('class','schoolLabel');
 
         var padding=5;

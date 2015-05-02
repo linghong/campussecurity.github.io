@@ -52,7 +52,7 @@ MapViz.prototype.init = function(){
         .attr("height", this.height);
 
     this.drag = d3.behavior.drag().on("drag", dragMove);
-    this.svg.call(d3.behavior.zoom().scaleExtent([1, this.scaleFactor*this.width]).on("zoom", zoom));
+    //this.svg.call(d3.behavior.zoom().scaleExtent([1, this.scaleFactor*this.width]).on("zoom", zoom));
     this.svg.call(this.drag);
 
     $( window ).resize(function() {
@@ -470,12 +470,13 @@ MapViz.prototype.loadData = function (){
         .append("path")
         .attr("i",function(d,i){return i })
         .attr("id",function(d,i){return d.id })
-        .style("fill",that.stateFillColor) // function(d, i) {return colors(i)})
+        .on('click', stateClicked)
+        .style("fill",that.stateFillColor)
         .style("stroke", "grey")
         .attr("d", that.path)
         .on("mouseover",stateIn)
         .on("mouseout",stateOut)
-        .on('click', stateClicked)
+
 
 
 
@@ -519,7 +520,7 @@ MapViz.prototype.loadData = function (){
         }
 
         that.grp.transition()
-            .duration(500)
+            .duration(1000)
             .attr("transform",
             "translate(" + that.width / 2 + ","
             + that.height / 2 + ")scale("+scale+")translate("+ -midpointX + "," + -midpointY + ")");
