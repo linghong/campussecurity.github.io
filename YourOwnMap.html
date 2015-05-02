@@ -219,6 +219,9 @@
             $(myEventHandler).on('sectorDeSelected', function(e, sectorCd){
                 mapViz.wrangleSectorOut(sectorCd)
             });
+            $(myEventHandler).on('stateSelected', function(e, stateCd){
+                mapViz.wrangleStateIn(stateCd)
+            });
         }
         function rbClicked(ctrl){
             if('type' == ctrl.value){

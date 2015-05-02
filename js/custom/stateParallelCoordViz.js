@@ -4,6 +4,7 @@
 StateParallelCoordinateViz = function(_theDiv,_eventHandler){
 
     this.width = 366;
+    this.eventHandler = _eventHandler;
     this.height = 160;
     this.svg = d3.select("#"+_theDiv).append("svg")
         .attr('width', this.width)
@@ -184,13 +185,16 @@ StateParallelCoordinateViz.prototype.init = function () {
 
     function highlight(){
 
-        d3.select(this).style("stroke-width",3)
-        d3.select(this).style("opacity",1)
+        var myLine = d3.select(this);
+
+        myLine.style("stroke-width",3)
+        myLine.style("opacity",1)
 
         var coord = d3.mouse(this);
+        $(that.eventHandler).trigger('stateSelected',myLine.attr("type"))
 
         that.txt.style("visibility", "visible")
-            .text(d3.select(this).attr("type"))
+            .text(myLine.attr("type"))
             .attr("x",  coord[0] + 10)
             .attr("y",  coord[1] +  10)
             .attr('class','schoolLabel');

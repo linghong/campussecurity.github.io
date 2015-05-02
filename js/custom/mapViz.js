@@ -4,9 +4,9 @@ MapViz = function(_statesData,_countryStatistics,_weightControl, _eventHandler) 
     this.txt = null;
     this.grp = null;
     this.txtBox = null;
+    this.oldPath = null;
     this.zoomed = false;
     this.stateFillColor = "#f2f2f2";
-    // get the width of a D3 element
     this.width = $("#map").width();
     this.mapRatio = 0.6;
     this.height = this.width * this.mapRatio;
@@ -138,8 +138,11 @@ MapViz.prototype.wrangleSectorIn = function (sectorCd) {
     var that = this;
 
     that.circlesBySector[sectorCd].forEach(function(d){
-        d3.select(d).style('stroke', 'black')
-        d3.select(d).style('stroke-width', '3px')
+        var ctrl = d3.select(d);
+        ctrl.attr('origOpacity',ctrl.attr('opacity'));
+        ctrl.style('stroke', 'black')
+        ctrl.style('stroke-width', '3px')
+        ctrl.style('opacity', '1')
     })
 }
 
@@ -147,8 +150,50 @@ MapViz.prototype.wrangleSectorOut = function (sectorCd) {
     var that = this;
 
     that.circlesBySector[sectorCd].forEach(function(d){
-        d3.select(d).style('stroke', '')
-        d3.select(d).style('stroke-width', '0px')
+        var ctrl = d3.select(d);
+        ctrl.style('stroke', '')
+        ctrl.style('stroke-width', '0px')
+        ctrl.style('opacity', ctrl.attr('origOpacity'))
+    })
+}
+
+
+
+MapViz.prototype.wrangleStateIn = function (stateCd) {
+    var that = this;
+    if(that.oldPath && that.oldPath.attr('id') == stateCd){
+        return;
+    }
+    var path = that.svg.select("path[id="+stateCd+"]");
+
+    var box = path.node().getBBox();
+    var midpointX = box.x + box.width/2;
+    var midpointY = box.y + box.height/2;
+    //Reference:http://stackoverflow.com/questions/12062561/calculate-svg-path-centroid-with-d3-js
+    var scale;
+    that.zoomed = true;
+    scale = 4;
+    that.grp.transition()
+        .duration(1000)
+        .attr("transform",
+        "translate(" + that.width / 2 + ","
+        + that.height / 2
+        + ")scale("+scale+")translate("
+        + (-midpointX) + ","
+        + (-midpointY) + ")");
+
+    path.style("fill","khaki");
+    if(that.oldPath){
+        that.oldPath.style('fill',that.stateFillColor)
+    }
+    that.oldPath = path;
+
+}
+
+MapViz.prototype.wrangleStateOut = function (stateCd) {
+    var that = this;
+    that.paths.forEach(function(d,i){
+
     })
 }
 
@@ -459,7 +504,9 @@ MapViz.prototype.loadData = function (){
         .data(selectedData)
         .enter()
         .append("path")
-        .attr("i",function(d,i){return i })
+        .attr("i",function(d,i){
+            return i
+        })
         .attr("id",function(d,i){return d.id })
         .on('click', stateClicked)
         .style("fill",that.stateFillColor)
@@ -501,7 +548,7 @@ MapViz.prototype.loadData = function (){
             scale = 1;
             midpointX = that.width /2;
             midpointY = that.height /2;
-
+            that.oldPath = null;
         }
         else {
             that.zoomed = true;
