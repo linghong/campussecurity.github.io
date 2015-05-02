@@ -1,5 +1,60 @@
+//
+var year=2010
+
+var myEventHandler = new Object();
+var crimeAnalyzer = null;
+var weightsContainerViz = new WeightContainerViz("weightsSelector",myEventHandler);
+queue()
+    .defer(d3.json, 'data/us-states.json')
+    .defer(d3.tsv, 'data/countryStatistics.tsv')
+    .defer(d3.tsv, 'data/stateOffsets.tsv')
+    .defer(d3.json, 'data/crimedatabackup.json')
+    .await(dataLoaded);
+
+function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeDatabackup) {
+
+    //a flat structure data
+    var schoolCrime = [];
+    _crimeDatabackup.forEach(function (d) {
+        d.yearData.forEach(function (c) {
+            schoolCrime.push({
+                "schoolId": d.schoolId,
+                "year": c.yearOfData,
+                "state": d.state,
+                "sectorCd": d.sectorCd,
+                "murderCount": c.murderCount,
+                "negligentManSlaughter": c.negligentManSlaughter,
+                "forcibleSexOffense": c.forcibleSexOffense,
+                "nonForcibleSexOffense": c.nonForcibleSexOffense,
+                "robbery": c.robbery,
+                "aggravatedAssault": c.aggravatedAssault,
+                "burglary": c.burglary,
+                "vehicleTheft": c.vehicleTheft,
+                "arson": c.arson,
+                "weaponOffence": c.weaponOffence,
+                "drugViolations": c.drugViolations,
+                "liquorViolations": c.liquorViolations
+            });
+        });
+    });
+    crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
+    mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets,weightsContainerViz, myEventHandler);
+    parallelCoordinateViz = new ParallelCoordinateViz('parallelCoordinateBox',myEventHandler)
+    stateParallelCoordinateViz = new StateParallelCoordinateViz('parallelCoordinateStateBox',myEventHandler)
+    colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
+    loadData();
+
+}
+
+
+function loadData(){
+
+
+var yearBucket = crimeAnalyzer.getCategoryCrimeData()[year];
+console.log(crimeAnalyzer.getCategoryCrimeData())
+
 var bardata = [];
-    d3.tsv('crimeDataStats.tsv', function(data) {
+    d3.tsv('/js/custom/crimeDataStats.tsv', function(data) {
         console.log(data);
 
         for (key in data) {
@@ -118,3 +173,5 @@ var bardata = [];
         hGuide.selectAll('line')
             .style({ stroke: "#000"})
 });
+
+}
