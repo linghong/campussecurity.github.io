@@ -254,7 +254,6 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
                 pushToSector(school.sectorCd,this);
                 caption += "<span class='captionLabel'>Crime Ranking:</span><span class='captionValueHighlight'>"
                 + school.rank + " / " + maxRank + "</span><br>"
-
                 caption += "<span class='captionLabel'>Murders:</span>" +
                 "<span class='captionValue'>" + formatData(container.murderCount) + "</span>"
                 caption += "<span class='captionLabel'>Negligent Manslaughter:</span>" +
@@ -541,13 +540,15 @@ MapViz.prototype.loadData = function (){
 
 
         var midpoint = that.path.centroid(itm);
-        var transitionDuration = 500;
         var scale, midpointX, midpointY;
         if(that.zoomed) {
             that.zoomed = false;
             scale = 1;
             midpointX = that.width /2;
             midpointY = that.height /2;
+            if(that.oldPath){
+                that.oldPath.style('fill',that.stateFillColor)
+            }
             that.oldPath = null;
         }
         else {
