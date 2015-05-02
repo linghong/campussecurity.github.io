@@ -71,8 +71,11 @@
 					<!--map -->
 					<div class="col-md-12 col-sm-12 panel-calm main-center" id="map">  
                 	</div>
+                    <label>All Years</label>
+                    <input type="radio" checked value="" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                    this.value)">
                     <label>2008</label>
-                    <input type="radio" value="2008" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                    <input type="radio"  value="2008" name="year" onchange="$(myEventHandler).trigger('yearChanged',
                     this.value)">
                      <label>2009</label>
                     <input type="radio" value="2009" name="year" onchange="$(myEventHandler).trigger('yearChanged',
@@ -137,9 +140,6 @@
 
     <script type="text/javascript">
 
-        function updateYear(){
-            //)
-        }
         var myEventHandler = new Object();
         var divPadding=20;
         var mapViz=null;
@@ -162,11 +162,10 @@
         queue()
                 .defer(d3.json, 'data/us-states.json')
                 .defer(d3.tsv, 'data/countryStatistics.tsv')
-                .defer(d3.tsv, 'data/stateOffsets.tsv')
                 .defer(d3.json, 'data/crimedatabackup.json')
                 .await(dataLoaded);
 
-        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeDatabackup) {
+        function dataLoaded (error,_statesData, _countryStatistics, _crimeDatabackup) {
 
             //a flat structure data
             var schoolCrime=[];
@@ -193,18 +192,32 @@
                 });
             });
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
-            mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets,weightsContainerViz, myEventHandler);
+            mapViz = new MapViz(_statesData, _countryStatistics,weightsContainerViz, myEventHandler);
             parallelCoordinateViz = new ParallelCoordinateViz('parallelCoordinateBox',myEventHandler)
             stateParallelCoordinateViz = new StateParallelCoordinateViz('parallelCoordinateStateBox',myEventHandler)
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
 
             $(myEventHandler).on('changed', function () {
-                mapViz.wrangleData();
-                parallelCoordinateViz.wrangleData(2013)
+                var yearToProcess = $('input:radio[name=year]:checked').val()
+                if(yearToProcess == ""){
+                    yearToProcess = null;
+                }
+                mapViz.wrangleData(yearToProcess);
             });
             $(myEventHandler).on('yearChanged', function (e,year) {
-                parallelCoordinateViz.wrangleData(year)
-                stateParallelCoordinateViz.wrangleData(year)
+                var yearToProcess = year;
+                if(year == ""){
+                    yearToProcess = null;
+                }
+                mapViz.wrangleData(yearToProcess);
+                parallelCoordinateViz.wrangleData(yearToProcess)
+                stateParallelCoordinateViz.wrangleData(yearToProcess)
+            });
+            $(myEventHandler).on('sectorSelected', function(e, sectorCd){
+                mapViz.wrangleSectorIn(sectorCd)
+            });
+            $(myEventHandler).on('sectorDeSelected', function(e, sectorCd){
+                mapViz.wrangleSectorOut(sectorCd)
             });
         }
         function rbClicked(ctrl){
