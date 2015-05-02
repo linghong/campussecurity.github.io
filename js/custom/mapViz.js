@@ -1,15 +1,12 @@
 
-//TODO:
-//add parameters - data and width so that it can be passed from outside.
-MapViz = function(_statesData,_countryStatistics,_stateOffsets,_weightControl, _eventHandler) {
+MapViz = function(_statesData,_countryStatistics,_weightControl, _eventHandler) {
     this.eventHandler = _eventHandler;
     this.txt = null;
     this.grp = null;
     this.txtBox = null;
+    this.oldPath = null;
     this.zoomed = false;
-    this.stateOffsets=_stateOffsets;
     this.stateFillColor = "#f2f2f2";
-    // get the width of a D3 element
     this.width = $("#map").width();
     this.mapRatio = 0.6;
     this.height = this.width * this.mapRatio;
@@ -21,7 +18,6 @@ MapViz = function(_statesData,_countryStatistics,_stateOffsets,_weightControl, _
     this.scaleFactor = 1.1;
     this.scale = this.scaleFactor * this.width;
     this.scaleLast = this.scale;
-    this.multiplier = 1;
     this.zoomTimer = null;
     this.moveTimer = null;
     this.showDetailTimer=null;
@@ -34,8 +30,7 @@ MapViz = function(_statesData,_countryStatistics,_stateOffsets,_weightControl, _
 
     this.countryStatistics = _countryStatistics;
     this.statesData = _statesData;
-    //this.totalSchools = crimeAnalyzer.schools.length;
-
+    this.circlesBySector = {};
     this.init();
     this.loadData();
 };
@@ -111,8 +106,6 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
     that.moveTimer = null;
 
     that.scaleLast = scaleIn;
-    var radiusScale = that.scale/800;
-    console.log(radiusScale)
     that.projection.scale([that.scale])
         .translate([that.width/2 + parseInt(that.xOffset) ,that.height/2 + parseInt(that.yOffset)]);
     that.path.projection(that.projection)
@@ -141,13 +134,76 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
         })
 }
 
-MapViz.prototype.wrangleData = function () {
+MapViz.prototype.wrangleSectorIn = function (sectorCd) {
+    var that = this;
+
+    that.circlesBySector[sectorCd].forEach(function(d){
+        var ctrl = d3.select(d);
+        ctrl.attr('origOpacity',ctrl.attr('opacity'));
+        ctrl.style('stroke', 'black')
+        ctrl.style('stroke-width', '3px')
+        ctrl.style('opacity', '1')
+    })
+}
+
+MapViz.prototype.wrangleSectorOut = function (sectorCd) {
+    var that = this;
+
+    that.circlesBySector[sectorCd].forEach(function(d){
+        var ctrl = d3.select(d);
+        ctrl.style('stroke', '')
+        ctrl.style('stroke-width', '0px')
+        ctrl.style('opacity', ctrl.attr('origOpacity'))
+    })
+}
+
+
+
+MapViz.prototype.wrangleStateIn = function (stateCd) {
+    var that = this;
+    if(that.oldPath && that.oldPath.attr('id') == stateCd){
+        return;
+    }
+    var path = that.svg.select("path[id="+stateCd+"]");
+
+    var box = path.node().getBBox();
+    var midpointX = box.x + box.width/2;
+    var midpointY = box.y + box.height/2;
+    //Reference:http://stackoverflow.com/questions/12062561/calculate-svg-path-centroid-with-d3-js
+    var scale;
+    that.zoomed = true;
+    scale = 4;
+    that.grp.transition()
+        .duration(1000)
+        .attr("transform",
+        "translate(" + that.width / 2 + ","
+        + that.height / 2
+        + ")scale("+scale+")translate("
+        + (-midpointX) + ","
+        + (-midpointY) + ")");
+
+    path.style("fill","khaki");
+    if(that.oldPath){
+        that.oldPath.style('fill',that.stateFillColor)
+    }
+    that.oldPath = path;
+
+}
+
+MapViz.prototype.wrangleStateOut = function (stateCd) {
+    var that = this;
+    that.paths.forEach(function(d,i){
+
+    })
+}
+
+MapViz.prototype.wrangleData = function (year) {
     this.svg.selectAll("text").remove();
     this.svg.selectAll("rect").remove();
 
     var weights = this.weightControl.getWeights();
-    var crimeData = crimeAnalyzer.processWeights(weights)
-    this.paintCircles(crimeData,"", weights.hideSafeSchools)
+    var crimeData = crimeAnalyzer.processWeights(weights,year)
+    this.paintCircles(crimeData,year, weights.hideSafeSchools)
 }
 
 
@@ -161,55 +217,15 @@ MapViz.prototype.getAveCrimeFactor = function (univAggrData,weights){
         weights.vehicleCrimeFactor * univAggrData.avgAggVehicleTheft;
 };
 
-
-
-MapViz.prototype.processCrimeFactor = function (cityData,weights){
-    var minCrimeFactor = null, maxCrimeFactor = null;
-
-    var that = this;
-
-    cityData.forEach(function(d){
-
-        var crimeFactor = that.multiplier * weights.murdFactor * d.avgMurderCount +
-            that.multiplier * weights.negligenceFactor * d.avgNegligentManSlaughter +
-            that.multiplier * weights.forcibleCrimeFactor * d.avgForcibleSexOffense +
-            that.multiplier * weights.robberyCrimeFactor * d.avgRobbery +
-            that.multiplier * weights.burglaryCrimeFactor * d.avgBurglary +
-            that.multiplier * weights.vehicleCrimeFactor * d.avgVehicleTheft;
-
-        d["crimeFactor"] = crimeFactor;
-        d["cityName"] = d.city + ", " + d.state + "-" + d.zip;
-
-
-        if (minCrimeFactor == null){
-            minCrimeFactor = crimeFactor;
-        }
-        else if(minCrimeFactor > crimeFactor){
-            minCrimeFactor = crimeFactor;
-        }
-
-        if(maxCrimeFactor == null){
-            maxCrimeFactor = crimeFactor;
-        }
-        else if(maxCrimeFactor<crimeFactor){
-            maxCrimeFactor = crimeFactor;
-        }
-    })
-
-    return{
-        minCrimeFactor: minCrimeFactor,
-        maxCrimeFactor: maxCrimeFactor
-    }
-}
-
 MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
     var that = this;
-
     var topCount=1000, bottomCount=1000
 
     var maxRank = crimeData.containerForMapVis.maxRank;
     var aveCrimeFactor = crimeData.containerForMapVis.averageCrimeFactor;
     var maxCrimeFactor = crimeData.containerForMapVis.maxCrimeFactor;
+
+    this.circlesBySector = {};
 
     this.grp.selectAll("circle").remove();
     this.grp.selectAll("circle")
@@ -217,6 +233,8 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
         .enter()
         .append("circle")
         .style('cursor','pointer')
+        //.style('stroke', 'black')
+        //.style('stroke-width', '1px')
         .attr("caption", function(d){
 
             var caption = "(" + d.rank + " / " + maxRank +") "
@@ -230,44 +248,40 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
             caption = "<p class='univCity'>" + school.name + "</p>"
             caption += "<div class='univCity'>" + school.address +", " + school.state + "-" +school.zip +"</div>"
 
-            var container = null;
+            var container = getYearData(that.year,school);
 
-            if (that.year){
-                container = school.yearData[year];
+            if(container) {
+                pushToSector(school.sectorCd,this);
+                caption += "<span class='captionLabel'>Crime Ranking:</span><span class='captionValueHighlight'>"
+                + school.rank + " / " + maxRank + "</span><br>"
+
+                caption += "<span class='captionLabel'>Murders:</span>" +
+                "<span class='captionValue'>" + formatData(container.murderCount) + "</span>"
+                caption += "<span class='captionLabel'>Negligent Manslaughter:</span>" +
+                "<span class='captionValue'>" + formatData(container.negligentManSlaughter) + "</span><br>"
+                caption += "<span class='captionLabel'>Forcible Sex Assault:</span>" +
+                "<span class='captionValue'>" + formatData(container.forcibleSexOffense) + "</span>"
+                caption += "<span class='captionLabel'>Non Forcible Sex Assault:</span>" +
+                "<span class='captionValue'>" + formatData(container.nonForcibleSexOffense) + "</span><br>"
+                caption += "<span class='captionLabel'>Robbery:</span>" +
+                "<span class='captionValue'>" + formatData(container.robbery) + "</span>"
+                caption += "<span class='captionLabel'>Aggravated Assault:</span>" +
+                "<span class='captionValue'>" + formatData(container.aggravatedAssault) + "</span><br>"
+                caption += "<span class='captionLabel'>Burglary:</span>" +
+                "<span class='captionValue'>" + formatData(container.burglary) + "</span>"
+                caption += "<span class='captionLabel'>Vehicle Theft:</span>" +
+                "<span class='captionValue'>" + formatData(container.vehicleTheft) + "</span><br>"
+                caption += "<span class='captionLabel'>Arson:</span>" +
+                "<span class='captionValue'>" + formatData(container.arson) + "</span>"
+                caption += "<span class='captionLabel'>Weapons Offense:</span>" +
+                "<span class='captionValue'>" + formatData(container.weaponOffence) + "</span><br>"
+                caption += "<span class='captionLabel'>Drug Violations:</span>" +
+                "<span class='captionValue'>" + formatData(container.drugViolations) + "</span>"
+                caption += "<span class='captionLabel'>Liquor Violations:</span>" +
+                "<span class='captionValue'>" + formatData(container.liquorViolations) + "</span>"
             }
-            else {
-                container = school.allTimeCrimeData;
-            }
-
-
-            caption += "<span class='captionLabel'>Crime Ranking:</span><span class='captionValueHighlight'>"
-                    + school.rank +" / " + maxRank +"</span><br>"
-
-            caption += "<span class='captionLabel'>Murders:</span>" +
-            "<span class='captionValue'>"+formatData(container.murderCount)+ "</span>"
-            caption += "<span class='captionLabel'>Negligent Manslaughter:</span>"  +
-            "<span class='captionValue'>"+formatData(container.negligentManSlaughter)+ "</span><br>"
-            caption += "<span class='captionLabel'>Forcible Sex Assault:</span>" +
-            "<span class='captionValue'>"+formatData(container.forcibleSexOffense)+ "</span>"
-            caption += "<span class='captionLabel'>Non Forcible Sex Assault:</span>" +
-            "<span class='captionValue'>"+formatData(container.nonForcibleSexOffense)+ "</span><br>"
-            caption += "<span class='captionLabel'>Robbery:</span>" +
-            "<span class='captionValue'>"+formatData(container.robbery)+ "</span>"
-            caption += "<span class='captionLabel'>Aggravated Assault:</span>" +
-            "<span class='captionValue'>"+formatData(container.aggravatedAssault)+ "</span><br>"
-            caption += "<span class='captionLabel'>Burglary:</span>"  +
-            "<span class='captionValue'>"+formatData(container.burglary)+ "</span>"
-            caption += "<span class='captionLabel'>Vehicle Theft:</span>" +
-            "<span class='captionValue'>"+formatData(container.vehicleTheft)+ "</span><br>"
-            caption += "<span class='captionLabel'>Arson:</span>" +
-            "<span class='captionValue'>"+formatData(container.arson) +"</span>"
-            caption += "<span class='captionLabel'>Weapons Offense:</span>"  +
-            "<span class='captionValue'>"+formatData(container.weaponOffence)+ "</span><br>"
-            caption += "<span class='captionLabel'>Drug Violations:</span>"  +
-            "<span class='captionValue'>"+formatData(container.drugViolations)+ "</span>"
-            caption += "<span class='captionLabel'>Liquor Violations:</span>"  +
-            "<span class='captionValue'>"+formatData(container.liquorViolations)+ "</span>"
             return caption;
+
         })
         .attr("cx", function(d) {
             var proj = that.projection([d.longitude, d.latitude]);
@@ -293,8 +307,6 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
         .attr("r",function(d,i){
 
             var r;
-
-
             try {
                 if (d.rank <=topCount || d.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
 
@@ -352,6 +364,32 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
         .style("visibility", "hidden")
         .attr("class","schoolLabel")
     that.txtBox = that.svg.insert('rect', 'text');
+
+    function pushToSector(sectorCd,circle){
+        var sectorContainer = that.circlesBySector[sectorCd];
+        if(!sectorContainer){
+            sectorContainer = []
+            that.circlesBySector[sectorCd] = sectorContainer;
+        }
+        sectorContainer.push(circle);
+    }
+
+    function getYearData(year, school){
+        if (year) {
+            if (school.yearData) {
+                school.yearData.forEach(function (d) {
+                    if (d.yearOfData == year) {
+                        return d;
+                    }
+                })
+            }
+
+            return null;
+        }
+        else {
+            return school.allTimeCrimeData
+        }
+    }
 
     function formatData(data){
         return Math.round(data);
@@ -452,8 +490,6 @@ MapViz.prototype.loadData = function (){
 
     var aveCrimeFactor= that.getAveCrimeFactor(that.universityAggregateData,weights)
     var minCrimeFactor = null, maxCrimeFactor = null;
-    //var crimeFactors = that.processCrimeFactor(that.zipCodeData,weights);
-
     var crimeData = crimeAnalyzer.processWeights(weights);
 
     var selectedData = []
@@ -468,7 +504,9 @@ MapViz.prototype.loadData = function (){
         .data(selectedData)
         .enter()
         .append("path")
-        .attr("i",function(d,i){return i })
+        .attr("i",function(d,i){
+            return i
+        })
         .attr("id",function(d,i){return d.id })
         .on('click', stateClicked)
         .style("fill",that.stateFillColor)
@@ -510,7 +548,7 @@ MapViz.prototype.loadData = function (){
             scale = 1;
             midpointX = that.width /2;
             midpointY = that.height /2;
-
+            that.oldPath = null;
         }
         else {
             that.zoomed = true;
@@ -523,7 +561,10 @@ MapViz.prototype.loadData = function (){
             .duration(1000)
             .attr("transform",
             "translate(" + that.width / 2 + ","
-            + that.height / 2 + ")scale("+scale+")translate("+ -midpointX + "," + -midpointY + ")");
+            + that.height / 2
+            + ")scale("+scale+")translate("
+            + (-midpointX) + ","
+            + (-midpointY) + ")");
 
     }
 

@@ -160,11 +160,10 @@
         queue()
                 .defer(d3.json, 'data/us-states.json')
                 .defer(d3.tsv, 'data/countryStatistics.tsv')
-                .defer(d3.tsv, 'data/stateOffsets.tsv')
                 .defer(d3.json, 'data/crimedatabackup.json')
                 .await(dataLoaded);
 
-        function dataLoaded (error,_statesData, _countryStatistics, _stateOffsets,_crimeDatabackup) {
+        function dataLoaded (error,_statesData, _countryStatistics,_crimeDatabackup) {
             
             //a flat structure data
             var schoolCrime=[];
@@ -191,7 +190,7 @@
                 }); 
             }); 
             crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
-            mapViz = new MapViz(_statesData, _countryStatistics, _stateOffsets, categorySelectionViz, myEventHandler);
+            mapViz = new MapViz(_statesData, _countryStatistics, categorySelectionViz, myEventHandler);
             colSectorsViz =new ColSectorsViz(schoolCrime, "weaponOffence");
 
             $(myEventHandler).on('changed', function () {

@@ -7112,8 +7112,8 @@ div#univDataDivText{
 polyline{
     fill:none;
     stroke:blue;
-    stroke-width:2;
-    opacity:.3
+    stroke-width:1;
+    opacity:.6
 }
 .axiscaption
 {

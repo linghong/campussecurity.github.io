@@ -168,13 +168,23 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
 
 
     var totalCrimeFactor=0, count=0;
+    var container = null;
+
 
     this.crimeData.forEach(function(d,i) {
 
-        var container = null;
+        container = null;
         var yearKey = "*";
         if(year){
-            container = d.yearData[year];
+
+            if (d.yearData) {
+                d.yearData.forEach(function (dd) {
+                    if (dd.yearOfData == year) {
+                        container = dd;
+                    }
+                })
+            }
+
             yearKey = "year_"+year;
         }
         else {
@@ -186,22 +196,17 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
 
         var allTimeBucket = getYearBucket("*",that.categoryCrimeData);
 
-        for(var year=2006; year<=2013; year++) {
-            var yearBucket = getYearBucket(year,that.categoryCrimeData);
+        for(var yr=2008; yr<=2013; yr++) {
+            var yearBucket = getYearBucket(yr,that.categoryCrimeData);
             for (var idx=0; idx< d.yearData.length; idx++){
-                if(year == d.yearData[idx].yearOfData){
+                if(yr == d.yearData[idx].yearOfData){
                     processSectData(d, yearBucket,d.yearData[idx])
                     processSectData(d, allTimeBucket,d.yearData[idx])
                     processStateData(d, yearBucket,d.yearData[idx])
                     processStateData(d, allTimeBucket,d.yearData[idx])
                 }
             }
-
         }
-
-
-
-
 
         if(container && weights[sectKey]){
             count++;
@@ -252,11 +257,17 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
     var rank = 0;
     var oldCrimeFactor = -1;
 
-    var container = null;
+    container = null;
 
     this.crimeData.forEach(function(d,i){
         if(year){
-            container = d[year]
+            if (d.yearData) {
+                d.yearData.forEach(function (dd) {
+                    if (dd.yearOfData == year) {
+                        container = dd;
+                    }
+                })
+            }
         }
         else {
             container = d.allTimeCrimeData
