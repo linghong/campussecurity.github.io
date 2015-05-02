@@ -5,6 +5,7 @@ ParallelCoordinateViz = function(_theDiv,_eventHandler){
 
     this.width = 366;
     this.height = 160;
+    this.eventHandler = _eventHandler;
     this.svg = d3.select("#"+_theDiv).append("svg")
         .attr('width', this.width)
         .attr('height',this.height)
@@ -121,6 +122,9 @@ ParallelCoordinateViz.prototype.init = function () {
         .data(pointsArray)
         .enter()
         .append("polyline")
+        .attr("sectorCd", function(d,i){
+            return (i+1);
+        })
         .attr("type", function(d,i){
             return that.labels[i];
         })
@@ -141,13 +145,17 @@ ParallelCoordinateViz.prototype.init = function () {
 
     function highlight(){
 
-        d3.select(this).style("stroke-width",3)
-        d3.select(this).style("opacity",1)
 
         var coord = d3.mouse(this);
 
+        var myPolyLine = d3.select(this)
+        myPolyLine.style("stroke-width",3)
+        myPolyLine.style("opacity",1)
+
+        $(that.eventHandler).trigger('sectorSelected', myPolyLine.attr('sectorCd'))
+
         that.txt.style("visibility", "visible")
-            .text(d3.select(this).attr("type"))
+            .text(myPolyLine.attr("type"))
             .attr("x",  coord[0] + 10)
             .attr("y",  coord[1] +  10)
             .attr('class','schoolLabel');
@@ -178,8 +186,11 @@ ParallelCoordinateViz.prototype.init = function () {
     }
 
     function unHighlight(){
-        d3.select(this).style("stroke-width",2)
-        d3.select(this).style("opacity",.3)
+        var myPolyLine = d3.select(this)
+        $(that.eventHandler).trigger('sectorDeSelected', myPolyLine.attr('sectorCd'))
+
+        myPolyLine.style("stroke-width",1)
+        myPolyLine.style("opacity",.6)
         that.txtBox.style("visibility", "hidden")
         that.txt.style("visibility", "hidden")
 
