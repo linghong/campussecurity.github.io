@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../js/d3.v3.js"></script>
+    <style>
+        .noSelect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h5>How important are the crime categories for me?</h5>
+    <script >
+
+
+        var colorScale = d3.scale.linear().domain([0,5]).range(["lightgreen","red"]);
+
+        var labels = ['Murder','Negligent Manslaughter', 'Forcible Sex Offence', 'Robbery', 'Burglary',
+            'Vehicle Theft', 'Aggravated Assault', 'Arson', 'Weapons Offence', 'Drug Offence', 'Liquor Offence']
+        var tot =weights.length;
+
+        var barHeight = height / tot;
+        var extent = d3.extent(weights, function(d){
+            return d.weight;
+        });
+        var max = d3.max(weights, function(d){
+            return d.weight;
+        })
+
+        var xScale = width/max;
+
+        svg = d3.select("body").append("svg").attr('width', checkedImageWidth+ width +labelWidth +2*imagePadding +imageWidth)
+                .attr('height',height)
+        var y = 0;
+        var color = d3.scale.category20();
+        var bars = [];
+        for(var i=0; i<tot;i++){
+            var rect = svg.append("rect")
+                    .attr("width",xScale*weights[i].weight)
+                    .attr("x",labelWidth+ 4*imagePadding+imageWidth + checkedImageWidth)
+                    .attr("y",y + barSpacing)
+                    .attr("height", barHeight - barSpacing)
+                    .style("fill", colorScale(weights[i].weight));
+
+            weights[i]["bar"] = rect;
+            bars.push(rect);
+
+            svg.append('text')
+                    .attr('x',labelWidth-5)
+                    .attr('y',y+barHeight-3)
+                    .text(labels[i])
+                    .attr('text-anchor','end')
+                    .attr('font-size','12px')
+                    .attr('class','noSelect')
+
+            svg.append('image')
+                    .attr("width",checkedImageWidth)
+                    .attr("height",checkedImageWidth)
+                    .attr("idx",i)
+                    .attr("checked","1")
+                    .attr('x',labelWidth+ 5*imagePadding )
+                    .attr('y',y +(barHeight-checkedImageWidth))
+                    .attr("xlink:href", "../images/checked.png")
+                    .style("cursor", "pointer")
+                    .on("mouseup", toggle)
+
+            y += barHeight;
+        }
+
+        y=0;
+        for(var i=0; i<tot;i++){
+            svg.append("image")
+                    .attr("width",imageWidth)
+                    .attr("idx",i)
+                    .attr("x",labelWidth+imagePadding)
+                    .attr("y",y + imageSpacing)
+                    .attr("height", imageWidth)
+                    .style("cursor", "pointer")
+                    .attr("xlink:href", "../images/plus.png")
+                    .on("mouseup", add)
+
+            svg.append("image")
+                    .attr("idx",i)
+                    .attr("width",imageWidth)
+                    .attr("x",labelWidth+imagePadding)
+                    .attr("y",y + barHeight -2*imageSpacing)
+                    .attr("height", imageWidth)
+                    .attr("idx",i)
+                    .style("cursor", "pointer")
+                    .attr("xlink:href", "../images/minus.png")
+                    .on('mouseup', subtract)
+
+           y+=barHeight;
+        }
+
+        function toggle(){
+            var button = d3.select(this);
+            var checked = button.attr("checked");
+
+            if(checked == 1){
+                button.attr("checked",0);
+                button.attr("xlink:href","../images/unchecked.png")
+            }
+            else{
+                button.attr("checked",1);
+                button.attr("xlink:href","../images/checked.png")
+            }
+        }
+        function add(){
+            var button = d3.select(this);
+            var idx = button.attr('idx')
+
+            var w = bars[idx].attr('width')
+            if(w == width){
+                return;
+            }
+
+            var wt = weights[idx];
+            wt.weight += 5/xScale;
+            console.log(weights)
+            paintRectangle(wt)
+            bars[idx].attr('width', parseInt(w)+5);
+        }
+
+        function subtract(){
+            var button = d3.select(this);
+            var idx = button.attr('idx')
+            var w = bars[idx].attr('width')
+            if(w==0){
+                return;
+            }
+
+            var wt = weights[idx];
+            wt.weight -= 5/xScale;
+            paintRectangle(wt)
+
+            console.log(weights)
+
+            bars[idx].attr('width', parseInt(w)-5);
+        }
+
+        function paintRectangle(bucket){
+            bucket.bar.style('fill', colorScale(bucket.weight))
+        }
+    </script>
+
+    </svg>
+</body>
+</html>
