@@ -24,6 +24,7 @@
     <script src="js/custom/colSectorsViz.js"></script>
     <script src="js/custom/stateSectorsViz.js"></script>
     <script src="js/custom/categorySelectionViz.js"></script>
+    <script src="js/custom/barChartViz.js"></script>
 
 </head>
 
@@ -121,8 +122,8 @@
                 </div>                            					
 		 	</aside>
             <section class="col-md-12 col-sm-12 panel-info-darken">
-                <div class="col-md-9 col-sm-12 panel panel-info section" id="usstates">
-                            <h4>Distribution of College Crime Data in the 50 United States</h4>
+                <div class="col-md-9 col-sm-12 panel panel-info section" id="usStatesDiv">
+
                 </div>  
                 <div class="col-md-3 col-sm-12 panel panel-info section" id="usstates">
                             <h4>Historical Crime Data By College Secotors(2006-2013)</h4>
@@ -143,6 +144,7 @@
         var divPadding=20;
         var mapViz=null;
         var crimeAnalyzer = null;
+        var barChartViz = null;
         var categorySelectionViz = new CategorySelectionViz();
         $("#hide").hover(function(){
             $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
@@ -196,7 +198,7 @@
                 mapViz.wrangleData();
             });
             stateSectorsViz =new StateSectorsViz(schoolCrime, "weaponOffence");
-
+            barChartViz = new BarChartViz("usStatesDiv", myEventHandler)
             //click the button below the map, make updates for maps, and the viz in three boxes.
             $("#map-control-1 button").click(function() {
 

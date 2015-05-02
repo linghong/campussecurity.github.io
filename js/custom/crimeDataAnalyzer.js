@@ -356,6 +356,5 @@ CrimeDataAnalyzer.prototype.getData = function(){
 
 
 CrimeDataAnalyzer.prototype.getCategoryCrimeData = function(){
-    console.log(this.categoryCrimeData);
     return this.categoryCrimeData;
 }
