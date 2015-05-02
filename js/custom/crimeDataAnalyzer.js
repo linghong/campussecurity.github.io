@@ -1,6 +1,11 @@
 
 CrimeDataAnalyzer = function(_crimeData) {
     this.crimeData = _crimeData;
+
+    this.categoryCrimeData = [];
+    this.stateCrimeData = [];
+
+
     this.crimeData["containerForMapVis"] = {
         minCrimeFactor:null,
         maxCrimeFactor:null,
@@ -26,6 +31,7 @@ CrimeDataAnalyzer = function(_crimeData) {
         crimeFactorForMapVis:0,
         count: 0
     };
+
     this.init();
 }
 
@@ -118,7 +124,7 @@ CrimeDataAnalyzer.prototype.init = function(){
         });
     });
 
-    for(year=2006; year<=2013; year++){
+    for(var year=2006; year<=2013; year++){
         if(that.yearCrimeData[year]){
             var yearData = that.yearCrimeData[year];
             yearData.murderCount *= (1000/yearData.count);
@@ -157,18 +163,47 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
     that.crimeData.containerForMapVis.minCrimeFactor = null;
     that.crimeData.containerForMapVis.maxCrimeFactor = null;
 
+    this.categoryCrimeData = {};
+    this.stateCrimeData = {};
+
+
     var totalCrimeFactor=0, count=0;
 
     this.crimeData.forEach(function(d,i) {
 
         var container = null;
+        var yearKey = "*";
         if(year){
             container = d.yearData[year];
+            yearKey = "year_"+year;
         }
         else {
+            "year_all";
             container = d.allTimeCrimeData;
         }
-        if(container && weights["sectId"+ d.sectorCd]){
+
+        var sectKey = "sectId"+ d.sectorCd;
+
+        var allTimeBucket = getYearBucket("*",that.categoryCrimeData);
+
+        for(var year=2006; year<=2013; year++) {
+            var yearBucket = getYearBucket(year,that.categoryCrimeData);
+            for (var idx=0; idx< d.yearData.length; idx++){
+                if(year == d.yearData[idx].yearOfData){
+                    processSectData(d, yearBucket,d.yearData[idx])
+                    processSectData(d, allTimeBucket,d.yearData[idx])
+                    processStateData(d, yearBucket,d.yearData[idx])
+                    processStateData(d, allTimeBucket,d.yearData[idx])
+                }
+            }
+
+        }
+
+
+
+
+
+        if(container && weights[sectKey]){
             count++;
             d.crimeFactorForMapVis =
                 weights.murdFactor * container.murderCount +
@@ -249,8 +284,77 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
     return this.crimeData;
 
 
+    function getYearBucket(_year,_crimeData)
+    {
+
+        var yearBucket =
+            _crimeData[_year];
+
+        if(!yearBucket){
+            yearBucket = {
+                year:_year
+            }
+            _crimeData[_year] = yearBucket;
+        }
+        return yearBucket;
+    }
+
+
+    function processSectData(d, yearBucket, container){
+        var sectKey = "sectId" + d.sectorCd;
+
+        processBucket(yearBucket,sectKey,container)
+
+    }
+
+    function processBucket(yearBucket,key,container){
+        var yearCategoryBucket = yearBucket[key];
+
+        if (!yearCategoryBucket) {
+
+            yearCategoryBucket = {
+                category:key,
+                crimeCounts: {
+                    murderCount:0,
+                    negligentManSlaughter:0,
+                    forcibleSexOffense:0,
+                    robbery:0,
+                    burglary:0,
+                    vehicleTheft:0,
+                    aggravatedAssault:0,
+                    arson:0,
+                    weaponOffence:0,
+                    drugViolations:0,
+                    liquorViolations:0
+                }
+            }
+            yearBucket[key] = yearCategoryBucket;
+        }
+
+        yearCategoryBucket.crimeCounts.murderCount += Math.round(container.murderCount);
+        yearCategoryBucket.crimeCounts.negligentManSlaughter += Math.round(container.negligentManSlaughter);
+        yearCategoryBucket.crimeCounts.forcibleSexOffense += Math.round(container.forcibleSexOffense);
+        yearCategoryBucket.crimeCounts.robbery += Math.round(container.robbery);
+        yearCategoryBucket.crimeCounts.burglary += Math.round(container.burglary);
+        yearCategoryBucket.crimeCounts.vehicleTheft += Math.round(container.vehicleTheft);
+        yearCategoryBucket.crimeCounts.aggravatedAssault += Math.round(container.aggravatedAssault);
+        yearCategoryBucket.crimeCounts.arson += Math.round(container.arson);
+        yearCategoryBucket.crimeCounts.weaponOffence += Math.round(container.weaponOffence);
+        yearCategoryBucket.crimeCounts.drugViolations += Math.round(container.drugViolations);
+        yearCategoryBucket.crimeCounts.liquorViolations += Math.round(container.liquorViolations);
+    }
+
+    function processStateData(d, yearBucket, container){
+        var stateKey = "state" + d.state;
+        processBucket(yearBucket,stateKey,container)
+    }
 }
 
 CrimeDataAnalyzer.prototype.getData = function(){
     return this.crimeData;
+}
+
+
+CrimeDataAnalyzer.prototype.getCategoryCrimeData = function(){
+    return this.categoryCrimeData;
 }

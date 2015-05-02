@@ -4,7 +4,9 @@
 MapViz = function(_statesData,_countryStatistics,_stateOffsets,_weightControl, _eventHandler) {
     this.eventHandler = _eventHandler;
     this.txt = null;
+    this.grp = null;
     this.txtBox = null;
+    this.zoomed = false;
     this.stateOffsets=_stateOffsets;
     this.stateFillColor = "#f2f2f2";
     // get the width of a D3 element
@@ -137,10 +139,6 @@ MapViz.prototype.moveMap = function(scaleIn,reOffset){
                 return proj[1];
             }
         })
-        /*.attr("r", function (d){
-            return parseFloat(d3.select(this).attr("originalR"))* (.5* radiusScale) ;
-        })*/;
-
 }
 
 MapViz.prototype.wrangleData = function () {
@@ -213,11 +211,12 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
     var aveCrimeFactor = crimeData.containerForMapVis.averageCrimeFactor;
     var maxCrimeFactor = crimeData.containerForMapVis.maxCrimeFactor;
 
-    this.svg.selectAll("circle").remove();
-    this.svg.selectAll("circle")
+    this.grp.selectAll("circle").remove();
+    this.grp.selectAll("circle")
         .data(crimeData)
         .enter()
         .append("circle")
+        .style('cursor','pointer')
         .attr("caption", function(d){
 
             var caption = "(" + d.rank + " / " + maxRank +") "
@@ -229,7 +228,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
             var school = d;
 
             caption = "<p class='univCity'>" + school.name + "</p>"
-            caption += "<div class='univCity'>" + school.address +", " + school.state + "-" +school.zip +"</div><br><br>"
+            caption += "<div class='univCity'>" + school.address +", " + school.state + "-" +school.zip +"</div>"
 
             var container = null;
 
@@ -241,32 +240,33 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
             }
 
 
-            caption += "<span class='captionLabel'>Rank:</span><span class='captionValueHighlight'>" + school.rank +" / " + maxRank +"</span><br>"
+            caption += "<span class='captionLabel'>Crime Ranking:</span><span class='captionValueHighlight'>"
+                    + school.rank +" / " + maxRank +"</span><br>"
 
             caption += "<span class='captionLabel'>Murders:</span>" +
-            "<span class='captionValue'>"+formatData(container.murderCount)+ "</span><br>"
+            "<span class='captionValue'>"+formatData(container.murderCount)+ "</span>"
             caption += "<span class='captionLabel'>Negligent Manslaughter:</span>"  +
             "<span class='captionValue'>"+formatData(container.negligentManSlaughter)+ "</span><br>"
             caption += "<span class='captionLabel'>Forcible Sex Assault:</span>" +
-            "<span class='captionValue'>"+formatData(container.forcibleSexOffense)+ "</span><br>"
+            "<span class='captionValue'>"+formatData(container.forcibleSexOffense)+ "</span>"
             caption += "<span class='captionLabel'>Non Forcible Sex Assault:</span>" +
             "<span class='captionValue'>"+formatData(container.nonForcibleSexOffense)+ "</span><br>"
             caption += "<span class='captionLabel'>Robbery:</span>" +
-            "<span class='captionValue'>"+formatData(container.robbery)+ "</span><br>"
+            "<span class='captionValue'>"+formatData(container.robbery)+ "</span>"
             caption += "<span class='captionLabel'>Aggravated Assault:</span>" +
             "<span class='captionValue'>"+formatData(container.aggravatedAssault)+ "</span><br>"
             caption += "<span class='captionLabel'>Burglary:</span>"  +
-            "<span class='captionValue'>"+formatData(container.burglary)+ "</span><br>"
+            "<span class='captionValue'>"+formatData(container.burglary)+ "</span>"
             caption += "<span class='captionLabel'>Vehicle Theft:</span>" +
             "<span class='captionValue'>"+formatData(container.vehicleTheft)+ "</span><br>"
             caption += "<span class='captionLabel'>Arson:</span>" +
-            "<span class='captionValue'>"+formatData(container.arson)+ "<br>"
+            "<span class='captionValue'>"+formatData(container.arson) +"</span>"
             caption += "<span class='captionLabel'>Weapons Offense:</span>"  +
             "<span class='captionValue'>"+formatData(container.weaponOffence)+ "</span><br>"
             caption += "<span class='captionLabel'>Drug Violations:</span>"  +
-            "<span class='captionValue'>"+formatData(container.drugViolations)+ "</span><br>"
+            "<span class='captionValue'>"+formatData(container.drugViolations)+ "</span>"
             caption += "<span class='captionLabel'>Liquor Violations:</span>"  +
-            "<span class='captionValue'>"+formatData(container.liquorViolations)+ "</span><br>"
+            "<span class='captionValue'>"+formatData(container.liquorViolations)+ "</span>"
             return caption;
         })
         .attr("cx", function(d) {
@@ -461,8 +461,10 @@ MapViz.prototype.loadData = function (){
         selectedData.push(d);
     })
 
+    that.grp = that.svg.append("g");
+
     //Bind data and create one path per GeoJSON feature
-    that.paths = that.svg.selectAll("path")
+    that.paths = that.grp.selectAll("path")
         .data(selectedData)
         .enter()
         .append("path")
@@ -471,9 +473,10 @@ MapViz.prototype.loadData = function (){
         .style("fill",that.stateFillColor) // function(d, i) {return colors(i)})
         .style("stroke", "grey")
         .attr("d", that.path)
-        //.on("click",stateClicked)
         .on("mouseover",stateIn)
         .on("mouseout",stateOut)
+        .on('click', stateClicked)
+
 
 
     that.paintCircles(crimeData,"",weights.hideSafeSchools);
@@ -495,19 +498,32 @@ MapViz.prototype.loadData = function (){
 
 
 
-    function stateClicked(){
-        var stateId = d3.select(this).attr("id")
+    function stateClicked(itm){
 
 
-        for (var i=0; i<that.stateOffsets.length; i++){
-            if (that.stateOffsets[i].stateId ==stateId ){
-                that.scale = that.stateOffsets[i].scale;
-                that.xOffset = that.stateOffsets[i].xOffset;
-                that.yOffset = that.stateOffsets[i].yOffset;
-                that.moveMap(that.scale,false);
-                break;
-            }
+        var midpoint = that.path.centroid(itm);
+        var transitionDuration = 500;
+        var scale, midpointX, midpointY;
+        if(that.zoomed) {
+            that.zoomed = false;
+            scale = 1;
+            midpointX = that.width /2;
+            midpointY = that.height /2;
+
         }
+        else {
+            that.zoomed = true;
+            midpointX = midpoint[0];
+            midpointY = midpoint[1];
+            scale = 5;
+        }
+
+        that.grp.transition()
+            .duration(500)
+            .attr("transform",
+            "translate(" + that.width / 2 + ","
+            + that.height / 2 + ")scale("+scale+")translate("+ -midpointX + "," + -midpointY + ")");
+
     }
 
     function stateIn(){

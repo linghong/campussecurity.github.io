@@ -7042,10 +7042,20 @@ div#univDataDivText {
   cursor: hand;
 }
 span.captionLabel {
-  width: 150px;
+    width: 150px;
     display: inline-table;
-  text-align: right;
+    text-align: right;
     padding-right: 5px;
+}
+
+span.captionValue {
+    width: 25px;
+    display: inline-table;
+    text-align: right;
+}
+span.captionValueHighlight{
+    background-color: #ffff00;
+
 }
 
 div#paramsContainer {
@@ -7078,5 +7088,28 @@ text.schoolLabel
 }
 div#univDataDivText{
 
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #bbb;
+    stroke-width: 1;
+}
+
+.axis text {
+    display: none;
+}
+polyline{
+    fill:none;
+    stroke:blue;
+    stroke-width:2;
+    opacity:.5
+}
+.axiscaption
+{
+    color: #bbb;
+    text-anchor:end;
+    font-size: 10px;
 }
 
