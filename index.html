@@ -76,7 +76,7 @@
 					<div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-1" >
                         <div class="col-md-4 col-sm-6">
                             <!--for time-->
-                            2006<label ><input type="range" name="yearslider" min="2008" max="2013" step="1" value="2013" id="slidertime" ></label>2013    
+                            2008<label ><input type="range" name="yearslider" min="2008" max="2013" step="1" value="2013" id="slidertime" ></label>2013    
                         </div>
 						<div class="btn-group col-md-8 col-sm-6">
 	                        <button class="btn btn-info-darken btn-sm" id="weapon" value="weaponOffence">WEAPON</button>
@@ -98,29 +98,36 @@
 			</main>
 
 			<!--top right column -->
-			<aside class="col-md-4 col-sm-12 panel  panel-info-darken " id="aside">
+			<aside class="col-md-4 col-sm-12 panel panel-info  " id="aside">
                 <!--box for crime distribution across school sectors-->
                  <div class="col-md-12 col-sm-12 panel-info-lightdarken aside-top" id="box2">
-                  <span class="minititle">College Crime by School Sectors </span>
+                  <span class="minititle">College Crime by US College Categories </span>
                 </div>      
 				<!--box for user interactive box: make my own security map  -->
 				<div class="col-md-12 col-sm-12 panel-info center aside-center" id="yearsectors">
                   
-                    color indicates crime nmuber per US college in different years in the U.S.
+                    Each color indicates one year(2008-2013)
                 </div> 
                 <!--box for user interactive box: make my own security map  -->
-                <div class="col-md-12 col-sm-12 panel-info center aside-bottom" id="statessectors">
+                <div class="col-md-12 col-sm-12 panel-info  center aside-bottom" id="statessectors">
                   
-                    color indicates crime number per college in different states in a given year
-                </div>                					
+                    Each color represents one US state
+             
+                </div>
+                <div class="col-md-12 col-sm-12 left">
+                <span class="schooltext">1:public 4 year college, 2:Private 4 year college, 3:for-profit 4 year college </span><br>
+                <span class="schooltext">4:public 2 year college, 5:Private 2 year college 6:for-profit 2 year college </span><br>
+                <span class="schooltext"> 7:public less than 2 year, 8:Private less than 2 year 9:for-profit less than 2 year </span>
+                </div>                            					
 		 	</aside>
             <section class="col-md-12 col-sm-12 panel-info-darken">
-                <div class="col-md-8 col-sm-12 panel panel-info section" id="usstates">
+                <div class="col-md-9 col-sm-12 panel panel-info section" id="usstates">
                             <h4>Distribution of College Crime Data in the 50 United States</h4>
                 </div>  
-                <div class="col-md-4 col-sm-12 panel panel-info section" id="usstates">
+                <div class="col-md-3 col-sm-12 panel panel-info section" id="usstates">
                             <h4>Historical Crime Data By College Secotors(2006-2013)</h4>
-                </div>                      
+                </div> 
+         
             </section>
 
 		</div>
