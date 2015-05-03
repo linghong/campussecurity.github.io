@@ -3,20 +3,21 @@
  * @param _data -- the data array
  * @constructor
  */
-ColSectorsViz = function(_data,_crimekey){
+ColSectorsViz = function(_data){
     this.data = _data;
     // defines constants
     this.padding= {top: 20, right: 0, bottom: 25, left: 70};
     this.width = $("#yearsectors").width();
     this.height = 0.55*this.width;
-    this.initVis(_crimekey);
+    this.displayData={};
+    this.initVis();
 }
 
 
 /**
  * Method that sets up the SVG and the variables
  */
-ColSectorsViz.prototype.initVis = function(_crimekey){
+ColSectorsViz.prototype.initVis = function(){
   var that = this; // read about the this
 
   // constructs SVG layout
@@ -25,9 +26,9 @@ ColSectorsViz.prototype.initVis = function(_crimekey){
     .attr("height", this.height)
     .append("g");
 
-    this.wrangleData(_crimekey);
+    this.wrangleData("weaponOffence");
     // call the update method
-    this.updateViz(_crimekey);
+    this.updateViz();
 
      // Add the text label for the Y axis
     this.svg.append("text")
@@ -68,9 +69,8 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
     }          
   }
      
-    this.ySecCrime ={};
       for (i=0;i<aggregatedData.length;i++){
-         this.ySecCrime[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
+         this.displayData[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
       }
 }
 
@@ -80,7 +80,7 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
 ColSectorsViz.prototype.updateViz = function(){
 
 // a data series
-var dataSeries = d3.values(this.ySecCrime);
+var dataSeries = d3.values(this.displayData);
 
 //scales
 var x =d3.scale.ordinal()
@@ -109,7 +109,7 @@ var y = d3.scale.linear()
   
   var series = this.svg.selectAll( "g" )
     // convert the object to an array of d3 entries
-    .data( d3.map(this.ySecCrime).entries())
+    .data( d3.map(this.displayData).entries())
     
     series.enter()    
     // create a container for each series
@@ -152,13 +152,13 @@ var y = d3.scale.linear()
  */
 ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
     this.wrangleData(_crimekey);
-    this.updateViz(_crimekey);
+    this.updateViz();
 
 }
 
 ColSectorsViz.prototype.onYearChange= function (_slideryear){
   console.log(".series-" + _slideryear);
-$(".series-" + _slideryear).css({"background-color":"blue"});
+//$(".series-" + _slideryear).css({"background-color":"blue"});
 //$(".series-" + _slideryear).classed('clicked', true);
 }
  
