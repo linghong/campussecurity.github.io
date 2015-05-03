@@ -7107,6 +7107,16 @@ text.schoolLabelBlack {
     font-size: 7pt;
 }
 
+div#paramsContainer{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 7pt;
+}
+
 .univCity{
     text-align: center;
 }
@@ -7136,7 +7146,7 @@ div.univCity{
     fill:none;
     stroke:blue;
     stroke-width:1;
-    opacity:.2
+    opacity:.3
 }
 
 .axiscaption

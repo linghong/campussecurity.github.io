@@ -243,6 +243,9 @@ StateParallelCoordinateViz.prototype.init = function () {
         .attr("idx", function(d,i){
             return i;
         })
+        .attr('stateCd', function(d,i){
+            return that.labels[i];
+        })
         .on("mouseover", highlight)
         .on("mouseout", unHighlight)
         .attr("points", basePoint)
@@ -261,6 +264,11 @@ StateParallelCoordinateViz.prototype.init = function () {
 
     function highlight(){
 
+        if(that.triggerTimer){
+            clearTimeout(that.triggerTimer)
+            that.triggerTimer = null;
+        }
+
         var myLine = d3.select(this);
 
         myLine.style("stroke-width",3)
@@ -268,24 +276,23 @@ StateParallelCoordinateViz.prototype.init = function () {
 
         var coord = d3.mouse(this);
 
+
         that.triggerTimer = setTimeout(function(){
-            $(that.eventHandler).trigger('stateSelected',myLine.attr("type"));
             that.triggerTimer = null;
-        },100);
+            $(that.eventHandler).trigger('stateSelected',myLine.attr("type"));
+        },500);
 
 
         that.txt.style("visibility", "visible")
             .text(myLine.attr("type"))
-            .attr("x",  coord[0] + 10)
+            .attr("x",  coord[0] -20)
             .attr("y",  coord[1] +  10)
             .attr('class','schoolLabel');
 
         var padding=5;
         var bbox= that.txt[0][0].getBBox()
         that.txtBox
-            .attr('x', bbox.x-padding)
-            .attr('y', bbox.y-padding)
-            .attr('width', bbox.width+2*padding)
+            .attr('x', bbox.x-padding).attr('y', bbox.y-padding).attr('width', bbox.width+2*padding)
             .attr('height', bbox.height+2*padding)
 
         var deltaX =  parseFloat(that.svg.attr('width')) - (bbox.x +bbox.width);
@@ -321,7 +328,7 @@ StateParallelCoordinateViz.prototype.init = function () {
                         txt: that.svg
                             .append("text")
                             .attr('class', 'schoolLabelBlack highlightOnly')
-                    }
+    }
                 );
             }
         }
@@ -412,6 +419,8 @@ StateParallelCoordinateViz.prototype.init = function () {
 
 
     }
+
+
 }
 
 StateParallelCoordinateViz.prototype.updateAxis =function(data,i){
