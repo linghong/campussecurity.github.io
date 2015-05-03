@@ -265,10 +265,9 @@ ParallelCoordinateViz.prototype.init = function () {
                         txtBox: that.svg
                             .append('rect')
                             .attr('class', 'highlightOnly')
-                            .style('fill', 'yellow')
+                            .style('fill', 'white')
                             .style('stroke', 'black')
                             .style('stroke-width', '1px')
-                            .style('opacity', '.8')
                             .style('text-anchor', 'middle'),
 
                         txt: that.svg
@@ -420,19 +419,49 @@ ParallelCoordinateViz.prototype.wrangleData =function(year) {
         var points = "";
         j=0
 
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.arsons[i])
+        that.captionTextBoxData[i][j].value= that.arsons[i]
         points += that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.arsons[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.aggravatedAssaults[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.burglaries[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.drugViolations[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.forcibleSexOffenses[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.liquorViolations[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.murderCounts[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.negligentManSlaughters[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.robberies[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.vehicleThefts[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.weaponOffences[i]);
-        pointsArray.push(points)
 
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.aggravatedAssaults[i])
+        that.captionTextBoxData[i][j].value= that.aggravatedAssaults[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.aggravatedAssaults[i]);
+
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.burglaries[i])
+        that.captionTextBoxData[i][j].value= that.burglaries[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.burglaries[i]);
+
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.drugViolations[i])
+        that.captionTextBoxData[i][j].value= that.drugViolations[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.drugViolations[i]);
+
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.forcibleSexOffenses[i])
+        that.captionTextBoxData[i][j].value= that.forcibleSexOffenses[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.forcibleSexOffenses[i]);
+
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.liquorViolations[i])
+        that.captionTextBoxData[i][j].value= that.liquorViolations[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.liquorViolations[i]);
+
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.murderCounts[i])
+        that.captionTextBoxData[i][j].value= that.murderCounts[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.murderCounts[i]);
+
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.negligentManSlaughters[i])
+        that.captionTextBoxData[i][j].value= that.negligentManSlaughters[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.negligentManSlaughters[i]);
+
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.robberies[i])
+        that.captionTextBoxData[i][j].value= that.robberies[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.robberies[i]);
+
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.vehicleThefts[i])
+        that.captionTextBoxData[i][j].value= that.vehicleThefts[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.vehicleThefts[i]);
+
+        that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.weaponOffences[i])
+        that.captionTextBoxData[i][j].value= that.weaponOffences[i]
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.weaponOffences[i]);
     }
 
     that.svg.selectAll("polyline")
