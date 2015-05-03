@@ -15,6 +15,10 @@ StateParallelCoordinateViz = function(_theDiv,_eventHandler){
         .attr('height','100%')
         .attr('fill','white')
 
+    this.captionTextBoxData = [];
+    this.captionTextBoxes = [];
+
+
     this.aggravatedAssaults = []
     this.arsons = []
     this.burglaries = []
@@ -27,7 +31,6 @@ StateParallelCoordinateViz = function(_theDiv,_eventHandler){
     this.vehicleThefts = []
     this.weaponOffences = []
     this.categoryMetaData = [];
-    this.polyLines = [];
 
     this.txt = null;
     this.txtBox = null;
@@ -142,22 +145,91 @@ StateParallelCoordinateViz.prototype.init = function () {
     basePoint += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(0);
 
     var pointsArray=[];
-    for(var i=0; i<9; i++){
+    for(var i=0; i< that.labels.length; i++){
 
         var points = "";
         j=0
 
+        that.captionTextBoxData.push([]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.arsons[i]),
+            value:that.arsons[i]
+        })
         points += that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.arsons[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.aggravatedAssaults[i]),
+            value:that.aggravatedAssaults[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.aggravatedAssaults[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.burglaries[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.drugViolations[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.arsons[i]),
+            value:that.arsons[i]
+        })
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.arsons[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.arsons[i]),
+            value:that.arsons[i]
+        })
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.arsons[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.forcibleSexOffenses[i]),
+            value:that.forcibleSexOffenses[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.forcibleSexOffenses[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.liquorViolations[i]),
+            value:that.liquorViolations[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.liquorViolations[i]);
+
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.murderCounts[i]),
+            value:that.murderCounts[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.murderCounts[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.negligentManSlaughters[i]),
+            value:that.negligentManSlaughters[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.negligentManSlaughters[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.robberies[i]),
+            value:that.robberies[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.robberies[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.vehicleThefts[i]),
+            value:that.vehicleThefts[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.vehicleThefts[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.weaponOffences[i]),
+            value:that.weaponOffences[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.weaponOffences[i]);
+
         pointsArray.push(points);
     }
 
@@ -168,9 +240,13 @@ StateParallelCoordinateViz.prototype.init = function () {
         .attr("type", function(d,i){
             return that.labels[i];
         })
+        .attr("idx", function(d,i){
+            return i;
+        })
         .on("mouseover", highlight)
         .on("mouseout", unHighlight)
         .attr("points", basePoint)
+        .attr("class", 'polylineState')
         .transition()
         .delay(500)
         .attr("points", function(d){
@@ -202,7 +278,9 @@ StateParallelCoordinateViz.prototype.init = function () {
         var padding=5;
         var bbox= that.txt[0][0].getBBox()
         that.txtBox
-            .attr('x', bbox.x-padding).attr('y', bbox.y-padding).attr('width', bbox.width+2*padding)
+            .attr('x', bbox.x-padding)
+            .attr('y', bbox.y-padding)
+            .attr('width', bbox.width+2*padding)
             .attr('height', bbox.height+2*padding)
 
         var deltaX =  parseFloat(that.svg.attr('width')) - (bbox.x +bbox.width);
@@ -220,15 +298,72 @@ StateParallelCoordinateViz.prototype.init = function () {
 
         that.txtBox.style("visibility", "visible")
 
+        var idx = myLine.attr("idx");
+
+        if(that.captionTextBoxes.length ==0){
+
+            for(var i=0; i< that.captionTextBoxData[idx].length; i++){
+                that.captionTextBoxes.push(
+                    {
+                        txtBox: that.svg
+                            .append('rect')
+                            .attr('class', 'highlightOnly')
+                            .style('fill', 'yellow')
+                            .style('stroke', 'black')
+                            .style('stroke-width', '1px')
+                            .style('opacity', '.8')
+                            .style('text-anchor', 'middle'),
+
+                        txt: that.svg
+                            .append("text")
+                            .attr('class', 'schoolLabelBlack highlightOnly')
+                    }
+                );
+            }
+        }
+
+        padding=1
+        for(var i=0; i<that.captionTextBoxData[idx].length; i++){
+
+            that.captionTextBoxes[i].txt.style("visibility", "visible")
+                .text(that.captionTextBoxData[idx][i].value)
+                .attr("x",  that.captionTextBoxData[idx][i].x + 1)
+                .attr("y",  that.captionTextBoxData[idx][i].y + 10);
+
+            bbox= that.captionTextBoxes[i].txt[0][0].getBBox()
+            that.captionTextBoxes[i].txtBox
+                .attr('x', bbox.x-padding)
+                .attr('y', bbox.y-padding)
+                .attr('width', bbox.width+2*padding)
+                .attr('height', bbox.height+2*padding)
+
+            deltaX =  parseFloat(that.svg.attr('width')) - (bbox.x +bbox.width);
+            deltaY =  parseFloat(that.svg.attr('height')) - (bbox.y +bbox.height);
+
+            if(deltaX <0){
+                that.captionTextBoxes[i].txtBox.attr('x',parseFloat(that.captionTextBoxes[i].txtBox.attr('x')) +deltaX);
+                that.captionTextBoxes[i].txt.attr('x',parseFloat(that.captionTextBoxes[i].txt.attr('x')) +deltaX);
+            }
+
+            if(deltaY <0){
+                that.captionTextBoxes[i].txtBox.attr('y',parseFloat(that.captionTextBoxes[i].txtBox.attr('y')) +deltaY);
+                that.captionTextBoxes[i].txt.attr('y',parseFloat(that.captionTextBoxes[i].txt.attr('y')) +deltaY);
+            }
+
+            that.captionTextBoxes[i].txtBox.style("visibility", "visible")
 
 
+        }
     }
 
     function unHighlight(){
-        d3.select(this).style("stroke-width",1)
-        d3.select(this).style("opacity",.6)
+        d3.select(this).style("stroke-width",null)
+        d3.select(this).style("opacity",null)
       that.txtBox.style("visibility", "hidden")
         that.txt.style("visibility", "hidden")
+
+        d3.selectAll('.highlightOnly')
+            .style('visibility','hidden')
 
     }
 
@@ -338,6 +473,8 @@ StateParallelCoordinateViz.prototype.wrangleData =function(year) {
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.vehicleThefts[i]);
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.weaponOffences[i]);
         pointsArray.push(points)
+
+        console.log(that.negligentManSlaughters[i])
 
     }
 

@@ -6,6 +6,9 @@ ParallelCoordinateViz = function(_theDiv,_eventHandler){
     this.width = 366;
     this.height = 160;
     this.eventHandler = _eventHandler;
+    this.captionTextBoxData = [];
+    this.captionTextBoxes = [];
+
     this.svg = d3.select("#"+_theDiv).append("svg")
         .attr('width', this.width)
         .attr('height',this.height)
@@ -104,17 +107,86 @@ ParallelCoordinateViz.prototype.init = function () {
         var points = "";
         j=0
 
+        that.captionTextBoxData.push([]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.arsons[i]),
+            value:that.arsons[i]
+        })
         points += that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.arsons[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.aggravatedAssaults[i]),
+            value:that.aggravatedAssaults[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.aggravatedAssaults[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.burglaries[i]);
-        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.drugViolations[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.arsons[i]),
+            value:that.arsons[i]
+        })
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.arsons[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.arsons[i]),
+            value:that.arsons[i]
+        })
+        points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.arsons[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.forcibleSexOffenses[i]),
+            value:that.forcibleSexOffenses[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.forcibleSexOffenses[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.liquorViolations[i]),
+            value:that.liquorViolations[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.liquorViolations[i]);
+
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.murderCounts[i]),
+            value:that.murderCounts[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.murderCounts[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.negligentManSlaughters[i]),
+            value:that.negligentManSlaughters[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.negligentManSlaughters[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.robberies[i]),
+            value:that.robberies[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.robberies[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.vehicleThefts[i]),
+            value:that.vehicleThefts[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.vehicleThefts[i]);
+
+        that.captionTextBoxData[i].push({
+            x: that.categoryMetaData[j].offset,
+            y: that.categoryMetaData[j].scale(that.weaponOffences[i]),
+            value:that.weaponOffences[i]
+        })
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.weaponOffences[i]);
+
         pointsArray.push(points);
     }
 
@@ -128,6 +200,10 @@ ParallelCoordinateViz.prototype.init = function () {
         .attr("type", function(d,i){
             return that.labels[i];
         })
+        .attr("idx", function(d,i){
+            return i;
+        })
+        .attr('class','polylineSectorCd')
         .on("mouseover", highlight)
         .on("mouseout", unHighlight)
         .attr("points", basePoint)
@@ -144,10 +220,7 @@ ParallelCoordinateViz.prototype.init = function () {
 
 
     function highlight(){
-
-
         var coord = d3.mouse(this);
-
         var myPolyLine = d3.select(this)
         myPolyLine.style("stroke-width",3)
         myPolyLine.style("opacity",1)
@@ -157,7 +230,7 @@ ParallelCoordinateViz.prototype.init = function () {
         that.txt.style("visibility", "visible")
             .text(myPolyLine.attr("type"))
             .attr("x",  coord[0] + 10)
-            .attr("y",  coord[1] +  10)
+            .attr("y",  coord[1] + 20)
             .attr('class','schoolLabel');
 
         var padding=5;
@@ -182,6 +255,62 @@ ParallelCoordinateViz.prototype.init = function () {
         that.txtBox.style("visibility", "visible")
 
 
+        var idx = myPolyLine.attr("idx");
+
+        if(that.captionTextBoxes.length ==0){
+
+            for(var i=0; i< that.captionTextBoxData[idx].length; i++){
+                that.captionTextBoxes.push(
+                    {
+                        txtBox: that.svg
+                            .append('rect')
+                            .attr('class', 'highlightOnly')
+                            .style('fill', 'yellow')
+                            .style('stroke', 'black')
+                            .style('stroke-width', '1px')
+                            .style('opacity', '.8')
+                            .style('text-anchor', 'middle'),
+
+                        txt: that.svg
+                            .append("text")
+                            .attr('class', 'schoolLabelBlack highlightOnly')
+                    }
+                );
+            }
+        }
+
+        padding=1
+        for(var i=0; i<that.captionTextBoxData[idx].length; i++){
+
+            that.captionTextBoxes[i].txt.style("visibility", "visible")
+                .text(that.captionTextBoxData[idx][i].value)
+                .attr("x",  that.captionTextBoxData[idx][i].x + 1)
+                .attr("y",  that.captionTextBoxData[idx][i].y + 10);
+
+            bbox= that.captionTextBoxes[i].txt[0][0].getBBox()
+            that.captionTextBoxes[i].txtBox
+                .attr('x', bbox.x-padding)
+                .attr('y', bbox.y-padding)
+                .attr('width', bbox.width+2*padding)
+                .attr('height', bbox.height+2*padding)
+
+            deltaX =  parseFloat(that.svg.attr('width')) - (bbox.x +bbox.width);
+            deltaY =  parseFloat(that.svg.attr('height')) - (bbox.y +bbox.height);
+
+            if(deltaX <0){
+                that.captionTextBoxes[i].txtBox.attr('x',parseFloat(that.captionTextBoxes[i].txtBox.attr('x')) +deltaX);
+                that.captionTextBoxes[i].txt.attr('x',parseFloat(that.captionTextBoxes[i].txt.attr('x')) +deltaX);
+            }
+
+            if(deltaY <0){
+                that.captionTextBoxes[i].txtBox.attr('y',parseFloat(that.captionTextBoxes[i].txtBox.attr('y')) +deltaY);
+                that.captionTextBoxes[i].txt.attr('y',parseFloat(that.captionTextBoxes[i].txt.attr('y')) +deltaY);
+            }
+
+            that.captionTextBoxes[i].txtBox.style("visibility", "visible")
+
+
+        }
 
     }
 
@@ -189,11 +318,12 @@ ParallelCoordinateViz.prototype.init = function () {
         var myPolyLine = d3.select(this)
         $(that.eventHandler).trigger('sectorDeSelected', myPolyLine.attr('sectorCd'))
 
-        myPolyLine.style("stroke-width",1)
-        myPolyLine.style("opacity",.6)
+        myPolyLine.style("stroke-width",null)
+        myPolyLine.style("opacity",null)
         that.txtBox.style("visibility", "hidden")
         that.txt.style("visibility", "hidden")
-
+        d3.selectAll('.highlightOnly')
+            .style('visibility','hidden')
     }
 
 
