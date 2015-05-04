@@ -7071,10 +7071,13 @@ input.weightScale {
 div#univDataDiv {
   padding: 10px;
   border: 1px solid gray;
+  background-color: #d0e9c6;
+  padding-bottom: 30px;
+  box-shadow: 10px 10px 5px #888888;
 }
 div#univDataDivText {
   font-size: 7pt;
-  overflow: scroll;
+  background-color: #d0e9c6;
 }
 .univName {
   font-size: 10pt;
@@ -7083,6 +7086,89 @@ div#univDataDivText {
   cursor: hand;
 }
 span.captionLabel {
-  width: 40px;
+  width: 150px;
+  display: inline-table;
   text-align: right;
+  padding-right: 5px;
+  font-size: 12px;
+}
+span.captionValue {
+  width: 25px;
+  display: inline-table;
+  text-align: right;
+  font-size: 12px;
+}
+span.captionValueHighlight {
+  background-color: #ffff00;
+}
+div#paramsContainer {
+  background-color: #ffffff;
+  padding-top: 10px;
+}
+.noSelect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+text.schoolLabel {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #ffffff;
+}
+text.schoolLabelBlack {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-size: 7pt;
+}
+div#paramsContainer {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-size: 7pt;
+}
+.univCity {
+  text-align: center;
+}
+div.univCity {
+  font-size: 12px;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #bbb;
+  stroke-width: 1;
+}
+.axis text {
+  display: none;
+}
+.polylineSectorCd {
+  fill: none;
+  stroke: blue;
+  stroke-width: 1;
+  opacity: 0.3;
+}
+.polylineState {
+  fill: none;
+  stroke: blue;
+  stroke-width: 1;
+  opacity: 0.3;
+}
+.axiscaption {
+  color: #bbb;
+  text-anchor: end;
+  font-size: 10px;
 }
