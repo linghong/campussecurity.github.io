@@ -26,15 +26,7 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("height", this.height)
         .append("g");
 
-<<<<<<< HEAD
-     // Add the text label for the Y axis
-=======
-    this.wrangleData("weaponOffence");
-    // call the update method
-    this.updateViz();
-
     // Add the text label for the Y axis
->>>>>>> upstream/master
     this.svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 20)
@@ -42,10 +34,6 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("dy", "0.08em")
         .style("text-anchor", "middle")
         .text("Crime Number Per College");
-<<<<<<< HEAD
-    
-=======
->>>>>>> upstream/master
     // Add the text label for the x axis
     this.svg.append("text")
         .attr("y", this.height-12)
@@ -55,9 +43,8 @@ ColSectorsViz.prototype.initVis = function(){
         .text("Nine US College Categories");
 
     this.wrangleData("weaponOffence");
-
     // call the update method
-    this.updateViz();
+    this.updateViz();    
 }
 
 /**
@@ -66,26 +53,6 @@ ColSectorsViz.prototype.initVis = function(){
  */
 ColSectorsViz.prototype.wrangleData= function(_crimekey){
 
-<<<<<<< HEAD
-     //get aggregated data
-    var dataPrepare = new DataPrepare(this.data, "year", "sectorCd");
-
-  //make a data object used for the multi-series scatterplot
-  var firstKeyArray=[];
-  for (var y=0; y<aggregatedData.length;y++){
-
-    for (var s=0; s<aggregatedData[y].values.length;s++){
-      firstKeyArray.push({
-        "aggKey2": aggregatedData[y].values[s].key,
-        "key":aggregatedData[y].values[s].values[_crimekey],    
-      });
-    }          
-  }
-
-  for (i=0;i<aggregatedData.length;i++){
-      this.crimeKeyData[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
-  }
-=======
     //get aggregated data
     var dataPrepare = new DataPrepare(this.data, "year", "sectorCd");
 
@@ -102,27 +69,20 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
     }
 
     for (i=0;i<aggregatedData.length;i++){
-        this.displayData[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
-    }
->>>>>>> upstream/master
+      this.crimeKeyData[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
+  }
 }
 
 /**
  * Method to updata Viz.
  */
 ColSectorsViz.prototype.updateViz = function(){
-
-//for check boxes
-this.selectData();
-
+   //for check boxes
+//this.selectData(); 
+this.displayData=this.crimeKeyData;
 // a data series
-<<<<<<< HEAD
-var dataSeries = d3.values(this.displayData);
- 
-=======
     var dataSeries = d3.values(this.displayData);
 
->>>>>>> upstream/master
 //scales
     var x =d3.scale.ordinal()
         .domain(["",1,2,3,4,5,6,7,8,9,"."])
@@ -144,23 +104,6 @@ var dataSeries = d3.values(this.displayData);
         .orient("bottom");
 
     this.yAxis = d3.svg.axis()
-<<<<<<< HEAD
-      .scale(y)
-      .ticks(5)
-      .orient("left");
-      
-  var series = this.svg.selectAll( "g" )
-    // convert the object to an array of d3 entries
-    .data( d3.map(this.displayData).entries())
-
-  series.enter()    
-    // create a container for each series
-    .append("g")
-    .attr( "class", function(d) {  
-      return "series-" + d.key } );
-
-  var circle=series.selectAll( "circle" )
-=======
         .scale(y)
         .ticks(5)
         .orient("left");
@@ -175,7 +118,6 @@ var dataSeries = d3.values(this.displayData);
         .attr( "class", function(d) { return "series-" + d.key } );
 
     var circle=series.selectAll( "circle" )
->>>>>>> upstream/master
         // do a data join for each series' values
         .data( function(d) { return d.value } );
 
@@ -199,14 +141,8 @@ var dataSeries = d3.values(this.displayData);
         .call(this.yAxis);
 
     series.exit().remove();
-<<<<<<< HEAD
-    circle.exit().remove(); 
-
-  }
-=======
     circle.exit().remove();
 }
->>>>>>> upstream/master
 
 
 /**
@@ -221,19 +157,16 @@ ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
 }
 
 ColSectorsViz.prototype.onYearChange= function (_slideryear){
-<<<<<<< HEAD
-=======
     console.log(".series-" + _slideryear);
->>>>>>> upstream/master
 //$(".series-" + _slideryear).css({"background-color":"blue"});
 //$(".series-" + _slideryear).classed('clicked', true);
 }
+
 ColSectorsViz.prototype.selectData=function(){
 
     var checkedValue =[];//array to represents which years are checked
     this.displayData={};
  
-<<<<<<< HEAD
     //function for checking which boxes are checked
     var  m=0;
     d3.selectAll('input[name="year"]').each(function (d) {
@@ -245,7 +178,7 @@ ColSectorsViz.prototype.selectData=function(){
 
   var crimeYear=2008; 
   //get filtered data
-  for(var i=0; i<checkedValue.length;i++){ 
+for(var i=0; i<checkedValue.length;i++){ 
     while(parseInt(checkedValue[i])!=crimeYear) {  
     //***d3.select("g").classed("series-"+crimeYear, false); 
     crimeYear++;
@@ -255,6 +188,3 @@ ColSectorsViz.prototype.selectData=function(){
     crimeYear++; 
   } 
 }
-=======
-
->>>>>>> upstream/master

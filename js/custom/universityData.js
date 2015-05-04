@@ -4,3 +4,4 @@
 
 
 console.log (d3.csv("data/universities.csv"));
+console.log (d3.csv("data/crimecause.csv"));
