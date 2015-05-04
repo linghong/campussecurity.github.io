@@ -10,6 +10,28 @@ BarChartViz = function(_theDiv,_eventHandler){
 BarChartViz.prototype.init = function(_theDiv,_height,_width)
 {
     console.log(crimeAnalyzer.getCategoryCrimeData());
+
+    // -------------------- test grabbing data ---------------
+    var crimeCategory = "murderCount";
+    var year = "2008";
+    var yearBucket = crimeAnalyzer.getCategoryCrimeData()[year];
+    console.log(yearBucket)
+    var stateData = yearBucket.stateVA;
+    console.log(stateData)
+    var stateCrimeCounts = stateData.crimeCounts;
+    console.log(stateCrimeCounts.robbery)
+
+
+    var stateAbbr = [
+                'stateAL','stateAK','stateAZ','stateAR','stateCA','stateCO','stateCT','stateDE','stateFL','stateGA','stateHI',
+    'stateID','stateIL','stateIN','stateIA','stateKS','stateKY','stateLA','stateME','stateMD','stateMA','stateMI','stateMN',
+    'stateMS','stateMO','stateMT','stateNE','stateNV','stateNH','stateNJ','stateNM','stateNY','stateNC','stateND','stateOH',
+    'stateOK','stateOR','statePA','stateRI','stateSC','stateSD','stateTN','stateTX','stateUT','stateVT','stateVI','stateVA',
+    'stateWA','stateWV','stateWI','stateWY'
+    ];
+    //--------------------------------------------------------
+
+
     var that=this;
     var bardata = [];
     d3.tsv('/js/custom/crimeDataStats.tsv', function(data) {
@@ -40,7 +62,6 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
             .scale(vGuideScale)
             .orient('left')
             .ticks(10)
-
 
 
         var tempColor;
