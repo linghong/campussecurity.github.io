@@ -66,3 +66,13 @@ p {
 #graphic {
   margin: 0 auto;
 }
+
+.stateAxes path,
+.stateAxes line {
+    fill: none;
+    stroke: #bbb;
+    stroke-width: 1;
+}
+.stateAxes text {
+    font-size: 10px;
+}
