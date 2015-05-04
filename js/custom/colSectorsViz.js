@@ -1,4 +1,3 @@
-
 /**
  * @param _data -- the data array
  * @constructor
@@ -10,6 +9,7 @@ ColSectorsViz = function(_data){
     this.width = $("#yearsectors").width();
     this.height = 0.55*this.width;
     this.displayData={};
+    this.crimeKeyData={};
     this.initVis();
 }
 
@@ -26,10 +26,6 @@ ColSectorsViz.prototype.initVis = function(){
     .attr("height", this.height)
     .append("g");
 
-    this.wrangleData("weaponOffence");
-    // call the update method
-    this.updateViz();
-
      // Add the text label for the Y axis
     this.svg.append("text")
         .attr("transform", "rotate(-90)")
@@ -38,7 +34,8 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("dy", "0.08em")
         .style("text-anchor", "middle")
         .text("Crime Number Per College");
-  // Add the text label for the x axis
+    
+    // Add the text label for the x axis
     this.svg.append("text")
         .attr("y", this.height-12)
         .attr("x", 200)
@@ -46,6 +43,10 @@ ColSectorsViz.prototype.initVis = function(){
         .style("text-anchor", "middle")
         .text("Nine US College Categories");
 
+    this.wrangleData("weaponOffence");
+
+    // call the update method
+    this.updateViz();
 }
 
 /**
@@ -54,8 +55,8 @@ ColSectorsViz.prototype.initVis = function(){
  */
 ColSectorsViz.prototype.wrangleData= function(_crimekey){
 
-  //get aggregated data
-  var dataPrepare = new DataPrepare(this.data, "year", "sectorCd");
+     //get aggregated data
+    var dataPrepare = new DataPrepare(this.data, "year", "sectorCd");
 
   //make a data object used for the multi-series scatterplot
   var firstKeyArray=[];
@@ -68,10 +69,10 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
       });
     }          
   }
-     
-      for (i=0;i<aggregatedData.length;i++){
-         this.displayData[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
-      }
+
+  for (i=0;i<aggregatedData.length;i++){
+      this.crimeKeyData[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
+  }
 }
 
 /**
@@ -79,9 +80,12 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
  */
 ColSectorsViz.prototype.updateViz = function(){
 
+//for check boxes
+this.selectData();
+
 // a data series
 var dataSeries = d3.values(this.displayData);
-
+ 
 //scales
 var x =d3.scale.ordinal()
     .domain(["",1,2,3,4,5,6,7,8,9,"."])
@@ -106,16 +110,17 @@ var y = d3.scale.linear()
       .scale(y)
       .ticks(5)
       .orient("left");
-  
+      
   var series = this.svg.selectAll( "g" )
     // convert the object to an array of d3 entries
     .data( d3.map(this.displayData).entries())
-    
-    series.enter()    
+
+  series.enter()    
     // create a container for each series
     .append("g")
-    .attr( "class", function(d) { return "series-" + d.key } );
-    
+    .attr( "class", function(d) {  
+      return "series-" + d.key } );
+
   var circle=series.selectAll( "circle" )
         // do a data join for each series' values
         .data( function(d) { return d.value } );
@@ -139,9 +144,9 @@ var y = d3.scale.linear()
       .attr("transform", "translate("+this.padding.left+",0)")  
       .call(this.yAxis);
 
-
     series.exit().remove();
-    circle.exit().remove();
+    circle.exit().remove(); 
+
   }
 
 
@@ -157,8 +162,32 @@ ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
 }
 
 ColSectorsViz.prototype.onYearChange= function (_slideryear){
-  console.log(".series-" + _slideryear);
 //$(".series-" + _slideryear).css({"background-color":"blue"});
 //$(".series-" + _slideryear).classed('clicked', true);
 }
+ColSectorsViz.prototype.selectData=function(){
+
+    var checkedValue =[];//array to represents which years are checked
+    this.displayData={};
  
+    //function for checking which boxes are checked
+    var  m=0;
+    d3.selectAll('input[name="year"]').each(function (d) {
+      if(d3.select(this).attr("type") == "checkbox" &&d3.select(this).node().checked) {
+        checkedValue[m] =d3.select(this).attr("value");
+        m++;
+      }         
+  }); 
+
+  var crimeYear=2008; 
+  //get filtered data
+  for(var i=0; i<checkedValue.length;i++){ 
+    while(parseInt(checkedValue[i])!=crimeYear) {  
+    //***d3.select("g").classed("series-"+crimeYear, false); 
+    crimeYear++;
+    }
+    //****d3.select("g").classed("series-"+crimeYear, true); 
+    this.displayData[checkedValue[i]] =this.crimeKeyData[checkedValue[i]];      
+    crimeYear++; 
+  } 
+}

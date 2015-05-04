@@ -60,7 +60,7 @@ StateSectorsViz.prototype.wrangleData= function(_crimekey, _year){
           .key(function(d) { 
             return d.year; })
           .entries(this.data);
- 
+
   //get aggregated data
   var dataPrepare = new DataPrepare(yearData[_year-2008].values, "state", "sectorCd");
    
@@ -136,6 +136,7 @@ var y = d3.scale.linear()
         .attr( "r", "5" )
         .attr( "cy", function(d) { return y(d.key)-5} );
  
+
 
     // Add axes visual elements
     this.svg
