@@ -47,8 +47,8 @@ ParallelCoordinateViz = function(_theDiv,_eventHandler){
     ];
 
     this.crimeLabels= [
-        "Aggr. Assault",
         "Arson",
+        "Aggr. Assault",
         "Burglary",
         "Drug Violations",
         "Forcible Sex Offence",
@@ -229,8 +229,8 @@ ParallelCoordinateViz.prototype.init = function () {
 
         that.txt.style("visibility", "visible")
             .text(myPolyLine.attr("type"))
-            .attr("x",  coord[0] + 10)
-            .attr("y",  coord[1] + 20)
+            .attr("x",  10)
+            .attr("y",  10)
             .attr('class','schoolLabel');
 
         var padding=5;
@@ -462,6 +462,7 @@ ParallelCoordinateViz.prototype.wrangleData =function(year) {
         that.captionTextBoxData[i][j].y = that.categoryMetaData[j].scale(that.weaponOffences[i])
         that.captionTextBoxData[i][j].value= that.weaponOffences[i]
         points += " " + that.categoryMetaData[j].offset + "," + that.categoryMetaData[j++].scale(that.weaponOffences[i]);
+        pointsArray.push(points)
     }
 
     that.svg.selectAll("polyline")

@@ -247,6 +247,28 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
         }
     });
 
+
+    var starRatingData = [];
+
+    var starBucket =  (that.crimeData.containerForMapVis.maxCrimeFactor
+                        -that.crimeData.containerForMapVis.minCrimeFactor)/5;
+    starRatingData.push({
+        from:(-1),
+        to:starBucket,
+        starRating:5
+    })
+
+    var crimeBucket = starBucket;
+    for (var starIdx = 0; starIdx<5; starIdx++){
+        starRatingData.push({
+            from:crimeBucket,
+            to:crimeBucket+starBucket,
+            starRating:(5 - (starIdx+1))
+        })
+
+        crimeBucket+=starBucket;
+    }
+
     this.crimeData.sort(
     function(a,b){
         return d3.ascending(a.crimeFactorForMapVis, b.crimeFactorForMapVis)
@@ -273,7 +295,19 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
             container = d.allTimeCrimeData
         }
 
+        if(d.schoolId =='196024001'){
+            console.log(d);
+        }
+
         if(container){
+            for (var starIdx = 0; starIdx<5; starIdx++){
+                if(d.crimeFactorForMapVis > starRatingData[starIdx].from &&
+                    d.crimeFactorForMapVis <= starRatingData[starIdx].to ){
+                    d["starRating"] = starRatingData[starIdx].starRating;
+                    break;
+                }
+            }
+
             if(oldCrimeFactor != d.crimeFactorForMapVis){
                 d["rank"] = ++rank;
             }
