@@ -28,6 +28,8 @@ MapViz = function(_statesData,_countryStatistics,_weightControl, _eventHandler) 
     this.hideDetailTimer = null;
     this.hideCaptionWaitPeriod = 2500;
 
+    this.stateScale = 1;
+
     this.countryStatistics = _countryStatistics;
     this.statesData = _statesData;
     this.circlesBySector = {};
@@ -140,7 +142,14 @@ MapViz.prototype.wrangleSectorIn = function (sectorCd) {
         var ctrl = d3.select(d);
         ctrl.attr('origOpacity',ctrl.attr('opacity'));
         ctrl.style('stroke', 'black')
-        ctrl.style('stroke-width', '2px')
+        ctrl.style('stroke-width', function(d,i){
+            if(that.zoomed){
+                return '.5px';
+            }
+            else{
+                return '2px';
+            }
+        })
         ctrl.style('opacity', '1')
     })
 }
@@ -165,6 +174,7 @@ MapViz.prototype.wrangleStateIn = function (stateCd) {
     }
     var path = that.svg.select("path[id="+stateCd+"]");
 
+
     var box = path.node().getBBox();
     var midpointX = box.x + box.width/2;
     var midpointY = box.y + box.height/2;
@@ -172,7 +182,7 @@ MapViz.prototype.wrangleStateIn = function (stateCd) {
     var xScale = that.width / box.width;
     var yScale = that.height / box.height;
 
-    var scale = d3.min([xScale,yScale])
+    that.stateScale = d3.min([xScale,yScale])
 
     //Reference:http://stackoverflow.com/questions/12062561/calculate-svg-path-centroid-with-d3-js
     that.zoomed = true;
@@ -181,11 +191,20 @@ MapViz.prototype.wrangleStateIn = function (stateCd) {
         .attr("transform",
         "translate(" + that.width / 2 + ","
         + that.height / 2
-        + ")scale("+scale+")translate("
+        + ")scale("+that.stateScale+")translate("
         + (-midpointX) + ","
         + (-midpointY) + ")");
 
+    that.svg.selectAll('circle')
+        .attr("r", function(d,i){
+            return d3.select(this).attr("originalR") /(that.stateScale/2);
+        });
+
     path.style("fill","khaki");
+
+    that.svg.selectAll('path')
+        .style('stroke-width',(2/(that.stateScale)/2)+'px')
+
     if(that.oldPath){
         that.oldPath.style('fill',that.stateFillColor)
     }
@@ -235,6 +254,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
         .data(crimeData)
         .enter()
         .append("circle")
+        .attr('class', 'schoolCircle')
         .style('cursor','pointer')
         //.style('stroke', 'black')
         //.style('stroke-width', '1px')
@@ -338,6 +358,14 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
         })
         .attr("originalR", function(d){
             return d3.select(this).attr("r");
+        })
+        .attr("r", function(d){
+            if(that.zoomed) {
+                return d3.select(this).attr("originalR") / (that.stateScale/2);
+            }
+            else {
+                return d3.select(this).attr("r")
+            }
         })
         .style("fill", function(d,i){
 
@@ -543,10 +571,10 @@ MapViz.prototype.loadData = function (){
 
 
         var midpoint = that.path.centroid(itm);
-        var scale, midpointX, midpointY;
+        var midpointX, midpointY;
         if(that.zoomed) {
             that.zoomed = false;
-            scale = 1;
+            that.stateScale = 1;
             midpointX = that.width /2;
             midpointY = that.height /2;
             if(that.oldPath){
@@ -558,7 +586,7 @@ MapViz.prototype.loadData = function (){
             that.zoomed = true;
             midpointX = midpoint[0];
             midpointY = midpoint[1];
-            scale = 5;
+            that.stateScale = 5;
         }
 
         that.grp.transition()
@@ -566,10 +594,39 @@ MapViz.prototype.loadData = function (){
             .attr("transform",
             "translate(" + that.width / 2 + ","
             + that.height / 2
-            + ")scale("+scale+")translate("
+            + ")scale("+that.stateScale+")translate("
             + (-midpointX) + ","
             + (-midpointY) + ")");
 
+
+        if(that.stateScale==1){
+            that.svg.selectAll('circle')
+                .transition()
+                .duration(1000)
+                .attr("r", function(d,i){
+                    return d3.select(this).attr("originalR");
+                });
+
+            that.svg.selectAll('path')
+                .transition()
+                .duration(1000)
+                .style('stroke-width',null);
+
+        }
+        else {
+            that.svg.selectAll('circle')
+                .transition()
+                .duration(1000)
+                .attr("r", function(d,i){
+                    return d3.select(this).attr("originalR") /(that.stateScale/2);
+                });
+
+            that.svg.selectAll('path')
+                .transition()
+                .duration(1000)
+                .style('stroke-width',(2/(that.stateScale)/2)+'px')
+
+        }
     }
 
     function stateIn(){
