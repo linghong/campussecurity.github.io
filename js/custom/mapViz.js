@@ -52,10 +52,10 @@ MapViz.prototype.init = function(){
     this.svg.call(this.drag);
 
     $( window ).resize(function() {
-        that.svg.call(resize);
+        that.svg.call(this.resize());
     });
 
-
+    var that=this;
 
     function zoom(){
 
@@ -79,19 +79,6 @@ MapViz.prototype.init = function(){
 
         that.moveTimer = setTimeout(that.moveMap(that.scale,false), that.timerWaitPeriod);
     }
-
-
-
-    function resize(){
-        // get the width of a D3 element
-        that.width = $("#map").width();
-        that.height = that.width * that.mapRatio;
-        that.scale = that.scaleFactor * that.width;
-        that.svg.attr("width", that.width)
-            .attr("height", that.height);
-        that.moveMap();
-    }
-
 
 }
 
@@ -644,7 +631,14 @@ MapViz.prototype.loadData = function (){
         var i=ctrl.attr("i");
         d3.select(this).style("fill",that.stateFillColor);
     }
-
 }
 
-
+ MapViz.prototype.resize  = function (){
+        // get the width of a D3 element
+        this.width = $("#map").width();
+        this.height = this.width * this.mapRatio;
+        this.scale = this.scaleFactor * this.width;
+        this.svg.attr("width", this.width)
+            .attr("height", this.height);
+        this.moveMap();
+    }
