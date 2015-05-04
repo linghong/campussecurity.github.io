@@ -20,8 +20,8 @@ WeightContainerViz = function(_theDiv,_eventHandler){
 
     this.colorScale = d3.scale.linear().domain([0,this.MAX]).range(["lightgreen","orange"]);
     var initialWeights = [4,3,2,.5,.5,.2,1,.2,.1,.1,.1]
-    var labels = ['Murder','Negl. Manslaughter', 'Forcible Sex Offence', 'Robbery', 'Burglary',
-        'Vehicle Theft', 'Aggravated Assault', 'Arson', 'Weapons Offence', 'Drug Offence', 'Liquor Offence']
+    var labels = ['Murder','Negl. Manslaughter', 'Forcible Sex Offense', 'Robbery', 'Burglary',
+        'Vehicle Theft', 'Aggravated Assault', 'Arson', 'Weapons Offense', 'Drug Offense', 'Liquor Offense']
 
     this.weights = [];
 

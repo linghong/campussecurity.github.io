@@ -275,8 +275,14 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
 
             if(container) {
                 pushToSector(school.sectorCd,this);
-                caption += "<span class='captionLabel'>Crime Ranking:</span><span class='captionValueHighlight'>"
-                + school.rank + " / " + maxRank + "</span><br>"
+                //caption += "<span class='captionLabel'>Crime Ranking:</span><span class='captionValueHighlight'>"
+                //+ school.rank + " / " + maxRank + "</span><br>"
+                caption += "<span class='captionLabel'>Safety Rating:</span><span>"
+                +"<img width='70' src='/images/" + school["starRating"] + "stars.png'></span><br>"
+                if(!school["starRating"]){
+                    console.log(school.schoolId + "<img src='/images/" + school["starRating"] + "stars.png'>")
+                }
+
                 caption += "<span class='captionLabel'>Murders:</span>" +
                 "<span class='captionValue'>" + formatData(container.murderCount) + "</span>"
                 caption += "<span class='captionLabel'>Negligent Manslaughter:</span>" +
@@ -332,7 +338,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
             try {
                 if (d.rank <=topCount || d.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
 
-                    if (d.crimeFactorForMapVis  < aveCrimeFactor){
+                    if (d["starRating"]  >= 5){
                        if(hideSafeSchools){
                            r =0;
                        }
@@ -369,7 +375,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
         })
         .style("fill", function(d,i){
 
-            if (d.crimeFactorForMapVis > aveCrimeFactor){
+            if (d["starRating"]  < 5){
                 return "brown";// colorScale(d.crimeFactor)
             }
             else {
