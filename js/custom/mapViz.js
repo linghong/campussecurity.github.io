@@ -168,10 +168,14 @@ MapViz.prototype.wrangleStateIn = function (stateCd) {
     var box = path.node().getBBox();
     var midpointX = box.x + box.width/2;
     var midpointY = box.y + box.height/2;
+
+    var xScale = that.width / box.width;
+    var yScale = that.height / box.height;
+
+    var scale = d3.min([xScale,yScale])
+
     //Reference:http://stackoverflow.com/questions/12062561/calculate-svg-path-centroid-with-d3-js
-    var scale;
     that.zoomed = true;
-    scale = 10;
     that.grp.transition()
         .duration(1000)
         .attr("transform",
