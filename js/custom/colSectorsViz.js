@@ -34,6 +34,7 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("dy", "0.08em")
         .style("text-anchor", "middle")
         .text("Crime Number Per College");
+
     // Add the text label for the x axis
     this.svg.append("text")
         .attr("y", this.height-12)
@@ -41,9 +42,10 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("dy", "0.08em")
         .style("text-anchor", "middle")
         .text("Nine US College Categories");
-
+  this.crimeYear=[2008,2009,2010,2011,2012,2013]; 
     this.wrangleData("weaponOffence");
     // call the update method
+
     this.updateViz();    
 }
 
@@ -176,15 +178,25 @@ ColSectorsViz.prototype.selectData=function(){
       }         
   }); 
 
-  var crimeYear=2008; 
+
+  var n=0;
   //get filtered data
 for(var i=0; i<checkedValue.length;i++){ 
-    while(parseInt(checkedValue[i])!=crimeYear) {  
-    //***d3.select("g").classed("series-"+crimeYear, false); 
-    crimeYear++;
+   
+    while (parseInt(checkedValue[i])>this.crimeYear[n]) {  
+    this.svg.selectAll('#yearsectors g .series-'+this.crimeYear[n]).classed("series-"+this.crimeYear[n], false); 
+    console.log("remove crimeYear[n]");
+    console.log(this.crimeYear[n]);
+    n++;
     }
-    //****d3.select("g").classed("series-"+crimeYear, true); 
-    this.displayData[checkedValue[i]] =this.crimeKeyData[checkedValue[i]];      
-    crimeYear++; 
+
+    this.svg.selectAll('#yearsectors g .series-'+parseInt(checkedValue[i])).classed("series-"+parseInt(checkedValue[i]), true);  
+    console.log("add crimeYear[n]");
+    console.log(parseInt(checkedValue[i]));
+    this.displayData[checkedValue[i]] =this.crimeKeyData[checkedValue[i]];
+     
+    n++; 
   } 
+ this.crimeYear=checkedValue;
+ console.log(this.crimeYear);
 }
