@@ -78,8 +78,9 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
  */
 ColSectorsViz.prototype.updateViz = function(){
    //for check boxes
-//this.selectData(); 
-this.displayData=this.crimeKeyData;
+this.selectData(); 
+
+//this.displayData=this.crimeKeyData;
 // a data series
     var dataSeries = d3.values(this.displayData);
 
@@ -163,10 +164,9 @@ ColSectorsViz.prototype.onYearChange= function (_slideryear){
 }
 
 ColSectorsViz.prototype.selectData=function(){
-
     var checkedValue =[];//array to represents which years are checked
     this.displayData={};
- 
+
     //function for checking which boxes are checked
     var  m=0;
     d3.selectAll('input[name="year"]').each(function (d) {
