@@ -9,3 +9,12 @@ input.weightScale{
    background-color: #bde6f2;
 }
 
+.stateAxes path,
+.stateAxes line {
+    fill: none;
+    stroke: #bbb;
+    stroke-width: 1;
+}
+.stateAxes text {
+    font-size: 10px;
+}
