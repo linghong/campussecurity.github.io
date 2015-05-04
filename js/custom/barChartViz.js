@@ -8,7 +8,7 @@ BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
         'AK',
         'AL',
         'AR',
-        'AS',
+        //'AS',
         'AZ',
         'CA',
         'CO',
@@ -52,7 +52,7 @@ BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
         'TX',
         'UT',
         'VA',
-        'VI',
+        //'VI',
         'VT',
         'WA',
         'WI',
@@ -73,16 +73,17 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
     that.states.forEach(function(d,i){
         var stateData = yearBucket["state"+d];
         bardata.push({
+
             state:d,
-            count:stateData.crimeCounts[that.crimeCateogry]
+            count: stateData.crimeCounts[that.crimeCateogry]
         });
     });
 
-    var margin = { top: 30, right: 30, bottom: 40, left:50 }
+    console.log(bardata)
+    var margin = { top: 30, right: 5, bottom: 40, left:60 }
 
     var height = that.height  - margin.top - margin.bottom,
         width = that.width - margin.left - margin.right,
-        barWidth = 50,
         barOffset = 5;
 
     that.svg = d3.select('#'+ _theDiv).append('svg')
@@ -115,27 +116,35 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
             .range([0, height]);
 
         var xScale = d3.scale.ordinal()
-            .domain(d3.range(0, bardata.length))
+            .domain(that.states)
             .rangeBands([0, width], 0.2)
 
         var hAxis = d3.svg.axis()
             .scale(xScale)
-            .orient('bottom')
-            .tickValues(xScale.domain().filter(function(d, i) {
-                return !(i % (bardata.length/5));
-            }))
+            .orient('bottom');
+
+            /*.tickValues(xScale.domain().filter(function(d, i) {
+                return d.state;
+            }))*/
 
         var vAxisGroup = that.svg.append("g")
-            .attr("class",'axis')
+            .attr("class",'stateAxes')
             .attr("transform",
-            "translate("+ 30 + ","+margin.top+")").call(vAxis)
+            "translate("+ 49 + ","+margin.top+")").call(vAxis)
 
 
         var hAxisGroup = that.svg.append("g")
-            .attr("class",'axis')
+            .attr("class",'stateAxes')
             .attr("transform",
             //"translate("+ 0 + ","+height + margin.top + margin.bottom+")").call(hAxis)
-            "translate(30,280)").call(hAxis)
+            "translate(40, "+ (margin.top + height) +")").call(hAxis)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", (1.5 * xScale.rangeBand()))
+            .attr("transform", function(d) {
+                return "rotate(-90)"
+            });
 
         var tooltip = d3.select('body').append('div')
             .style('position', 'absolute')
@@ -156,8 +165,7 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
             })
             .attr('width', xScale.rangeBand())
             .attr('x', function(d,i) {
-                console.log(xScale(d.count))
-                return xScale(d.count);
+                return xScale(d.state);
             })
             .attr('height', 0)
             .attr('y', height)

@@ -171,7 +171,7 @@ MapViz.prototype.wrangleStateIn = function (stateCd) {
     //Reference:http://stackoverflow.com/questions/12062561/calculate-svg-path-centroid-with-d3-js
     var scale;
     that.zoomed = true;
-    scale = 4;
+    scale = 10;
     that.grp.transition()
         .duration(1000)
         .attr("transform",
