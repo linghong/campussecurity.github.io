@@ -1,77 +1,117 @@
 
-BarChartViz = function(_theDiv,_eventHandler){
+BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
 
     this.width = 750;
     this.height = 310;
-
-    this.init(_theDiv, this.height, this.width);
+    this.svg = null;
+    this.states= [
+        'AK',
+        'AL',
+        'AR',
+        'AS',
+        'AZ',
+        'CA',
+        'CO',
+        'CT',
+        'DC',
+        'DE',
+        'FL',
+        'GA',
+        'HI',
+        'IA',
+        'ID',
+        'IL',
+        'IN',
+        'KS',
+        'KY',
+        'LA',
+        'MA',
+        'MD',
+        'ME',
+        'MI',
+        'MN',
+        'MO',
+        'MS',
+        'MT',
+        'NC',
+        'ND',
+        'NE',
+        'NH',
+        'NJ',
+        'NM',
+        'NV',
+        'NY',
+        'OH',
+        'OK',
+        'OR',
+        'PA',
+        'RI',
+        'SC',
+        'SD',
+        'TN',
+        'TX',
+        'UT',
+        'VA',
+        'VI',
+        'VT',
+        'WA',
+        'WI',
+        'WV',
+        'WY'
+    ];
+    this.year = _year;
+    this.crimeCateogry = _crimeCategory;
+    this.init(_theDiv);
 }
 
 BarChartViz.prototype.init = function(_theDiv,_height,_width)
 {
-    console.log(crimeAnalyzer.getCategoryCrimeData());
-
-    // -------------------- test grabbing data ---------------
-    var crimeCategory = "murderCount";
-    var year = "2008";
-    var yearBucket = crimeAnalyzer.getCategoryCrimeData()[year];
-    console.log(yearBucket)
-    var stateData = yearBucket.stateVA;
-    console.log(stateData)
-    var stateCrimeCounts = stateData.crimeCounts;
-    console.log(stateCrimeCounts.robbery)
-
-
-    var stateAbbr = [
-                'stateAL','stateAK','stateAZ','stateAR','stateCA','stateCO','stateCT','stateDE','stateFL','stateGA','stateHI',
-    'stateID','stateIL','stateIN','stateIA','stateKS','stateKY','stateLA','stateME','stateMD','stateMA','stateMI','stateMN',
-    'stateMS','stateMO','stateMT','stateNE','stateNV','stateNH','stateNJ','stateNM','stateNY','stateNC','stateND','stateOH',
-    'stateOK','stateOR','statePA','stateRI','stateSC','stateSD','stateTN','stateTX','stateUT','stateVT','stateVI','stateVA',
-    'stateWA','stateWV','stateWI','stateWY'
-    ];
-    //--------------------------------------------------------
-
-
     var that=this;
     var bardata = [];
-    d3.tsv('/js/custom/crimeDataStats.tsv', function(data) {
-        console.log(data);
+    // -------------------- test grabbing data ---------------
+    var yearBucket = crimeAnalyzer.getCategoryCrimeData()[that.year];
+    that.states.forEach(function(d,i){
+        var stateData = yearBucket["state"+d];
+        bardata.push({
+            state:d,
+            count:stateData.crimeCounts[that.crimeCateogry]
+        });
+    });
 
-        for (key in data) {
-            bardata.push(data[key].value)
-        }
+    var margin = { top: 30, right: 30, bottom: 40, left:50 }
 
-        var margin = { top: 30, right: 30, bottom: 40, left:50 }
+    var height = that.height  - margin.top - margin.bottom,
+        width = that.width - margin.left - margin.right,
+        barWidth = 50,
+        barOffset = 5;
 
-        var height = _height - margin.top - margin.bottom,
-            width = _width - margin.left - margin.right,
-            barWidth = 50,
-            barOffset = 5;
-
-        var svg = d3.select('#'+ _theDiv).append('svg').style('background', '#E7E0CB')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-
-
-
-        var vGuideScale = d3.scale.linear()
-            .domain([0, d3.max(bardata)])
-            .range([height, 0])
-
-        var vAxis = d3.svg.axis()
-            .scale(vGuideScale)
-            .orient('left')
-            .ticks(10)
+    that.svg = d3.select('#'+ _theDiv).append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
 
 
-        var tempColor;
+    var extent = d3.extent(bardata, function(d){
+        return d.count;
+    })
 
-        var colors = d3.scale.linear()
-            .domain([0, bardata.length*.33, bardata.length*.66, bardata.length])
-            .range(['#B58929','#C61C6F', '#268BD2', '#85992C'])
+    var vGuideScale = d3.scale.linear()
+        .domain(extent)
+        .range([height, 0])
+
+    var vAxis = d3.svg.axis()
+        .scale(vGuideScale)
+        .orient('left')
+        .ticks(10)
+
+
+    var tempColor;
+
+    var colors = d3.scale.linear()
+        .domain([0, bardata.length*.33, bardata.length*.66, bardata.length])
+        .range(['#B58929','#C61C6F', '#268BD2', '#85992C'])
 
         var yScale = d3.scale.linear()
-            .domain([0, d3.max(bardata)])
+            .domain(extent)
             .range([0, height]);
 
         var xScale = d3.scale.ordinal()
@@ -85,13 +125,13 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
                 return !(i % (bardata.length/5));
             }))
 
-        var vAxisGroup = svg.append("g")
+        var vAxisGroup = that.svg.append("g")
             .attr("class",'axis')
             .attr("transform",
             "translate("+ 30 + ","+margin.top+")").call(vAxis)
 
 
-        var hAxisGroup = svg.append("g")
+        var hAxisGroup = that.svg.append("g")
             .attr("class",'axis')
             .attr("transform",
             //"translate("+ 0 + ","+height + margin.top + margin.bottom+")").call(hAxis)
@@ -99,21 +139,25 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
 
         var tooltip = d3.select('body').append('div')
             .style('position', 'absolute')
-            .style('padding', '0 10px')
+            .style('padding', '0 5px')
+            .style('font-size', '10px')
             .style('background', 'white')
             .style('opacity', 0)
 
-        var myChart = svg
+        var myChart = that.svg
             .append('g')
             .attr('transform', 'translate('+ margin.left +', '+ margin.top +')')
-            .selectAll('rect').data(bardata)
-            .enter().append('rect')
+            .selectAll('rect')
+            .data(bardata)
+            .enter()
+            .append('rect')
             .style('fill', function(d,i) {
-                return colors(i);
+                return 'blue';
             })
             .attr('width', xScale.rangeBand())
             .attr('x', function(d,i) {
-                return xScale(i);
+                console.log(xScale(d.count))
+                return xScale(d.count);
             })
             .attr('height', 0)
             .attr('y', height)
@@ -123,15 +167,14 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
                 tooltip.transition()
                     .style('opacity', .9)
 
-                tooltip.html(d)
+                tooltip.html(d.count)
                     .style('left', (d3.event.pageX - 35) + 'px')
                     .style('top',  (d3.event.pageY - 30) + 'px')
 
 
                 tempColor = this.style.fill;
                 d3.select(this)
-                    .style('opacity', .5)
-                    .style('fill', 'yellow')
+                    .style('opacity', .2)
             })
 
             .on('mouseout', function(d) {
@@ -142,10 +185,10 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
 
         myChart.transition()
             .attr('height', function(d) {
-                return yScale(d);
+                return yScale(d.count);
             })
             .attr('y', function(d) {
-                return height - yScale(d);
+                return height - yScale(d.count);
             })
             .delay(function(d, i) {
                 return i * 20;
@@ -153,7 +196,6 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
             .duration(1000)
             .ease('elastic')
 
-        //var vGuide = d3.select('svg').append('g')
         var vGuide = myChart.append('g')
         vAxis(vGuide)
         vGuide.attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')')
@@ -164,7 +206,6 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
 
 
 
-        //var hGuide = d3.select('svg').append('g')
         var hGuide = myChart.append('g')
         hAxis(hGuide)
         hGuide.attr('transform', 'translate(' + margin.left + ', ' + (height + margin.top) + ')')
@@ -172,7 +213,7 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
             .style({ fill: 'none', stroke: "#000"})
         hGuide.selectAll('line')
             .style({ stroke: "#000"})
-    });
+    //});
 
 }
 

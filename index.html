@@ -201,7 +201,7 @@
         mapViz = new MapViz(_statesData, _countryStatistics, categorySelectionViz, myEventHandler);
         colSectorsViz =new ColSectorsViz(schoolCrime);
         stateSectorsViz =new StateSectorsViz(schoolCrime);
-        barChartViz = new BarChartViz("usStatesDiv", myEventHandler)
+        barChartViz = new BarChartViz("usStatesDiv", myEventHandler,2008, 'liquorViolations' )
 
         //click the button below the map, make updates for maps, and the viz in three boxes.
         $("#map-control-1 button").click(function() {
