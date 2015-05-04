@@ -3,22 +3,22 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>CS171 Final Project</title>
-	<!-- Common CSS/JSS are incorporated into bootstrap.min.css -->
-	<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
-	<link rel="stylesheet" href="css/campusSecurity.css" type="text/css">
-	<!--[if lt IE 9]>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS171 Final Project</title>
+    <!-- Common CSS/JSS are incorporated into bootstrap.min.css -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/campusSecurity.css" type="text/css">
+    <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
     <script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/d3.v3.js"></script>
-	<script src="js/queue.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/d3.v3.js"></script>
+    <script src="js/queue.js"></script>
     <script src="js/custom/dataPrepare.js"></script>
-	<script src="js/custom/mapViz.js"></script>
+    <script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
     <script src="js/custom/colSectorsViz.js"></script>
@@ -29,215 +29,216 @@
 </head>
 
 <body>
-    <div id="floatingDiv"
-         style="background-color: #999; z-index: 100;position: absolute;opacity: .2 ">
-    </div>
-    <div id="univDataDiv" style="display: none; z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
-        <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
-        <div id="univDataDivText"></div>
-    </div>
+<div id="floatingDiv"
+     style="background-color: #999; z-index: 100;position: absolute;opacity: .2 ">
+</div>
+<div id="univDataDiv" style="display: none; z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
+    <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
+    <div id="univDataDivText"></div>
+</div>
 
-	<div class="container">	
-		<!--row1: Site Name-->
-		<header class="row " >
-		</header>
-				
-		<!--row2: navigation -->
-		<nav class=" row navbar navbar-default " role="navigation">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse">
-				    <span class="sr-only">Toggle navigation</span>
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="collapse navbar-collapse" id="collapse">
-				<ul class="nav navbar-nav">
-					<li><a href='index.html'>Research Security Pattern</a></li>
-                    <li><a href='YourOwnMap.html'>Make Your Own Map</a></li>
-                    <li><a href=''>Watch Video</a></li>          
-                    <li><a href='#' id="hide">Hide</a></li>
-                    <li><a href='#' id="show">Show</a></li>
-				</ul>
-			</div>
-		</nav>
+<div class="container">
+    <!--row1: Site Name-->
+    <header class="row " >
+    </header>
 
-		<!--row3 Body Content -->
-		<div  class="row panel-info-darken edge-height">
-			
-			<!--top left column, map box-->
-			<main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
-				<div class="col-md-12 col-sm-12 panel panel-info" >					
-					<!--map -->
-					<div class="col-md-12 col-sm-12 panel-calm main-center" id="map">  
-                	</div>
+    <!--row2: navigation -->
+    <nav class=" row navbar navbar-default " role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="collapse">
+            <ul class="nav navbar-nav">
+                <li><a href='index.html'>Research Security Pattern</a></li>
+                <li><a href='YourOwnMap.html'>Make Your Own Map</a></li>
+                <li><a href=''>Watch Video</a></li>
+                <li><a href='#' id="hide">Hide</a></li>
+                <li><a href='#' id="show">Show</a></li>
+            </ul>
+        </div>
+    </nav>
 
-                	<!--map bottom crime button -->
-					<div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-1" >
-                        <div class="col-md-4 col-sm-6">
-                            <!--for time-->
-                            2008<label ><input type="range" name="yearslider" min="2008" max="2013" step="1" value="2013" id="slidertime" ></label>2013
-                        </div>
-						<div class="btn-group col-md-8 col-sm-6">
-	                        <button class="btn btn-info-darken btn-sm" id="weapon" value="weaponOffence">WEAPON</button>
-	                        <button class="btn btn-info-darken btn-sm" id="drug" value="drugViolations">DRUG</button>
-	                        <button class="btn btn-info-darken btn-sm" id="liquor" value="liquorViolations">LIQUOR</button>
-	                        <button class="btn btn-info-darken btn-sm" id="murd" value="murderCount">MURD</button>
-	                        <button class="btn btn-info-darken btn-sm" id="forcib" value="forcibleSexOffense">FORCIB</button>	                       
-	                        <button class="btn btn-info-darken btn-sm" id="robbe" value="robbery">ROBBE</button>
-	                        <button class="btn btn-info-darken btn-sm" id="agg" value="aggravatedAssault">AGG</button>
-	                        <button class="btn btn-info-darken btn-sm" id="burgla" value="burglary">BURGLA</button>
-	                        <button class="btn btn-info-darken btn-sm" id="vehic" value="vehicleTheft">VEHIC</button>
-	                        <button class="btn btn-info-darken btn-sm" id="arson" value="arson">ARSON</button>
-                    	</div >
-					</div>
-                    <div>
-                        <input type="checkbox" id="cbxHideSafe" onchange="$(myEventHandler).trigger('changed')"><label class="small"> Hide Safe Schools:</label>
-                    </div>
-				</div>							
-			</main>
+    <!--row3 Body Content -->
+    <div  class="row panel-info-darken edge-height">
 
-			<!--top right column -->
-			<aside class="col-md-4 col-sm-12 panel panel-info  " id="aside">
-                <!--box for crime distribution across school sectors-->
-                 <div class="col-md-12 col-sm-12 panel-info-lightdarken aside-top" id="box2">
-                  <span class="minititle">College Crime by US College Categories </span>
-                </div>      
-				<!--box for user interactive box: make my own security map  -->
-				<div class="col-md-12 col-sm-12 panel-info center aside-center" id="yearsectors">                  
-              <div id ="filterByYear" class="form-group">
-                <label  for="series-2008" class="s-2008"><input type="checkbox" name="2008" value="2008" title="2008" id="series-2008" checked></label>2008
-                <label for="series-2009" class="s-2009"><input type="checkbox" name="2009" value="2009" title="2009" id="series-2009" checked></label>2009
-                <label for="series-2010" class="s-2010"><input type="checkbox" name="2010" value="2010" title="2010" id="series-2009" checked></label>2010
-                <label for="series-2011" class="s-2011"><input type="checkbox" name="2011" value="2011" title="2011" id="series-2009" checked ></label>2011
-                <label for="series-2012" class="s-2012"><input type="checkbox" name="2012" value="2012" title="2012" id="series-2009" checked></label>2012
-                <label for="series-2013" class="s-2013"><input type="checkbox" name="2013" value="2013" title="2013" id="series-2009" checked ></label>2013
-              </div>
-                </div> 
-                <!--box for user interactive box: make my own security map  -->
-                <div class="col-md-12 col-sm-12 panel-info  center aside-bottom" id="statessectors">
-                  
-                    Each color represents one US state
-             
+        <!--top left column, map box-->
+        <main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
+            <div class="col-md-12 col-sm-12 panel panel-info" >
+                <!--map -->
+                <div class="col-md-12 col-sm-12 panel-calm main-center" id="map">
                 </div>
-                <div class="col-md-12 col-sm-12 left">
+
+                <!--map bottom crime button -->
+                <div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-1" >
+                    <div class="col-md-4 col-sm-6">
+                        <!--for time-->
+                        2008<label ><input type="range" name="yearslider" min="2008" max="2013" step="1" value="2013" id="slidertime" ></label>2013
+                    </div>
+                    <div class="btn-group col-md-8 col-sm-6">
+                        <button class="btn btn-info-darken btn-sm" id="weapon" value="weaponOffence">WEAPON</button>
+                        <button class="btn btn-info-darken btn-sm" id="drug" value="drugViolations">DRUG</button>
+                        <button class="btn btn-info-darken btn-sm" id="liquor" value="liquorViolations">LIQUOR</button>
+                        <button class="btn btn-info-darken btn-sm" id="murd" value="murderCount">MURD</button>
+                        <button class="btn btn-info-darken btn-sm" id="forcib" value="forcibleSexOffense">FORCIB</button>
+                        <button class="btn btn-info-darken btn-sm" id="robbe" value="robbery">ROBBE</button>
+                        <button class="btn btn-info-darken btn-sm" id="agg" value="aggravatedAssault">AGG</button>
+                        <button class="btn btn-info-darken btn-sm" id="burgla" value="burglary">BURGLA</button>
+                        <button class="btn btn-info-darken btn-sm" id="vehic" value="vehicleTheft">VEHIC</button>
+                        <button class="btn btn-info-darken btn-sm" id="arson" value="arson">ARSON</button>
+                    </div >
+                </div>
+                <div>
+                    <input type="checkbox" id="cbxHideSafe" onchange="$(myEventHandler).trigger('changed')"><label class="small"> Hide Safe Schools:</label>
+                </div>
+            </div>
+        </main>
+
+        <!--top right column -->
+        <aside class="col-md-4 col-sm-12 panel panel-info  " id="aside">
+            <!--box for crime distribution across school sectors-->
+            <div class="col-md-12 col-sm-12 panel-info-lightdarken aside-top" id="box2">
+                <span class="minititle">College Crime by US College Categories </span>
+            </div>
+            <!--box for user interactive box: make my own security map  -->
+            <div class="col-md-12 col-sm-12 panel-info center aside-center" id="yearsectors">
+                <div id ="filterByYear" class="form-group">
+                    <label  for="series-2008" class="s-2008"><input type="checkbox" name="2008" value="2008" title="2008" id="series-2008" checked></label>2008
+                    <label for="series-2009" class="s-2009"><input type="checkbox" name="2009" value="2009" title="2009" id="series-2009" checked></label>2009
+                    <label for="series-2010" class="s-2010"><input type="checkbox" name="2010" value="2010" title="2010" id="series-2009" checked></label>2010
+                    <label for="series-2011" class="s-2011"><input type="checkbox" name="2011" value="2011" title="2011" id="series-2009" checked ></label>2011
+                    <label for="series-2012" class="s-2012"><input type="checkbox" name="2012" value="2012" title="2012" id="series-2009" checked></label>2012
+                    <label for="series-2013" class="s-2013"><input type="checkbox" name="2013" value="2013" title="2013" id="series-2009" checked ></label>2013
+                </div>
+            </div>
+            <!--box for user interactive box: make my own security map  -->
+            <div class="col-md-12 col-sm-12 panel-info  center aside-bottom" id="statessectors">
+
+                Each color represents one US state
+
+            </div>
+            <div class="col-md-12 col-sm-12 left">
                 <span class="schooltext">1:public 4 year college, 2:Private 4 year college, 3:for-profit 4 year college </span><br>
                 <span class="schooltext">4:public 2 year college, 5:Private 2 year college 6:for-profit 2 year college </span><br>
                 <span class="schooltext"> 7:public less than 2 year, 8:Private less than 2 year 9:for-profit less than 2 year </span>
-                </div>                            					
-		 	</aside>
-            <section class="col-md-12 col-sm-12 panel-info-darken">
-                <div class="col-md-9 col-sm-12 panel panel-info section" id="usStatesDiv">
+            </div>
+        </aside>
+        <section class="col-md-12 col-sm-12 panel-info-darken">
+            <div class="col-md-9 col-sm-12 panel panel-info section" id="usStatesDiv">
 
-                </div>  
-                <div class="col-md-3 col-sm-12 panel panel-info section" id="usstates">
-                            <h4>Historical Crime Data By College Secotors(2006-2013)</h4>
-                </div> 
-         
-            </section>
+            </div>
+            <div class="col-md-3 col-sm-12 panel panel-info section" id="usstates">
+                <h4>Historical Crime Data By College Secotors(2006-2013)</h4>
+            </div>
 
-		</div>
-		
-		<!-- footer-->	
-		<footer class="edge-width">
-			<a href="home.html">Home</a>|<a href="">About</a>|<a href=''>Contact</a>|<a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a>|<a href='/doc/PressBook.md'>PressBook</a>|<a href=''>Video</a>|   
-		</footer>
-	</div> 
+        </section>
 
-	<script type="text/javascript">
-        var myEventHandler = new Object();
-        var divPadding=20;
-        var mapViz=null;
-        var crimeAnalyzer = null;
-        var barChartViz = null;
-        var categorySelectionViz = new CategorySelectionViz();
-        $("#hide").hover(function(){
-            $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
-            $('#aside').hide();
-            $('#switch').text('Show');
-        });
-        $("#show").hover(function(){
-            $('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
-            $('#aside').show();
-            $('#switch').text('Hide');
-        });
+    </div>
 
-        queue()
-                .defer(d3.json, 'data/us-states.json')
-                .defer(d3.tsv, 'data/countryStatistics.tsv')
-                .defer(d3.json, 'data/crimedatabackup.json')
-                .await(dataLoaded);
+    <!-- footer-->
+    <footer class="edge-width">
+        <a href="home.html">Home</a>|<a href="">About</a>|<a href=''>Contact</a>|<a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a>|<a href='/doc/PressBook.md'>PressBook</a>|<a href=''>Video</a>|
+    </footer>
+</div>
 
-        function dataLoaded (error,_statesData, _countryStatistics,_crimeDatabackup) {
-            
-            //a flat structure data
-            var schoolCrime=[];
-            _crimeDatabackup.forEach(function(d){
-                d.yearData.forEach(function(c){
-                    schoolCrime.push ({
-                        "schoolId": d.schoolId,
-                        "year":c.yearOfData,
-                        "state": d.state,
-                        "sectorCd": d.sectorCd, 
-                        "murderCount":c.murderCount,
-                        "negligentManSlaughter":c.negligentManSlaughter,
-                        "forcibleSexOffense":c.forcibleSexOffense,
-                        "nonForcibleSexOffense":c.nonForcibleSexOffense,
-                        "robbery":c.robbery,
-                        "aggravatedAssault":c.aggravatedAssault,
-                        "burglary":c.burglary,
-                        "vehicleTheft":c.vehicleTheft,
-                        "arson":c.arson,
-                        "weaponOffence":c.weaponOffence,
-                        "drugViolations":c.drugViolations,
-                        "liquorViolations":c.liquorViolations             
-                    });         
-                }); 
-            }); 
+<script type="text/javascript">
+    var myEventHandler = new Object();
+    var divPadding=20;
+    var mapViz=null;
+    var crimeAnalyzer = null;
+    var barChartViz = null;
+    var categorySelectionViz = new CategorySelectionViz();
+    $("#hide").hover(function(){
+        $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
+        $('#aside').hide();
+        $('#switch').text('Show');
+    });
+    $("#show").hover(function(){
+        $('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
+        $('#aside').show();
+        $('#switch').text('Hide');
+    });
 
-            //new Vizs
-            crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
-            mapViz = new MapViz(_statesData, _countryStatistics, categorySelectionViz, myEventHandler);
-            colSectorsViz =new ColSectorsViz(schoolCrime);
-            stateSectorsViz =new StateSectorsViz(schoolCrime);
-            barChartViz = new BarChartViz("usStatesDiv", myEventHandler)
-            
-            //click the button below the map, make updates for maps, and the viz in three boxes.
-            $("#map-control-1 button").click(function() {
+    queue()
+            .defer(d3.json, 'data/us-states.json')
+            .defer(d3.tsv, 'data/countryStatistics.tsv')
+            .defer(d3.json, 'data/crimedatabackup.json')
+            .await(dataLoaded);
 
-                //get the clicked button value
-               var crimeKey=$(this).val();
+    function dataLoaded (error,_statesData, _countryStatistics,_crimeDatabackup) {
 
-               //update the mapViz and the three other Viz 
-                colSectorsViz.onCrimeChange(crimeKey);
-                //update the mapViz and the three other Viz 
-                stateSectorsViz.onCrimeChange(crimeKey);
-
-                categorySelectionViz.onCrimeChange(crimeKey);
-                mapViz.wrangleData();
-
+        //a flat structure data
+        var schoolCrime=[];
+        _crimeDatabackup.forEach(function(d){
+            d.yearData.forEach(function(c){
+                schoolCrime.push ({
+                    "schoolId": d.schoolId,
+                    "year":c.yearOfData,
+                    "state": d.state,
+                    "sectorCd": d.sectorCd,
+                    "murderCount":c.murderCount,
+                    "negligentManSlaughter":c.negligentManSlaughter,
+                    "forcibleSexOffense":c.forcibleSexOffense,
+                    "nonForcibleSexOffense":c.nonForcibleSexOffense,
+                    "robbery":c.robbery,
+                    "aggravatedAssault":c.aggravatedAssault,
+                    "burglary":c.burglary,
+                    "vehicleTheft":c.vehicleTheft,
+                    "arson":c.arson,
+                    "weaponOffence":c.weaponOffence,
+                    "drugViolations":c.drugViolations,
+                    "liquorViolations":c.liquorViolations
+                });
             });
-        }
+        });
 
-        //move the time sliders below the map, make updates for maps, and the viz in three boxes.
-         d3.selectAll('input[type="range"]').on('input', function() {
+        //new Vizs
+        crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
+        mapViz = new MapViz(_statesData, _countryStatistics, categorySelectionViz, myEventHandler);
+        colSectorsViz =new ColSectorsViz(schoolCrime);
+        stateSectorsViz =new StateSectorsViz(schoolCrime);
+        barChartViz = new BarChartViz("usStatesDiv", myEventHandler,2008, 'liquorViolations' )
+
+        //click the button below the map, make updates for maps, and the viz in three boxes.
+        $("#map-control-1 button").click(function() {
+
+            //get the clicked button value
+            var crimeKey=$(this).val();
+
+            //update the mapViz and the three other Viz
+            colSectorsViz.onCrimeChange(crimeKey);
+            //update the mapViz and the three other Viz
+            stateSectorsViz.onCrimeChange(crimeKey);
+
+            categorySelectionViz.onCrimeChange(crimeKey);
+            mapViz.wrangleData();
+
+        });
+    }
+
+    //move the time sliders below the map, make updates for maps, and the viz in three boxes.
+    d3.selectAll('input[type="range"]').on('input', function() {
         //get year in the range slider
-            var slideryear=this.value;
-             $(myEventHandler).trigger('yearChanged', slideryear)
+        var slideryear=this.value;
+        $(myEventHandler).trigger('yearChanged', slideryear)
         //update the three other Viz 
-           colSectorsViz.onYearChange(slideryear);
-            stateSectorsViz.onYearChange(slideryear);
-         
-        });
+        colSectorsViz.onYearChange(slideryear);
+        stateSectorsViz.onYearChange(slideryear);
 
-        //wrangle data for mapViz
-        $(myEventHandler).on('changed', function () {
-                mapViz.wrangleData($('#slidertime').value());
-            });
-        $(myEventHandler).on('yearChanged', function (e,year) {
-                mapViz.wrangleData(year);
-        });
-    </script>
+    });
+
+    //wrangle data for mapViz
+    $(myEventHandler).on('changed', function () {
+        mapViz.wrangleData($('#slidertime').value());
+    });
+    $(myEventHandler).on('yearChanged', function (e,year) {
+        mapViz.wrangleData(year);
+    });
+</script>
 </body>
 </html>
+
