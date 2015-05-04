@@ -4,10 +4,10 @@ BarChartViz = function(_theDiv,_eventHandler){
     this.width = 750;
     this.height = 310;
 
-    this.init(_theDiv, this.height, this.width);
+    this.init(_theDiv, this.height, this.width, '2008', 'robbery');
 }
 
-BarChartViz.prototype.init = function(_theDiv,_height,_width)
+BarChartViz.prototype.init = function(_theDiv,_height,_width, _year, _category)
 {
     console.log(crimeAnalyzer.getCategoryCrimeData());
 
