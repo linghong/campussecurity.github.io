@@ -158,11 +158,13 @@
         $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
         $('#aside').hide();
         $('#switch').text('Show');
+        mapViz.resize();
     });
     $("#show").hover(function(){
         $('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
         $('#aside').show();
         $('#switch').text('Hide');
+        mapViz.resize();
     });
 
 
