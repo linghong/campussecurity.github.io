@@ -1,4 +1,3 @@
-
 BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
 
     this.width = 750;
@@ -226,3 +225,4 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
 BarChartViz.prototype.wrangleData = function(_year, _category) {
 
 }
+

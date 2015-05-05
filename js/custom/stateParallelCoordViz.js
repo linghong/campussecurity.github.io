@@ -91,8 +91,8 @@ StateParallelCoordinateViz = function(_theDiv,_eventHandler){
     ];
 
     this.crimeLabels= [
-        "Aggr. Assault",
         "Arson",
+        "Aggr. Assault",
         "Burglary",
         "Drug Violations",
         "Forcible Sex Offence",
@@ -285,8 +285,8 @@ StateParallelCoordinateViz.prototype.init = function () {
 
         that.txt.style("visibility", "visible")
             .text(myLine.attr("type"))
-            .attr("x",  coord[0] -20)
-            .attr("y",  coord[1] +  10)
+            .attr("x",  10)
+            .attr("y",  8)
             .attr('class','schoolLabel');
 
         var padding=5;

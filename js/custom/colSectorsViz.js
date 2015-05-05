@@ -9,6 +9,7 @@ ColSectorsViz = function(_data){
     this.width = $("#yearsectors").width();
     this.height = 0.55*this.width;
     this.displayData={};
+    this.crimeKeyData={};
     this.initVis();
 }
 
@@ -25,10 +26,6 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("height", this.height)
         .append("g");
 
-    this.wrangleData("weaponOffence");
-    // call the update method
-    this.updateViz();
-
     // Add the text label for the Y axis
     this.svg.append("text")
         .attr("transform", "rotate(-90)")
@@ -37,6 +34,7 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("dy", "0.08em")
         .style("text-anchor", "middle")
         .text("Crime Number Per College");
+
     // Add the text label for the x axis
     this.svg.append("text")
         .attr("y", this.height-12)
@@ -44,7 +42,11 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("dy", "0.08em")
         .style("text-anchor", "middle")
         .text("Nine US College Categories");
+  this.crimeYear=[2008,2009,2010,2011,2012,2013]; 
+    this.wrangleData("weaponOffence");
+    // call the update method
 
+    this.updateViz();    
 }
 
 /**
@@ -69,15 +71,18 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
     }
 
     for (i=0;i<aggregatedData.length;i++){
-        this.displayData[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
-    }
+      this.crimeKeyData[aggregatedData[i].key]=firstKeyArray.slice(i*9,i*9+9);
+  }
 }
 
 /**
  * Method to updata Viz.
  */
 ColSectorsViz.prototype.updateViz = function(){
+   //for check boxes
+this.selectData(); 
 
+//this.displayData=this.crimeKeyData;
 // a data series
     var dataSeries = d3.values(this.displayData);
 
@@ -138,7 +143,6 @@ ColSectorsViz.prototype.updateViz = function(){
         .attr("transform", "translate("+this.padding.left+",0)")
         .call(this.yAxis);
 
-
     series.exit().remove();
     circle.exit().remove();
 }
@@ -160,5 +164,39 @@ ColSectorsViz.prototype.onYearChange= function (_slideryear){
 //$(".series-" + _slideryear).css({"background-color":"blue"});
 //$(".series-" + _slideryear).classed('clicked', true);
 }
- 
 
+ColSectorsViz.prototype.selectData=function(){
+    var checkedValue =[];//array to represents which years are checked
+    this.displayData={};
+
+    //function for checking which boxes are checked
+    var  m=0;
+    d3.selectAll('input[name="year"]').each(function (d) {
+      if(d3.select(this).attr("type") == "checkbox" &&d3.select(this).node().checked) {
+        checkedValue[m] =d3.select(this).attr("value");
+        m++;
+      }         
+  }); 
+
+
+  var n=0;
+  //get filtered data
+for(var i=0; i<checkedValue.length;i++){ 
+   
+    while (parseInt(checkedValue[i])>this.crimeYear[n]) {  
+    this.svg.selectAll('#yearsectors g .series-'+this.crimeYear[n]).classed("series-"+this.crimeYear[n], false); 
+    console.log("remove crimeYear[n]");
+    console.log(this.crimeYear[n]);
+    n++;
+    }
+
+    this.svg.selectAll('#yearsectors g .series-'+parseInt(checkedValue[i])).classed("series-"+parseInt(checkedValue[i]), true);  
+    console.log("add crimeYear[n]");
+    console.log(parseInt(checkedValue[i]));
+    this.displayData[checkedValue[i]] =this.crimeKeyData[checkedValue[i]];
+     
+    n++; 
+  } 
+ this.crimeYear=checkedValue;
+ console.log(this.crimeYear);
+}
