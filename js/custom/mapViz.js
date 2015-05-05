@@ -11,7 +11,7 @@ MapViz = function(_statesData,_countryStatistics,_weightControl, _eventHandler) 
     this.mapRatio = 0.6;
     this.height = this.width * this.mapRatio;
     this.xOffset = 0;
-    this.yOffset =0;
+    this.yOffset = -35;
     this.universityAggregateData =null;
     this.path = null;
     this.paths = null;
@@ -41,7 +41,7 @@ MapViz.prototype.init = function(){
     this.hideDetails();
     var that = this;
     this.projection = d3.geo.albersUsa()
-        .translate([this.width/2, this.height/2]).scale([this.scaleFactor*this.width]);
+        .translate([this.width/2, this.height/2 + this.yOffset]).scale([this.scaleFactor*this.width]);
     this.path = d3.geo.path().projection(this.projection);
     this.svg = d3.select("#map")
         .append("svg")
