@@ -5,9 +5,9 @@
 ColSectorsViz = function(_data){
     this.data = _data;
     // defines constants
-    this.padding= {top: 20, right: 0, bottom: 25, left: 70};
+    this.padding= {top: 15, right: 0, bottom: 25, left: 70};
     this.width = $("#yearsectors").width();
-    this.height = 0.55*this.width;
+    this.height = 0.50*this.width;
     this.displayData={};
     this.crimeKeyData={};
     this.initVis();
@@ -33,11 +33,11 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("x", -92)
         .attr("dy", "0.08em")
         .style("text-anchor", "middle")
-        .text("Crime Number Per College");
+        .text(this.crimeKey+"Number/College");
 
     // Add the text label for the x axis
     this.svg.append("text")
-        .attr("y", this.height-12)
+        .attr("y", this.height-5)
         .attr("x", 200)
         .attr("dy", "0.08em")
         .style("text-anchor", "middle")

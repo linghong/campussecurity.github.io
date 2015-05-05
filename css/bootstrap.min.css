@@ -6725,7 +6725,7 @@ fieldset[disabled] .btn-info-darken.active {
 }
 .section {
   padding: 5px;
-  height: 320px;
+  height: 350px;
 }
 btn-small {
   width: padding:2px;
@@ -7171,4 +7171,15 @@ div.univCity {
   color: #bbb;
   text-anchor: end;
   font-size: 10px;
+}
+.yearbutton {
+  font-size: 8px;
+}
+.crimebutton {
+  font-size: 10px;
+  background-color: #53A68D;
+  color: white;
+}
+#filterByYear {
+  padding-left: 40px;
 }

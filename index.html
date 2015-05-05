@@ -8,12 +8,12 @@
     <!-- Common CSS/JSS are incorporated into bootstrap.min.css -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="css/campusSecurity.css" type="text/css">
- 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/d3.v3.js"></script>
@@ -22,92 +22,150 @@
     <script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
-    <script src="js/custom/colSectorsViz.js"></script>
+    <script src="js/custom/colSectorsViz.js"></script>    
+    <script src="js/custom/parallelCoordViz.js"></script>
+    <script src="js/custom/stateParallelCoordViz.js"></script>
     <script src="js/custom/stateSectorsViz.js"></script>
     <script src="js/custom/categorySelectionViz.js"></script>
     <script src="js/custom/barChartViz.js"></script>    
    
-
 </head>
 
 <body>
-<div id="floatingDiv"
-     style="background-color: #999; z-index: 100;position: absolute;opacity: .2 ">
-</div>
-<div id="univDataDiv" style="display: none; z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
-    <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
-    <div id="univDataDivText"></div>
-</div>
+    <div id="floatingDiv"
+         style="background-color: #999; z-index: 100;position: absolute;opacity: .2 ">
+    </div>
+    <div id="univDataDiv" style="display: none; z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
+        <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
+        <div id="univDataDivText"></div>
+    </div>
 
-<div class="container">
-    <!--row1: Site Name-->
-    <header class="row " >
-    </header>
-
-    <!--row2: navigation -->
-    <nav class=" row navbar navbar-default " role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="collapse">
-            <ul class="nav navbar-nav">
-                <li><a href='index.html'>Research Security Pattern</a></li>
-                <li><a href='YourOwnMap.html'>Make Your Own Map</a></li>
-                <li><a href=''>Watch Video</a></li>
-                <li><a href='#' id="hide">Hide</a></li>
-                <li><a href='#' id="show">Show</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!--row3 Body Content -->
-    <div  class="row panel-info-darken edge-height">
-
-        <!--top left column, map box-->
-        <main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
-            <div class="col-md-12 col-sm-12 panel panel-info" >
-                <!--map -->
-                <div class="col-md-12 col-sm-12 panel-calm main-center" id="map">
-                </div>
-
-                <!--map bottom crime button -->
-                <div class="col-md-12 col-sm-12 panel-calm main-top" id="map-control-1" >
-                    <div class="col-md-4 col-sm-6">
-                        <!--for time-->
-                        2008<label ><input type="range" name="yearslider" min="2008" max="2013" step="1" value="2013" id="slidertime" ></label>2013
-                    </div>
-                    <div class="btn-group col-md-8 col-sm-6">
-                        <button class="btn btn-info-darken btn-sm" id="weapon" value="weaponOffence">WEAPON</button>
-                        <button class="btn btn-info-darken btn-sm" id="drug" value="drugViolations">DRUG</button>
-                        <button class="btn btn-info-darken btn-sm" id="liquor" value="liquorViolations">LIQUOR</button>
-                        <button class="btn btn-info-darken btn-sm" id="murd" value="murderCount">MURD</button>
-                        <button class="btn btn-info-darken btn-sm" id="forcib" value="forcibleSexOffense">FORCIB</button>
-                        <button class="btn btn-info-darken btn-sm" id="robbe" value="robbery">ROBBE</button>
-                        <button class="btn btn-info-darken btn-sm" id="agg" value="aggravatedAssault">AGG</button>
-                        <button class="btn btn-info-darken btn-sm" id="burgla" value="burglary">BURGLA</button>
-                        <button class="btn btn-info-darken btn-sm" id="vehic" value="vehicleTheft">VEHIC</button>
-                        <button class="btn btn-info-darken btn-sm" id="arson" value="arson">ARSON</button>
-                    </div >
-                </div>
-                <div>
-                    <input type="checkbox" id="cbxHideSafe" onchange="$(myEventHandler).trigger('changed')"><label class="small"> Hide Safe Schools:</label>
-                </div>
+    <div class="container"> 
+        <!--row1: Site Name-->
+        <header class="row " >
+        </header>
+                
+        <!--row2: navigation -->
+        <nav class=" row navbar navbar-default " role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
             </div>
-        </main>
+            <div class="collapse navbar-collapse" id="collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a></li>
+                    <li><a href='/doc/PressBook.md'>PressBook</a></li>
+                    <li><a href=''>Watch Video</a></li>    
+                    <li><a href='#' id="hide">Hide</a></li>
+                    <li><a href='#' id="show">Show</a></li>
+                </ul>
+            </div>
+        </nav>
 
-        <!--top right column -->
-        <aside class="col-md-4 col-sm-12 panel panel-info  " id="aside">
-            <!--box for crime distribution across school sectors-->
-            <div class="col-md-12 col-sm-12 panel-info-lightdarken aside-top" id="box2">
+        <!--row3 Body Content -->
+        <div  class="row panel-info-darken edge-height">
+            
+            <!--top left column, map box-->
+            <main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
+                <div class="col-md-12 col-sm-12 panel panel-info" id="main-left" style="font-size:10px;" >
+                    <!--map -->
+                        <div class="col-md-12 col-sm-12 panel-calm main-center" id="map">
+                        </div>
+                        <div class="col-md-12 col-sm-12" >
+                            <label class="yearbutton">All Years</label>
+                            <input type="radio" checked value="" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                            <label class="yearbutton">2008</label>
+                            <input type="radio"  value="2008" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                             <label class="yearbutton">2009</label>
+                            <input type="radio" value="2009" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                             <label class="yearbutton">2010</label>
+                            <input type="radio" value="2010" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                             <label class="yearbutton">2011</label>
+                            <input type="radio" value="2011" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                             <label class="yearbutton">2012</label>
+                            <input type="radio" value="2012" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                             <label class="yearbutton">2013</label>
+                            <input type="radio" value="2013" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                        </div>
+
+                        
+                       <div class="col-md-12 col-sm-12" id="map-control-1" >
+                        
+                        <button id="allCategory" value="weaponOffence">All</button>
+                        <button id="weapon" value="weaponOffence">Weapon</button>
+                        <button id="drug" value="drugViolations">Drug</button>
+                        <button id="liquor" value="liquorViolations">Liquor</button>
+                        <button id="murd" value="murderCount">Murder</button>
+                        <button id="forcib" value="forcibleSexOffense">Forcible Sex Offense</button>
+                        <button id="robbe" value="robbery">Robbery</button>
+                        <button id="agg" value="aggravatedAssault">Aggrevated Assault</button>
+                        <button id="burgla" value="burglary">Burglary</button>
+                        <button id="vehic" value="vehicleTheft">Vehicle Crime</button>
+                        <button id="arson" value="arson">Arson</button>
+                    </div >
+                  
+                </div>
+
+            </main>
+
+            <!--top right column -->
+            <aside class="col-md-4 col-sm-12 panel-info-darken " id="aside">
+                <div style="background-color: #ffffff">
+                    <input type="checkbox" id="adjustSensitivity" onchange="$('#weightsSelector1').toggle()">
+                    <span id="ctrlPanelMsg">Adjust the Map's Sensitivity to Crime Category</span>
+                </div>
+                <div  id="weightsSelector2"  style="background-color: #ffffff">
+
+                    <br><br><br><br><br><br><br><br><br><br><br>
+                </div>
+                <div id="paramsContainer">
+
+                    <!--box for user interactive box: make my own security map  -->
+                    <h5>How Important Is A Crime Type To Me?</h5>
+                    <div  id="weightsSelector1" >
+
+                    </div>
+                    <br>
+
+                    <div style="font-size: 10px">
+                        <label><input id="cbxHideSafeSchools" type="checkbox"
+                                      checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Hide Safe Schools</label>
+                    </div>
+                </div>
+                <div style="background-color: #ffffff">
+                    <label>Crime Numbers By [</label>
+                    <input type="radio" checked name="divSelector" value="state" onchange="rbClicked(this)"><label>State</label>
+                    <input type="radio" name="divSelector" value="type" onchange="rbClicked(this)"><label>School Type]</label>
+                </div>
+                <div id="parallelCoordinateBox" style="display: none">
+                </div>
+                <div id="parallelCoordinateStateBox">
+                </div>
+
+            </aside>
+            <section class="col-md-12 col-sm-12 panel-info-darken">
+            <div class="col-md-7 col-sm-12 panel panel-info section" id="usStatesDiv">
+
+            </div>
+            <div class="col-md-5 col-sm-12 panel panel-info section" >
+
+                 <!--box for crime distribution across school sectors-->
+            <div class="col-md-12 col-sm-12 " >
                 <span class="minititle">College Crime by US College Categories </span>
             </div>
             <!--box for user interactive box: make my own security map  -->
-            <div class="col-md-12 col-sm-12 panel-info center aside-center" id="yearsectors">
+            <div class="col-md-12 col-sm-8 panel-info center aside-center" >
                 <div id ="filterByYear" class="form-group">
                     <label  for="series-2008" class="s-2008"><input type="checkbox" name="year" value="2008" title="2008" id="series-2008" checked></label>2008
                     <label for="series-2009" class="s-2009"><input type="checkbox" name="year" value="2009" title="2009" id="series-2009" checked></label>2009
@@ -116,43 +174,35 @@
                     <label for="series-2012" class="s-2012"><input type="checkbox" name="year" value="2012" title="2012" id="series-2009" checked></label>2012
                     <label for="series-2013" class="s-2013"><input type="checkbox" name="year" value="2013" title="2013" id="series-2009" checked ></label>2013
                 </div>
-            </div>
-            <!--box for user interactive box: make my own security map  -->
-            <div class="col-md-12 col-sm-12 panel-info  center aside-bottom" id="statessectors">
-
-                Each color represents one US state
-
-            </div>
-            <div class="col-md-12 col-sm-12 left">
+               <div class="col-md-12 col-sm-12 left"id="yearsectors"> 
+               </div>
+            <div class="col-md-offset-1 col-md-12 col-sm-12 left">
                 <span class="schooltext">1:public 4 year college, 2:Private 4 year college, 3:for-profit 4 year college </span><br>
                 <span class="schooltext">4:public 2 year college, 5:Private 2 year college 6:for-profit 2 year college </span><br>
                 <span class="schooltext"> 7:public less than 2 year, 8:Private less than 2 year 9:for-profit less than 2 year </span>
             </div>
-        </aside>
-        <section class="col-md-12 col-sm-12 panel-info-darken">
-            <div class="col-md-9 col-sm-12 panel panel-info section" id="usStatesDiv">
-
             </div>
-            <div class="col-md-3 col-sm-12 panel panel-info section" id="usstates">
-                <h4>Historical Crime Data By College Secotors(2006-2013)</h4>
-            </div>
-  
+            
         </section>
 
+        </div>
+        
+        <!-- footer-->  
+        <footer class="edge-width">
+            |<a href="">About</a>|<a href=''>Contact</a>|<a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a>|<a href='/doc/PressBook.md'>PressBook</a>|
+        </footer>
     </div>
 
-    <!-- footer-->
-    <footer class="edge-width">
-        <a href="home.html">Home</a>|<a href="">About</a>|<a href=''>Contact</a>|<a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a>|<a href='/doc/PressBook.md'>PressBook</a>|<a href=''>Video</a>|
-    </footer>
-</div>
-
-<script type="text/javascript">
+    <script type="text/javascript">
     var myEventHandler = new Object();
     var divPadding=20;
     var mapViz=null;
     var crimeAnalyzer = null;
     var barChartViz = null;
+    var parallelCoordinateViz = null;
+    var stateParallelCoordinateViz = null;
+    var weightsContainerViz = new WeightContainerViz("weightsSelector",myEventHandler);
+
     var categorySelectionViz = new CategorySelectionViz();
     $("#hide").hover(function(){
         $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
@@ -164,7 +214,8 @@
         $('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
         $('#aside').show();
         $('#switch').text('Hide');
-        mapViz.resize();
+         mapViz.resize();
+        
     });
 
 
@@ -200,12 +251,17 @@
                 });
             });
         });
+
         //new Vizs
         crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
         mapViz = new MapViz(_statesData, _countryStatistics,categorySelectionViz, myEventHandler);
         colSectorsViz =new ColSectorsViz(schoolCrime);
         stateSectorsViz =new StateSectorsViz(schoolCrime);
-        barChartViz = new BarChartViz("usStatesDiv", myEventHandler,2008, 'liquorViolations' );
+        barChartViz = new BarChartViz("usStatesDiv", 
+        myEventHandler,2008, 'liquorViolations' );
+        parallelCoordinateViz = new ParallelCoordinateViz('parallelCoordinateBox',myEventHandler)
+        stateParallelCoordinateViz = new StateParallelCoordinateViz('parallelCoordinateStateBox',myEventHandler)
+
 
         //click the button below the map, make updates for maps, and the viz in three boxes.
         $("#map-control-1 button").click(function() {
@@ -241,7 +297,48 @@
     });
     $(myEventHandler).on('yearChanged', function (e,year) {
         mapViz.wrangleData(year);
+
     });
+
+    $(myEventHandler).on('changed', function () {
+                var yearToProcess = $('input:radio[name=year]:checked').val()
+                if(yearToProcess == ""){
+                    yearToProcess = null;
+                }
+                mapViz.wrangleData(yearToProcess);
+            });
+
+            $(myEventHandler).on('yearChanged', function (e,year) {
+                var yearToProcess = year;
+                if(year == ""){
+                    yearToProcess = null;
+                }
+                mapViz.wrangleData(yearToProcess);
+                parallelCoordinateViz.wrangleData(yearToProcess)
+                stateParallelCoordinateViz.wrangleData(yearToProcess)
+            });
+            $(myEventHandler).on('sectorSelected', function(e, sectorCd){
+                mapViz.wrangleSectorIn(sectorCd)
+            });
+            $(myEventHandler).on('sectorDeSelected', function(e, sectorCd){
+                mapViz.wrangleSectorOut(sectorCd)
+            });
+            $(myEventHandler).on('stateSelected', function(e, stateCd){
+                mapViz.wrangleStateIn(stateCd)
+            });
+
+        function rbClicked(ctrl){
+            if('type' == ctrl.value){
+               $('#parallelCoordinateBox').show()
+               $('#parallelCoordinateStateBox').hide()
+            }
+            else{
+                $('#parallelCoordinateBox').hide()
+                $('#parallelCoordinateStateBox').show()
+            }
+        }
+
 </script>
+
 </body>
 </html>

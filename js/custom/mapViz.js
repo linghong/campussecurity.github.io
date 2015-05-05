@@ -1,4 +1,3 @@
-
 MapViz = function(_statesData,_countryStatistics,_weightControl, _eventHandler) {
     this.eventHandler = _eventHandler;
     this.txt = null;
@@ -11,7 +10,7 @@ MapViz = function(_statesData,_countryStatistics,_weightControl, _eventHandler) 
     this.mapRatio = 0.6;
     this.height = this.width * this.mapRatio;
     this.xOffset = 0;
-    this.yOffset =0;
+    this.yOffset = -35;
     this.universityAggregateData =null;
     this.path = null;
     this.paths = null;
@@ -41,7 +40,7 @@ MapViz.prototype.init = function(){
     this.hideDetails();
     var that = this;
     this.projection = d3.geo.albersUsa()
-        .translate([this.width/2, this.height/2]).scale([this.scaleFactor*this.width]);
+        .translate([this.width/2, this.height/2 + this.yOffset]).scale([this.scaleFactor*this.width]);
     this.path = d3.geo.path().projection(this.projection);
     this.svg = d3.select("#map")
         .append("svg")
@@ -53,7 +52,7 @@ MapViz.prototype.init = function(){
 
     $( window ).resize(function() {
         that.svg.call(this.resize());
-    });
+   });
 
     var that=this;
 
@@ -262,8 +261,14 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
 
             if(container) {
                 pushToSector(school.sectorCd,this);
-                caption += "<span class='captionLabel'>Crime Ranking:</span><span class='captionValueHighlight'>"
-                + school.rank + " / " + maxRank + "</span><br>"
+                //caption += "<span class='captionLabel'>Crime Ranking:</span><span class='captionValueHighlight'>"
+                //+ school.rank + " / " + maxRank + "</span><br>"
+                caption += "<span class='captionLabel'>Safety Rating:</span><span>"
+                +"<img width='70' src='/images/" + school["starRating"] + "stars.png'></span><br>"
+                if(!school["starRating"]){
+                    console.log(school.schoolId + "<img src='/images/" + school["starRating"] + "stars.png'>")
+                }
+
                 caption += "<span class='captionLabel'>Murders:</span>" +
                 "<span class='captionValue'>" + formatData(container.murderCount) + "</span>"
                 caption += "<span class='captionLabel'>Negligent Manslaughter:</span>" +
@@ -319,7 +324,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
             try {
                 if (d.rank <=topCount || d.rank>= crimeData.containerForMapVis.maxRank -bottomCount ){
 
-                    if (d.crimeFactorForMapVis  < aveCrimeFactor){
+                    if (d["starRating"]  >= 5){
                        if(hideSafeSchools){
                            r =0;
                        }
@@ -356,7 +361,7 @@ MapViz.prototype.paintCircles = function (crimeData,year,hideSafeSchools){
         })
         .style("fill", function(d,i){
 
-            if (d.crimeFactorForMapVis > aveCrimeFactor){
+            if (d["starRating"]  < 5){
                 return "brown";// colorScale(d.crimeFactor)
             }
             else {
