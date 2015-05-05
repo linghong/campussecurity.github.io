@@ -1,4 +1,3 @@
-
 MapViz = function(_statesData,_countryStatistics,_weightControl, _eventHandler) {
     this.eventHandler = _eventHandler;
     this.txt = null;
@@ -53,7 +52,7 @@ MapViz.prototype.init = function(){
 
     $( window ).resize(function() {
         that.svg.call(this.resize());
-    });
+   });
 
     var that=this;
 
