@@ -47,7 +47,7 @@ ColSectorsViz.prototype.initVis = function(){
         .text("Crime Number/College");
 
     this.crimeYear=[2008,2009,2010,2011,2012,2013];
-    this.wrangleData("weaponOffence");
+    this.wrangleData("");
     // call the update method
 
 
