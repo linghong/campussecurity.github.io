@@ -7,7 +7,6 @@ BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
         'AK',
         'AL',
         'AR',
-        //'AS',
         'AZ',
         'CA',
         'CO',
@@ -51,41 +50,65 @@ BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
         'TX',
         'UT',
         'VA',
-        //'VI',
         'VT',
         'WA',
         'WI',
         'WV',
         'WY'
     ];
+
     this.year = _year;
     this.crimeCateogry = _crimeCategory;
-    this.init(_theDiv);
+    this.theDiv = _theDiv;
+    this.theData = this.prepData();
+    this.init();
 }
 
-BarChartViz.prototype.init = function(_theDiv,_height,_width)
+BarChartViz.prototype.prepData = function()
 {
     var that=this;
     var bardata = [];
     // -------------------- test grabbing data ---------------
     var yearBucket = crimeAnalyzer.getCategoryCrimeData()[that.year];
-    that.states.forEach(function(d,i){
-        var stateData = yearBucket["state"+d];
+    that.states.forEach(function (d, i) {
+        var stateData = yearBucket["state" + d];
         bardata.push({
-
-            state:d,
+            state: d,
             count: stateData.crimeCounts[that.crimeCateogry]
         });
     });
+    return bardata;
+}
+
+BarChartViz.prototype.init = function()
+{
+    var that=this;
+    var bardata = [];
+
+    /*
+    // -------------------- test grabbing data ---------------
+    var yearBucket = crimeAnalyzer.getCategoryCrimeData()[that.year];
+    that.states.forEach(function (d, i) {
+        var stateData = yearBucket["state" + d];
+        bardata.push({
+            state: d,
+            count: stateData.crimeCounts[that.crimeCateogry]
+        });
+    });
+    */
+    bardata = this.theData;
 
     console.log(bardata)
+
     var margin = { top: 30, right: 5, bottom: 40, left:60 }
 
     var height = that.height  - margin.top - margin.bottom,
         width = that.width - margin.left - margin.right,
         barOffset = 5;
 
-    that.svg = d3.select('#'+ _theDiv).append('svg')
+    d3.select('#'+ that.theDiv).select('svg').remove();
+
+    that.svg = d3.select('#'+ that.theDiv).append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
 
@@ -224,7 +247,16 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
 
 }
 
-BarChartViz.prototype.wrangleData = function() {
-
+BarChartViz.prototype.wrangleDataYear = function(_year) {
+    this.year = _year;
+    this.theData = this.prepData();
+    this.init();
 }
+
+BarChartViz.prototype.wrangleDataCrimeCategory = function(_crimeCategory) {
+    this.crimeCateogry = _crimeCategory;
+    this.theData = this.prepData();
+    this.init();
+}
+
 

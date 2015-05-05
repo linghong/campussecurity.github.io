@@ -270,6 +270,7 @@
             stateSectorsViz.onCrimeChange(crimeKey);
             categorySelectionViz.onCrimeChange(crimeKey);
             mapViz.wrangleData();
+            barChartViz.wrangleDataCrimeCategory(crimeKey);
         });
 
     }
@@ -294,7 +295,7 @@
     });
     $(myEventHandler).on('yearChanged', function (e,year) {
         mapViz.wrangleData(year);
-
+        barChartViz.wrangleDataYear(year);
     });
 
     $(myEventHandler).on('changed', function () {
