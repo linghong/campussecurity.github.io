@@ -216,6 +216,8 @@
             //update the mapViz and the three other Viz
             stateSectorsViz.onCrimeChange(crimeKey);
             categorySelectionViz.onCrimeChange(crimeKey);
+            //  ---  PG code goes here ---
+            barChartViz.wrangleDataCrimeCategory(crimeKey);
             mapViz.wrangleData();
         });
 
@@ -241,6 +243,8 @@
     });
     $(myEventHandler).on('yearChanged', function (e,year) {
         mapViz.wrangleData(year);
+        // --- PG code goes here ---
+        barChartViz.wrangleDataYear(year);
     });
 </script>
 </body>
