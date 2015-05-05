@@ -80,9 +80,28 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
     for (var y=0; y<aggregatedData.length;y++){
 
         for (var s=0; s<aggregatedData[y].values.length;s++){
+            var crimeValue=0;
+
+            if(_crimekey==""){
+                crimeValue+=aggregatedData[y].values[s].values.aggravatedAssault;
+                crimeValue+=aggregatedData[y].values[s].values.arson;
+                crimeValue+=aggregatedData[y].values[s].values.burglary;
+                crimeValue+=aggregatedData[y].values[s].values.drugViolations;
+                crimeValue+=aggregatedData[y].values[s].values.forcibleSexOffense;
+                crimeValue+=aggregatedData[y].values[s].values.liquorViolations;
+                crimeValue+=aggregatedData[y].values[s].values.murderCount;
+                crimeValue+=aggregatedData[y].values[s].values.negligentManSlaughter;
+                crimeValue+=aggregatedData[y].values[s].values.nonForcibleSexOffense;
+                crimeValue+=aggregatedData[y].values[s].values.robbery;
+                crimeValue+=aggregatedData[y].values[s].values.vehicleTheft;
+                crimeValue+=aggregatedData[y].values[s].values.weaponOffence;
+            }
+            else{
+                crimeValue+=aggregatedData[y].values[s].values[_crimekey];
+            }
             firstKeyArray.push({
-                "aggKey2": aggregatedData[y].values[s].key,
-                "crimeData":aggregatedData[y].values[s].values[_crimekey],
+                "crimeKey": aggregatedData[y].values[s].key,
+                "crimeData":crimeValue
             });
         }
     }
@@ -107,7 +126,6 @@ ColSectorsViz.prototype.updateViz = function(){
     })
 
     var dataSeries = d3.values(this.displayData);
-    console.log(this.displayData)
 
     var flatData = [];
     var yMax = null;
@@ -122,13 +140,12 @@ ColSectorsViz.prototype.updateViz = function(){
             }
             flatData.push({
                 year:crimeDataYear,
-                sectorCode:dd.aggKey2,
+                sectorCode:dd.crimeKey,
                 crimeData:dd.crimeData
             })
         });
     });
 
-    console.log(flatData);
 
 //scales
     var x =d3.scale.ordinal()
@@ -219,11 +236,6 @@ ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
 
 }
 
-ColSectorsViz.prototype.onYearChange= function (_slideryear){
-    console.log(".series-" + _slideryear);
-//$(".series-" + _slideryear).css({"background-color":"blue"});
-//$(".series-" + _slideryear).classed('clicked', true);
-}
 
 ColSectorsViz.prototype.selectData=function(){
     var that=this;
