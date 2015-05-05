@@ -13,7 +13,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    
+
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/d3.v3.js"></script>
@@ -22,175 +22,175 @@
     <script src="js/custom/mapViz.js"></script>
     <script src="js/custom/weightsContainerViz.js"></script>
     <script src="js/custom/crimeDataAnalyzer.js"></script>
-    <script src="js/custom/colSectorsViz.js"></script>    
+    <script src="js/custom/colSectorsViz.js"></script>
     <script src="js/custom/parallelCoordViz.js"></script>
     <script src="js/custom/stateParallelCoordViz.js"></script>
     <script src="js/custom/stateSectorsViz.js"></script>
     <script src="js/custom/categorySelectionViz.js"></script>
-    <script src="js/custom/barChartViz.js"></script>    
-   
+    <script src="js/custom/barChartViz.js"></script>
+
 </head>
 
 <body>
-    <div id="floatingDiv"
-         style="background-color: #999; z-index: 100;position: absolute;opacity: .2 ">
-    </div>
-    <div id="univDataDiv" style="display: none; z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
-        <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
-        <div id="univDataDivText"></div>
-    </div>
+<div id="floatingDiv"
+     style="background-color: #999; z-index: 100;position: absolute;opacity: .2 ">
+</div>
+<div id="univDataDiv" style="display: none; z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
+    <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
+    <div id="univDataDivText"></div>
+</div>
 
-    <div class="container"> 
-        <!--row1: Site Name-->
-        <header class="row " >
-        </header>
-                
-        <!--row2: navigation -->
-        <nav class=" row navbar navbar-default " role="navigation">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+<div class="container">
+    <!--row1: Site Name-->
+    <header class="row " >
+    </header>
+
+    <!--row2: navigation -->
+    <nav class=" row navbar navbar-default " role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="collapse">
+            <ul class="nav navbar-nav">
+                <li><a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a></li>
+                <li><a href='/doc/PressBook.md'>PressBook</a></li>
+                <li><a href=''>Watch Video</a></li>
+                <li><a href='#' id="hide">Hide</a></li>
+                <li><a href='#' id="show">Show</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!--row3 Body Content -->
+    <div  class="row panel-info-darken edge-height">
+
+        <!--top left column, map box-->
+        <main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
+            <div class="col-md-12 col-sm-12 panel panel-info" id="main-left" style="font-size:10px;" >
+                <!--map -->
+                <div class="col-md-12 col-sm-12 panel-calm main-center" id="map">
+                </div>
+                <div class="col-md-12 col-sm-12" >
+                    <label class="yearbutton">All Years</label>
+                    <input type="radio" checked value="" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                    <label class="yearbutton">2008</label>
+                    <input type="radio"  value="2008" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                    <label class="yearbutton">2009</label>
+                    <input type="radio" value="2009" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                    <label class="yearbutton">2010</label>
+                    <input type="radio" value="2010" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                    <label class="yearbutton">2011</label>
+                    <input type="radio" value="2011" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                    <label class="yearbutton">2012</label>
+                    <input type="radio" value="2012" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                    <label class="yearbutton">2013</label>
+                    <input type="radio" value="2013" name="year" onchange="$(myEventHandler).trigger('yearChanged',
+                            this.value)">
+                </div>
+
+
+                <div class="col-md-12 col-sm-12" id="map-control-1" >
+
+                    <button id="allCategory" value="weaponOffence">All</button>
+                    <button id="weapon" value="weaponOffence">Weapon</button>
+                    <button id="drug" value="drugViolations">Drug</button>
+                    <button id="liquor" value="liquorViolations">Liquor</button>
+                    <button id="murd" value="murderCount">Murder</button>
+                    <button id="forcib" value="forcibleSexOffense">Forcible Sex Offense</button>
+                    <button id="robbe" value="robbery">Robbery</button>
+                    <button id="agg" value="aggravatedAssault">Aggrevated Assault</button>
+                    <button id="burgla" value="burglary">Burglary</button>
+                    <button id="vehic" value="vehicleTheft">Vehicle Crime</button>
+                    <button id="arson" value="arson">Arson</button>
+                </div >
+
             </div>
-            <div class="collapse navbar-collapse" id="collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a></li>
-                    <li><a href='/doc/PressBook.md'>PressBook</a></li>
-                    <li><a href=''>Watch Video</a></li>    
-                    <li><a href='#' id="hide">Hide</a></li>
-                    <li><a href='#' id="show">Show</a></li>
-                </ul>
+
+        </main>
+
+        <!--top right column -->
+        <aside class="col-md-4 col-sm-12 panel-info-darken " id="aside">
+            <div style="background-color: #ffffff">
+                <input type="checkbox" id="adjustSensitivity" onchange="$('#weightsSelector1').toggle()">
+                <span id="ctrlPanelMsg">Adjust the Map's Sensitivity to Crime Category</span>
             </div>
-        </nav>
+            <div  id="weightsSelector2"  style="background-color: #ffffff">
 
-        <!--row3 Body Content -->
-        <div  class="row panel-info-darken edge-height">
-            
-            <!--top left column, map box-->
-            <main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
-                <div class="col-md-12 col-sm-12 panel panel-info" id="main-left" style="font-size:10px;" >
-                    <!--map -->
-                        <div class="col-md-12 col-sm-12 panel-calm main-center" id="map">
-                        </div>
-                        <div class="col-md-12 col-sm-12" >
-                            <label class="yearbutton">All Years</label>
-                            <input type="radio" checked value="" name="year" onchange="$(myEventHandler).trigger('yearChanged',
-                            this.value)">
-                            <label class="yearbutton">2008</label>
-                            <input type="radio"  value="2008" name="year" onchange="$(myEventHandler).trigger('yearChanged',
-                            this.value)">
-                             <label class="yearbutton">2009</label>
-                            <input type="radio" value="2009" name="year" onchange="$(myEventHandler).trigger('yearChanged',
-                            this.value)">
-                             <label class="yearbutton">2010</label>
-                            <input type="radio" value="2010" name="year" onchange="$(myEventHandler).trigger('yearChanged',
-                            this.value)">
-                             <label class="yearbutton">2011</label>
-                            <input type="radio" value="2011" name="year" onchange="$(myEventHandler).trigger('yearChanged',
-                            this.value)">
-                             <label class="yearbutton">2012</label>
-                            <input type="radio" value="2012" name="year" onchange="$(myEventHandler).trigger('yearChanged',
-                            this.value)">
-                             <label class="yearbutton">2013</label>
-                            <input type="radio" value="2013" name="year" onchange="$(myEventHandler).trigger('yearChanged',
-                            this.value)">
-                        </div>
+                <br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div id="paramsContainer">
 
-                        
-                       <div class="col-md-12 col-sm-12" id="map-control-1" >
-                        
-                        <button id="allCategory" value="weaponOffence">All</button>
-                        <button id="weapon" value="weaponOffence">Weapon</button>
-                        <button id="drug" value="drugViolations">Drug</button>
-                        <button id="liquor" value="liquorViolations">Liquor</button>
-                        <button id="murd" value="murderCount">Murder</button>
-                        <button id="forcib" value="forcibleSexOffense">Forcible Sex Offense</button>
-                        <button id="robbe" value="robbery">Robbery</button>
-                        <button id="agg" value="aggravatedAssault">Aggrevated Assault</button>
-                        <button id="burgla" value="burglary">Burglary</button>
-                        <button id="vehic" value="vehicleTheft">Vehicle Crime</button>
-                        <button id="arson" value="arson">Arson</button>
-                    </div >
-                  
+                <!--box for user interactive box: make my own security map  -->
+                <h5>How Important Is A Crime Type To Me?</h5>
+                <div  id="weightsSelector1" >
+
                 </div>
+                <br>
 
-            </main>
-
-            <!--top right column -->
-            <aside class="col-md-4 col-sm-12 panel-info-darken " id="aside">
-                <div style="background-color: #ffffff">
-                    <input type="checkbox" id="adjustSensitivity" onchange="$('#weightsSelector1').toggle()">
-                    <span id="ctrlPanelMsg">Adjust the Map's Sensitivity to Crime Category</span>
+                <div style="font-size: 10px">
+                    <label><input id="cbxHideSafeSchools" type="checkbox"
+                                  checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Hide Safe Schools</label>
                 </div>
-                <div  id="weightsSelector2"  style="background-color: #ffffff">
+            </div>
+            <div style="background-color: #ffffff">
+                <label>Crime Numbers By [</label>
+                <input type="radio" checked name="divSelector" value="state" onchange="rbClicked(this)"><label>State</label>
+                <input type="radio" name="divSelector" value="type" onchange="rbClicked(this)"><label>School Type]</label>
+            </div>
+            <div id="parallelCoordinateBox" style="display: none">
+            </div>
+            <div id="parallelCoordinateStateBox">
+            </div>
 
-                    <br><br><br><br><br><br><br><br><br><br><br>
-                </div>
-                <div id="paramsContainer">
-
-                    <!--box for user interactive box: make my own security map  -->
-                    <h5>How Important Is A Crime Type To Me?</h5>
-                    <div  id="weightsSelector1" >
-
-                    </div>
-                    <br>
-
-                    <div style="font-size: 10px">
-                        <label><input id="cbxHideSafeSchools" type="checkbox"
-                                      checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Hide Safe Schools</label>
-                    </div>
-                </div>
-                <div style="background-color: #ffffff">
-                    <label>Crime Numbers By [</label>
-                    <input type="radio" checked name="divSelector" value="state" onchange="rbClicked(this)"><label>State</label>
-                    <input type="radio" name="divSelector" value="type" onchange="rbClicked(this)"><label>School Type]</label>
-                </div>
-                <div id="parallelCoordinateBox" style="display: none">
-                </div>
-                <div id="parallelCoordinateStateBox">
-                </div>
-
-            </aside>
-            <section class="col-md-12 col-sm-12 panel-info-darken">
+        </aside>
+        <section class="col-md-12 col-sm-12 panel-info-darken">
             <div class="col-md-7 col-sm-12 panel panel-info section" id="usStatesDiv">
 
             </div>
             <div class="col-md-5 col-sm-12 panel panel-info section" >
 
-                 <!--box for crime distribution across school sectors
-            <div class="col-md-12 col-sm-12 " >
-                <span class="minititle">College Crime Show a School Type Releated Pattern </span>
-            </div>-->
-            <!--box for user interactive box: make my own security map  -->
-            <div class="col-md-12 col-sm-8 panel-info center aside-center" >
-              <div class="col-md-12 col-sm-12 " id="legend"> 
-               </div>
-               <div class="col-md-10 col-sm-10 " id="yearsectors"> 
-               </div>
-                 <div id ="filterByYear" class="col-md-2 col-sm-2 form-group">
-                    <label  for="series-2008" class="s-2008"><input type="checkbox" class="yearSelector" name="year" value="2008" title="2008" id="series-2008" checked></label>2008
-                    <label for="series-2009" class="s-2009"><input type="checkbox" class="yearSelector" name="year" value="2009" title="2009" id="series-2009" checked></label>2009
-                    <label for="series-2010" class="s-2010"><input type="checkbox" class="yearSelector" name="year" value="2010" title="2010" id="series-2010" checked></label>2010
-                    <label for="series-2011" class="s-2011"><input type="checkbox" class="yearSelector" name="year" value="2011" title="2011" id="series-2011" checked ></label>2011
-                    <label for="series-2012" class="s-2012"><input type="checkbox" class="yearSelector" name="year" value="2012" title="2012" id="series-2012" checked></label>2012
-                    <label for="series-2013" class="s-2013"><input type="checkbox" class="yearSelector" name="year" value="2013" title="2013" id="series-2013" checked ></label>2013
+                <!--box for crime distribution across school sectors
+           <div class="col-md-12 col-sm-12 " >
+               <span class="minititle">College Crime Show a School Type Releated Pattern </span>
+           </div>-->
+                <!--box for user interactive box: make my own security map  -->
+                <div class="col-md-12 col-sm-8 panel-info center aside-center" >
+                    <div class="col-md-12 col-sm-12 " id="legend">
+                    </div>
+                    <div class="col-md-10 col-sm-10 " id="yearsectors">
+                    </div>
+                    <div id ="filterByYear" class="col-md-2 col-sm-2 form-group">
+                        <label  for="series-2008" class="s-2008"><input type="checkbox" class="yearSelector" name="year" value="2008" title="2008" id="series-2008" checked></label>2008
+                        <label for="series-2009" class="s-2009"><input type="checkbox" class="yearSelector" name="year" value="2009" title="2009" id="series-2009" checked></label>2009
+                        <label for="series-2010" class="s-2010"><input type="checkbox" class="yearSelector" name="year" value="2010" title="2010" id="series-2010" checked></label>2010
+                        <label for="series-2011" class="s-2011"><input type="checkbox" class="yearSelector" name="year" value="2011" title="2011" id="series-2011" checked ></label>2011
+                        <label for="series-2012" class="s-2012"><input type="checkbox" class="yearSelector" name="year" value="2012" title="2012" id="series-2012" checked></label>2012
+                        <label for="series-2013" class="s-2013"><input type="checkbox" class="yearSelector" name="year" value="2013" title="2013" id="series-2013" checked ></label>2013
+                    </div>
                 </div>
-            </div>
-            
+
         </section>
 
-        </div>
-        
-        <!-- footer-->  
-        <footer class="edge-width">
-            |<a href="">About</a>|<a href=''>Contact</a>|<a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a>|<a href='/doc/PressBook.md'>PressBook</a>|
-        </footer>
     </div>
 
-    <script type="text/javascript">
+    <!-- footer-->
+    <footer class="edge-width">
+        |<a href="">About</a>|<a href=''>Contact</a>|<a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a>|<a href='/doc/PressBook.md'>PressBook</a>|
+    </footer>
+</div>
+
+<script type="text/javascript">
     var myEventHandler = new Object();
     var divPadding=20;
     var mapViz=null;
@@ -211,8 +211,8 @@
         $('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
         $('#aside').show();
         $('#switch').text('Hide');
-         mapViz.resize();
-        
+        mapViz.resize();
+
     });
     $("#yearsectors").hover
 
@@ -223,7 +223,7 @@
             .await(dataLoaded);
 
     function dataLoaded (error,_statesData, _countryStatistics,_crimeDatabackup) {
-        
+
         //a flat structure data
         var schoolCrime=[];
         _crimeDatabackup.forEach(function(d){
@@ -254,8 +254,8 @@
         mapViz = new MapViz(_statesData, _countryStatistics,categorySelectionViz, myEventHandler);
         colSectorsViz =new ColSectorsViz(schoolCrime);
         stateSectorsViz =new StateSectorsViz(schoolCrime);
-        barChartViz = new BarChartViz("usStatesDiv", 
-        myEventHandler,2008, 'liquorViolations' );
+        barChartViz = new BarChartViz("usStatesDiv",
+                myEventHandler,2008, 'liquorViolations' );
         parallelCoordinateViz = new ParallelCoordinateViz('parallelCoordinateBox',myEventHandler)
         stateParallelCoordinateViz = new StateParallelCoordinateViz('parallelCoordinateStateBox',myEventHandler)
 
@@ -285,10 +285,10 @@
         stateSectorsViz.onYearChange(slideryear);
     });
 
-    d3.selectAll('input[type="checkbox"]').on('change', function(){ 
-          colSectorsViz.updateViz();
-    });  
-   
+    d3.selectAll('input[type="checkbox"]').on('change', function(){
+        colSectorsViz.updateViz();
+    });
+
     //wrangle data for mapViz
     $(myEventHandler).on('changed', function () {
         mapViz.wrangleData($('#slidertime').value());
@@ -299,42 +299,42 @@
     });
 
     $(myEventHandler).on('changed', function () {
-                var yearToProcess = $('input:radio[name=year]:checked').val()
-                if(yearToProcess == ""){
-                    yearToProcess = null;
-                }
-                mapViz.wrangleData(yearToProcess);
-            });
-
-            $(myEventHandler).on('yearChanged', function (e,year) {
-                var yearToProcess = year;
-                if(year == ""){
-                    yearToProcess = null;
-                }
-                mapViz.wrangleData(yearToProcess);
-                parallelCoordinateViz.wrangleData(yearToProcess)
-                stateParallelCoordinateViz.wrangleData(yearToProcess)
-            });
-            $(myEventHandler).on('sectorSelected', function(e, sectorCd){
-                mapViz.wrangleSectorIn(sectorCd)
-            });
-            $(myEventHandler).on('sectorDeSelected', function(e, sectorCd){
-                mapViz.wrangleSectorOut(sectorCd)
-            });
-            $(myEventHandler).on('stateSelected', function(e, stateCd){
-                mapViz.wrangleStateIn(stateCd)
-            });
-
-        function rbClicked(ctrl){
-            if('type' == ctrl.value){
-               $('#parallelCoordinateBox').show()
-               $('#parallelCoordinateStateBox').hide()
-            }
-            else{
-                $('#parallelCoordinateBox').hide()
-                $('#parallelCoordinateStateBox').show()
-            }
+        var yearToProcess = $('input:radio[name=year]:checked').val()
+        if(yearToProcess == ""){
+            yearToProcess = null;
         }
+        mapViz.wrangleData(yearToProcess);
+    });
+
+    $(myEventHandler).on('yearChanged', function (e,year) {
+        var yearToProcess = year;
+        if(year == ""){
+            yearToProcess = null;
+        }
+        mapViz.wrangleData(yearToProcess);
+        parallelCoordinateViz.wrangleData(yearToProcess)
+        stateParallelCoordinateViz.wrangleData(yearToProcess)
+    });
+    $(myEventHandler).on('sectorSelected', function(e, sectorCd){
+        mapViz.wrangleSectorIn(sectorCd)
+    });
+    $(myEventHandler).on('sectorDeSelected', function(e, sectorCd){
+        mapViz.wrangleSectorOut(sectorCd)
+    });
+    $(myEventHandler).on('stateSelected', function(e, stateCd){
+        mapViz.wrangleStateIn(stateCd)
+    });
+
+    function rbClicked(ctrl){
+        if('type' == ctrl.value){
+            $('#parallelCoordinateBox').show()
+            $('#parallelCoordinateStateBox').hide()
+        }
+        else{
+            $('#parallelCoordinateBox').hide()
+            $('#parallelCoordinateStateBox').show()
+        }
+    }
 
 </script>
 
