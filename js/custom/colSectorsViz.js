@@ -33,7 +33,7 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("x", -92)
         .attr("dy", "0.08em")
         .style("text-anchor", "middle")
-        .text(this.crimeKey+"Number/College");
+        .text("Crime Number/College");
 
     // Add the text label for the x axis
     this.svg.append("text")
