@@ -6750,10 +6750,11 @@ subtitle {
   font-size: 22px;
 }
 .minititle {
-  text-align: center;
   font-weight: bold;
-  font-size: 11px;
-  color: white;
+  font-size: 14px;
+  color: black;
+  text-align: center;
+  padding: 10px;
 }
 .schooltext {
   font-size: 9px;
@@ -7182,4 +7183,5 @@ div.univCity {
 }
 #filterByYear {
   padding-left: 40px;
+  margin-top: 10px;
 }
