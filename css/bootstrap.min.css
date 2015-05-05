@@ -6771,7 +6771,7 @@ positions
   text-align: center;
 }
 .top {
-  margin-top: -40px;
+  margin-top: -30px;
 }
 .edge-width {
   margin-left: -15px;
@@ -6797,6 +6797,11 @@ styles for scatterplots
   fill: #00997A;
   opacity: 0.6;
 }
+.seriesradio-2008 {
+  fill: #00997A;
+  opacity: 0.8;
+  font-weight: 700;
+}
 .s-2008,
 .s-2009,
 .s-2010,
@@ -6819,6 +6824,11 @@ styles for scatterplots
   background-color: #FF6600;
   opacity: 0.6;
 }
+.seriesradio-2009 {
+  fill: black;
+  opacity: 0.6;
+  font-weight: 700;
+}
 .series-2010 {
   fill: #FF00FF;
   opacity: 0.6;
@@ -6826,6 +6836,11 @@ styles for scatterplots
 .s-2010 {
   background-color: #FF00FF;
   opacity: 0.6;
+}
+.seriesradio-2010 {
+  fill: #00997A;
+  opacity: 0.8;
+  font-weight: 700;
 }
 .series-2011 {
   fill: red;
@@ -6835,6 +6850,11 @@ styles for scatterplots
   background-color: red;
   opacity: 0.6;
 }
+.seriesradio-2011 {
+  fill: #00997A;
+  opacity: 0.8;
+  font-weight: 700;
+}
 .series-2012 {
   fill: blue;
   opacity: 0.6;
@@ -6843,6 +6863,11 @@ styles for scatterplots
   background-color: blue;
   opacity: 0.6;
 }
+.seriesradio-2012 {
+  fill: #00997A;
+  opacity: 0.8;
+  font-weight: 700;
+}
 .series-2013 {
   fill: green;
   opacity: 0.6;
@@ -6850,6 +6875,11 @@ styles for scatterplots
 .s-2013 {
   background-color: green;
   opacity: 0.6;
+}
+.seriesradio-2013 {
+  fill: #00997A;
+  opacity: 0.8;
+  font-weight: 700;
 }
 .series-AL {
   fill: #175b70;
@@ -7182,11 +7212,12 @@ div.univCity {
 .yearbutton {
   font-size: 8px;
 }
-.crimebutton {
-  font-size: 10px;
+.crimebutton button {
+  font-size: 7px;
   background-color: #53A68D;
   color: white;
 }
 #filterByYear {
   margin-top: 10px;
+  font-size: 0.9em;
 }

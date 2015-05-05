@@ -5,7 +5,7 @@
 ColSectorsViz = function(_data){
     this.data = _data;
     // defines constants
-    this.padding= {top: 30, right:-60, bottom: 15, left: 70};
+    this.padding= {top: 30, right:-40, bottom: 15, left: 70};
     this.width = $("#yearsectors").width();
     this.height = 0.75*this.width;
     this.displayData={};
@@ -37,9 +37,9 @@ ColSectorsViz.prototype.initVis = function(){
 
     // Add the text label for the x axis
     this.svg.append("text")
-        .attr("y", this.height-8)
+        .attr("y", this.height-12)
         .attr("x", 200)
-        .attr("dy", "0.05em")
+        .attr("dy", "0.032em")
         .style("text-anchor", "middle")
         .text("Nine US College Categories");
 
@@ -160,10 +160,18 @@ ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
 
 }
 
-ColSectorsViz.prototype.onYearChange= function (_slideryear){
-    console.log(".series-" + _slideryear);
-//$(".series-" + _slideryear).css({"background-color":"blue"});
-//$(".series-" + _slideryear).classed('clicked', true);
+ColSectorsViz.prototype.onYearChange= function (_radioyear){
+  for(var i=2008; i<2014;i++){
+    if(i==parseInt(_radioyear)==_radioyear){
+     this.svg.selectAll('#yearsectors g .series-'+i).classed("seriesradio-"+parseInt(_radioyear), true);
+  }else{
+    this.svg.selectAll('#yearsectors g .series-'+i).classed("seriesradio-"+parseInt(_radioyear), false);
+  }
+  
+
+  }
+
+   console.log("seriesradio-"+parseInt(_radioyear));
 }
 
 ColSectorsViz.prototype.selectData=function(){
