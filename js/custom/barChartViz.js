@@ -8,7 +8,6 @@ BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
         'AK',
         'AL',
         'AR',
-        //'AS',
         'AZ',
         'CA',
         'CO',
@@ -52,7 +51,6 @@ BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
         'TX',
         'UT',
         'VA',
-        //'VI',
         'VT',
         'WA',
         'WI',
@@ -225,6 +223,6 @@ BarChartViz.prototype.init = function(_theDiv,_height,_width)
 
 }
 
-BarChartViz.prototype.wrangleData = function() {
+BarChartViz.prototype.wrangleData = function(_year, _category) {
 
 }
