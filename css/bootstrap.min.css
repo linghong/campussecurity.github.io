@@ -7190,3 +7190,22 @@ div.univCity {
 #filterByYear {
   margin-top: 10px;
 }
+
+.scatterPlotAxis path,
+.stateAxes line {
+    fill: none;
+    stroke: #bbb;
+    stroke-width: 1;
+}
+.scatterPlotAxis text {
+    font-size: 10px;
+}
+
+.scatterPlotAxisX text {
+    display: none;
+}
+
+.scatterPlotLabel {
+    font-size: 11px ;
+    font-weight: normal;
+}
