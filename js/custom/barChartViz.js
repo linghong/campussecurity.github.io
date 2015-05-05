@@ -106,6 +106,8 @@ BarChartViz.prototype.init = function()
         width = that.width - margin.left - margin.right,
         barOffset = 5;
 
+    d3.select('#'+ that.theDiv).select('svg').remove();
+
     that.svg = d3.select('#'+ that.theDiv).append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
