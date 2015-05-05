@@ -5,9 +5,9 @@
 ColSectorsViz = function(_data){
     this.data = _data;
     // defines constants
-    this.padding= {top: 15, right: 0, bottom: 25, left: 70};
+    this.padding= {top: 30, right:-60, bottom: 15, left: 70};
     this.width = $("#yearsectors").width();
-    this.height = 0.50*this.width;
+    this.height = 0.75*this.width;
     this.displayData={};
     this.crimeKeyData={};
     this.initVis();
@@ -29,19 +29,20 @@ ColSectorsViz.prototype.initVis = function(){
     // Add the text label for the Y axis
     this.svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 20)
-        .attr("x", -92)
-        .attr("dy", "0.08em")
+        .attr("y", 30)
+        .attr("x", -122)
+        .attr("dy", "0.07em")
         .style("text-anchor", "middle")
         .text("Crime Number/College");
 
     // Add the text label for the x axis
     this.svg.append("text")
-        .attr("y", this.height-5)
+        .attr("y", this.height-8)
         .attr("x", 200)
-        .attr("dy", "0.08em")
+        .attr("dy", "0.05em")
         .style("text-anchor", "middle")
         .text("Nine US College Categories");
+
   this.crimeYear=[2008,2009,2010,2011,2012,2013]; 
     this.wrangleData("weaponOffence");
     // call the update method

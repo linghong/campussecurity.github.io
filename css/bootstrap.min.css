@@ -6760,12 +6760,18 @@ subtitle {
   font-size: 9px;
   font-weight: bold;
 }
+#legend {
+  height: 20px;
+}
 /*-----------------------------------------------------------------
 positions
 -------------------------------------------------------------------
 */
 .center {
   text-align: center;
+}
+.top {
+  margin-top: -40px;
 }
 .edge-width {
   margin-left: -15px;
@@ -7182,6 +7188,5 @@ div.univCity {
   color: white;
 }
 #filterByYear {
-  padding-left: 40px;
   margin-top: 10px;
 }
