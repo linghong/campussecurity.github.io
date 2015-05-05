@@ -60,8 +60,8 @@
                     <li><a href='http://github.com/campussecurity/campussecurity.github.io'>Code Source</a></li>
                     <li><a href='/doc/PressBook.md'>PressBook</a></li>
                     <li><a href=''>Watch Video</a></li>    
-                    <li><a href='#' id="hide">Hide</a></li>
-                    <li><a href='#' id="show">Show</a></li>
+                    <li><a href='#' id="hide">Large Map</a></li>
+                    <li><a href='#' id="show">Small Map</a></li>
                 </ul>
             </div>
         </nav>
@@ -70,7 +70,7 @@
         <div  class="row panel-info-darken edge-height">
             
             <!--top left column, map box-->
-            <main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
+            <main class="col-md-7 col-sm-12 panel-info-darken" id="mapContainer">
                 <div class="col-md-12 col-sm-12 panel panel-info" id="main-left" style="font-size:10px;" >
                     <!--map -->
                         <div class="col-md-12 col-sm-12 panel-calm main-center" id="map">
@@ -100,9 +100,7 @@
                         </div>
 
                         
-                       <div class="col-md-12 col-sm-12" id="map-control-1" >
-                        
-                        <button id="allCategory" value="weaponOffence">All</button>
+                       <div class="col-md-12 col-sm-12" id="map-control-1 crimebutton">                         
                         <button id="weapon" value="weaponOffence">Weapon</button>
                         <button id="drug" value="drugViolations">Drug</button>
                         <button id="liquor" value="liquorViolations">Liquor</button>
@@ -120,14 +118,14 @@
             </main>
 
             <!--top right column -->
-            <aside class="col-md-4 col-sm-12 panel-info-darken " id="aside">
-                <div style="background-color: #ffffff">
+            <aside class="col-md-5 col-sm-12 panel-info-darken " id="aside">
+                <div class="col-sm-12" style="background-color: #ffffff">
                     <input type="checkbox" id="adjustSensitivity" onchange="$('#weightsSelector1').toggle()">
                     <span id="ctrlPanelMsg">Adjust the Map's Sensitivity to Crime Category</span>
                 </div>
-                <div  id="weightsSelector2"  style="background-color: #ffffff">
+                <div class="col-sm-12" id="weightsSelector2"  style="background-color: #ffffff">
 
-                    <br><br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br>
                 </div>
                 <div id="paramsContainer">
 
@@ -154,11 +152,11 @@
                 </div>
 
             </aside>
-            <section class="col-md-12 col-sm-12 panel-info-darken">
-            <div class="col-md-7 col-sm-12 panel panel-info section" id="usStatesDiv">
+            <section class="col-md-12 col-sm-12 panel panel-info-darken">
+            <div class="col-md-7 col-sm-12 panel-info section" id="usStatesDiv">
 
             </div>
-            <div class="col-md-5 col-sm-12 panel panel-info section" >
+            <div class="col-md-5 col-sm-12 panel-info section" >
 
                  <!--box for crime distribution across school sectors
             <div class="col-md-12 col-sm-12 " >
@@ -166,11 +164,11 @@
             </div>-->
             <!--box for user interactive box: make my own security map  -->
             <div class="col-md-12 col-sm-8 panel-info center aside-center" >
-              <div class="col-md-12 col-sm-12 " id="legend"> 
-               </div>
-               <div class="col-md-10 col-sm-10 " id="yearsectors"> 
-               </div>
-                 <div id ="filterByYear" class="col-md-2 col-sm-2 form-group">
+                <div class="col-md-12 col-sm-12 " id="legend"> 
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10" id="yearsectors"> 
+                </div>
+                <div id ="filterByYear" class="col-lg-2  col-md-2 col-sm-2 form-group">
                     <label  for="series-2008" class="s-2008"><input type="checkbox" name="year" value="2008" title="2008" id="series-2008" checked></label>2008
                     <label for="series-2009" class="s-2009"><input type="checkbox" name="year" value="2009" title="2009" id="series-2009" checked></label>2009
                     <label for="series-2010" class="s-2010"><input type="checkbox" name="year" value="2010" title="2010" id="series-2009" checked></label>2010
@@ -207,13 +205,13 @@
 
     var categorySelectionViz = new CategorySelectionViz();
     $("#hide").hover(function(){
-        $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
+        $('#mapContainer').removeClass("col-md-7").addClass("col-md-12");
         $('#aside').hide();
         $('#switch').text('Show');
         mapViz.resize();
     });
     $("#show").hover(function(){
-        $('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
+        $('#mapContainer').removeClass("col-md-12").addClass("col-md-7");
         $('#aside').show();
         $('#switch').text('Hide');
          mapViz.resize();
@@ -280,13 +278,13 @@
     }
 
     //move the time sliders below the map, make updates for maps, and the viz in three boxes.
-    d3.selectAll('input[type="range"]').on('input', function() {
+    d3.selectAll('input[name="year"]').on('input', function() {
         //get year in the range slider
-        var slideryear=this.value;
-        $(myEventHandler).trigger('yearChanged', slideryear)
+        var radioyear=this.value;
+        $(myEventHandler).trigger('yearChanged', radioyear)
         //update the three other Viz 
-        colSectorsViz.onYearChange(slideryear);
-        stateSectorsViz.onYearChange(slideryear);
+        colSectorsViz.onYearChange(radioyear);
+        stateSectorsViz.onYearChange(radioyear);
     });
 
     d3.selectAll('input[type="checkbox"]').on('change', function(){ 
