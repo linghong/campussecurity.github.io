@@ -5,9 +5,9 @@
 ColSectorsViz = function(_data){
     this.data = _data;
     // defines constants
-    this.padding= {top: 20, right: 0, bottom: 25, left: 70};
+    this.padding= {top: 30, right:-40, bottom: 15, left: 70};
     this.width = $("#yearsectors").width();
-    this.height = 0.55*this.width;
+    this.height = 0.75*this.width;
     this.displayData={};
     this.crimeKeyData={};
     this.initVis();
@@ -29,19 +29,20 @@ ColSectorsViz.prototype.initVis = function(){
     // Add the text label for the Y axis
     this.svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 20)
-        .attr("x", -92)
-        .attr("dy", "0.08em")
+        .attr("y", 30)
+        .attr("x", -122)
+        .attr("dy", "0.07em")
         .style("text-anchor", "middle")
-        .text("Crime Number Per College");
+        .text("Crime Number/College");
 
     // Add the text label for the x axis
     this.svg.append("text")
         .attr("y", this.height-12)
         .attr("x", 200)
-        .attr("dy", "0.08em")
+        .attr("dy", "0.032em")
         .style("text-anchor", "middle")
         .text("Nine US College Categories");
+
   this.crimeYear=[2008,2009,2010,2011,2012,2013]; 
     this.wrangleData("weaponOffence");
     // call the update method
@@ -159,10 +160,18 @@ ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
 
 }
 
-ColSectorsViz.prototype.onYearChange= function (_slideryear){
-    console.log(".series-" + _slideryear);
-//$(".series-" + _slideryear).css({"background-color":"blue"});
-//$(".series-" + _slideryear).classed('clicked', true);
+ColSectorsViz.prototype.onYearChange= function (_radioyear){
+  for(var i=2008; i<2014;i++){
+    if(i==parseInt(_radioyear)==_radioyear){
+     this.svg.selectAll('#yearsectors g .series-'+i).classed("seriesradio-"+parseInt(_radioyear), true);
+  }else{
+    this.svg.selectAll('#yearsectors g .series-'+i).classed("seriesradio-"+parseInt(_radioyear), false);
+  }
+  
+
+  }
+
+   console.log("seriesradio-"+parseInt(_radioyear));
 }
 
 ColSectorsViz.prototype.selectData=function(){

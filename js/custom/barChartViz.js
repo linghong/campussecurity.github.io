@@ -1,6 +1,6 @@
 BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
 
-    this.width = 750;
+    this.width = 650;
     this.height = 310;
     this.svg = null;
     this.states= [
