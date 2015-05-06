@@ -7198,7 +7198,7 @@ div.univCity {
 .scatterPlotAxis path,
 .stateAxes line {
     fill: none;
-    stroke: #bbb;
+    stroke: #555;
     stroke-width: 1;
 }
 .scatterPlotAxis text {
