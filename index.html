@@ -76,6 +76,8 @@
                 <div class="col-md-12 col-sm-12 panel-calm main-center" id="map">
                 </div>
                 <div class="col-md-12 col-sm-12" >
+                    <label class="yearbutton">Select Data for -</label>
+                    <label class="yearbutton2">[</label>
                     <label class="yearbutton">All Years</label>
                     <input type="radio" checked value="" name="year" onchange="$(myEventHandler).trigger('yearChanged',
                             this.value)">
@@ -97,23 +99,10 @@
                     <label class="yearbutton">2013</label>
                     <input type="radio" value="2013" name="year" onchange="$(myEventHandler).trigger('yearChanged',
                             this.value)">
+                    <label class="yearbutton2">]</label>
                 </div>
 
 
-                <div class="col-md-12 col-sm-12" id="map-control-1" >
-
-                    <button id="allCategory" value="weaponOffence">All</button>
-                    <button id="weapon" value="weaponOffence">Weapon</button>
-                    <button id="drug" value="drugViolations">Drug</button>
-                    <button id="liquor" value="liquorViolations">Liquor</button>
-                    <button id="murd" value="murderCount">Murder</button>
-                    <button id="forcib" value="forcibleSexOffense">Forcible Sex Offense</button>
-                    <button id="robbe" value="robbery">Robbery</button>
-                    <button id="agg" value="aggravatedAssault">Aggrevated Assault</button>
-                    <button id="burgla" value="burglary">Burglary</button>
-                    <button id="vehic" value="vehicleTheft">Vehicle Crime</button>
-                    <button id="arson" value="arson">Arson</button>
-                </div >
 
             </div>
 
@@ -121,23 +110,26 @@
 
         <!--top right column -->
         <aside class="col-md-4 col-sm-12 panel-info-darken " id="aside">
-            <div style="background-color: #ffffff">
-                <input type="checkbox" id="adjustSensitivity" onchange="$('#weightsSelector1').toggle()">
-                <span id="ctrlPanelMsg">Adjust the Map's Sensitivity to Crime Category</span>
-            </div>
-            <div  id="weightsSelector2"  style="background-color: #ffffff">
 
-                <br><br><br><br><br><br><br><br><br><br><br>
-            </div>
             <div id="paramsContainer">
 
                 <!--box for user interactive box: make my own security map  -->
                 <h5>How Important Is A Crime Type To Me?</h5>
-                <div  id="weightsSelector1" >
+                <div  id="weightsSelector" >
 
                 </div>
                 <br>
-
+                <div style="display:none;font-size: 10px">
+                    <label><input id="sectId1" type="checkbox" value="1" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 4+ years</label>
+                    <label><input id="sectId2" type="checkbox" value="2" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit, 4+ years</label>
+                    <label><input id="sectId3" type="checkbox" value="3" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 4+ years</label>
+                    <label><input id="sectId4" type="checkbox" value="4" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 2 years</label>
+                    <label><input id="sectId5" type="checkbox" value="5" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit 2 years</label>
+                    <label><input id="sectId6" type="checkbox" value="6" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 2 years</label>
+                    <label><input id="sectId7" type="checkbox" value="7" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public <2 years</label>
+                    <label><input id="sectId8" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit <2 years</label>
+                    <label><input id="sectId9" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private <2 years</label>
+                </div>
                 <div style="font-size: 10px">
                     <label><input id="cbxHideSafeSchools" type="checkbox"
                                   checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Hide Safe Schools</label>
@@ -155,9 +147,27 @@
 
         </aside>
         <section class="col-md-12 col-sm-12 panel-info-darken">
+            <div style="background-color: #ffffff;width: 100%">
+                <div class="col-md-12 col-sm-12" id="map-control-1" >
+
+                    <button id="allCategory" value="weaponOffence">All</button>
+                    <button id="weapon" value="weaponOffence">Weapon</button>
+                    <button id="drug" value="drugViolations">Drug</button>
+                    <button id="liquor" value="liquorViolations">Liquor</button>
+                    <button id="murd" value="murderCount">Murder</button>
+                    <button id="forcib" value="forcibleSexOffense">Forcible Sex Offense</button>
+                    <button id="robbe" value="robbery">Robbery</button>
+                    <button id="agg" value="aggravatedAssault">Aggrevated Assault</button>
+                    <button id="burgla" value="burglary">Burglary</button>
+                    <button id="vehic" value="vehicleTheft">Vehicle Crime</button>
+                    <button id="arson" value="arson">Arson</button>
+                </div >
+            </div>
             <div class="col-md-7 col-sm-12 panel panel-info section" id="usStatesDiv">
 
             </div>
+
+
             <div class="col-md-5 col-sm-12 panel panel-info section" >
 
                 <!--box for crime distribution across school sectors
@@ -200,7 +210,7 @@
     var stateParallelCoordinateViz = null;
     var weightsContainerViz = new WeightContainerViz("weightsSelector",myEventHandler);
 
-    var categorySelectionViz = new CategorySelectionViz();
+    //var categorySelectionViz = new CategorySelectionViz();
     $("#hide").hover(function(){
         $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
         $('#aside').hide();
@@ -251,7 +261,7 @@
 
         //new Vizs
         crimeAnalyzer = new CrimeDataAnalyzer(_crimeDatabackup);
-        mapViz = new MapViz(_statesData, _countryStatistics,categorySelectionViz, myEventHandler);
+        mapViz = new MapViz(_statesData, _countryStatistics,weightsContainerViz, myEventHandler);
         colSectorsViz =new ColSectorsViz(schoolCrime);
         stateSectorsViz =new StateSectorsViz(schoolCrime);
         barChartViz = new BarChartViz("usStatesDiv",
@@ -291,7 +301,11 @@
 
     //wrangle data for mapViz
     $(myEventHandler).on('changed', function () {
-        mapViz.wrangleData($('#slidertime').value());
+        var yearToProcess = $('input:radio[name=year]:checked').val()
+        if(yearToProcess == ""){
+            yearToProcess = null;
+        }
+        mapViz.wrangleData(yearToProcess);
     });
     $(myEventHandler).on('yearChanged', function (e,year) {
         mapViz.wrangleData(year);
