@@ -50,9 +50,9 @@ MapViz.prototype.init = function(){
     this.drag = d3.behavior.drag().on("drag", dragMove);
     this.svg.call(this.drag);
 
-    $( window ).resize(function() {
+    /*$( window ).resize(function() {
         that.svg.call(this.resize());
-   });
+   });*/
 
     var that=this;
 
@@ -540,7 +540,7 @@ MapViz.prototype.loadData = function (){
 
 
 
-    that.paintCircles(crimeData,"",weights.hideSafeSchools);
+    that.paintCircles(crimeData,"", weights.hideSafeSchools);
 
     var rightEdge = $("#mapContainer").position().left+ $("#mapContainer").width();
     var topEdge = $("#mapContainer").position().top -divPadding;

@@ -7180,7 +7180,11 @@ div.univCity {
   font-size: 10px;
 }
 .yearbutton {
-  font-size: 8px;
+  font-size: 12px;
+}
+
+.yearbutton2 {
+    font-size: 15px;
 }
 .crimebutton {
   font-size: 10px;
