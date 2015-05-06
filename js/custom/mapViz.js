@@ -205,11 +205,11 @@ MapViz.prototype.wrangleStateOut = function (stateCd) {
     })
 }
 
-MapViz.prototype.wrangleData = function (year) {
+MapViz.prototype.wrangleData = function (year, crimeKey) {
     this.svg.selectAll("text").remove();
     this.svg.selectAll("rect").remove();
 
-    var weights = this.weightControl.getWeights();
+    var weights = this.weightControl.getWeights(crimeKey);
     var crimeData = crimeAnalyzer.processWeights(weights,year)
     this.paintCircles(crimeData,year, weights.hideSafeSchools)
 }

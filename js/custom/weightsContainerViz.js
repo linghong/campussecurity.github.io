@@ -141,6 +141,9 @@ WeightContainerViz = function(_theDiv,_eventHandler){
         }
         timer = setTimeout(triggerEvent, refreshWaitPeriod);
     }
+
+
+
     function add(){
         var button = d3.select(this);
         var idx = button.attr('idx')
@@ -262,7 +265,62 @@ WeightContainerViz = function(_theDiv,_eventHandler){
     }
 }
 
-WeightContainerViz.prototype.getWeights = function(){
+WeightContainerViz.prototype.getWeights = function(crimeKey){
+
+
+
+    if(crimeKey != null){
+        var allCategory = crimeKey=="";
+        var weapon = crimeKey=="weaponOffence";
+        var drug = crimeKey=="drugViolations";
+        var liquor = crimeKey=="liquorViolations";
+        var murd = crimeKey=="murderCount";
+        var forcib = crimeKey=="forcibleSexOffense";
+        var robbe = crimeKey=="robbery";
+        var agg = crimeKey=="aggravatedAssault";
+        var burgla = crimeKey=="burglary";
+        var vehic = crimeKey=="vehicleTheft";
+        var arson = crimeKey=="arson";
+
+        if (!allCategory){
+            this.weights[0].checked = murd;
+            this.weights[1].checked = false;
+            this.weights[2].checked = forcib;
+            this.weights[3].checked = robbe;
+            this.weights[4].checked = burgla;
+            this.weights[5].checked = vehic;
+            this.weights[6].checked = agg;
+            this.weights[7].checked = arson;
+            this.weights[8].checked = weapon;
+            this.weights[9].checked = drug;
+            this.weights[10].checked = liquor;
+        }
+        else{
+            this.weights[0].checked = true;
+            this.weights[1].checked = true;
+            this.weights[2].checked = true;
+            this.weights[3].checked = true;
+            this.weights[4].checked = true;
+            this.weights[5].checked = true;
+            this.weights[6].checked = true;
+            this.weights[7].checked = true;
+            this.weights[8].checked = true;
+            this.weights[9].checked = true;
+            this.weights[10].checked = true;
+        }
+
+        this.processSection(0)
+        this.processSection(1)
+        this.processSection(2)
+        this.processSection(3)
+        this.processSection(4)
+        this.processSection(5)
+        this.processSection(6)
+        this.processSection(7)
+        this.processSection(8)
+        this.processSection(9)
+        this.processSection(10)
+    }
 
     return {
         murdFactor: (this.weights[0].checked) ? Math.pow(10,this.weights[0].weight) : 0,
@@ -287,4 +345,24 @@ WeightContainerViz.prototype.getWeights = function(){
         sectId9:$('#sectId9').is(':checked'),
         hideSafeSchools:$('#cbxHideSafeSchools').is(':checked')
     }
+
+
+}
+WeightContainerViz.prototype.processSection = function (idx){
+    var button = this.svg.select('image[idx="'+idx+'"]');
+    var that=this;
+
+    if(!this.weights[idx].checked){
+        button.attr("checked",0);
+        button.attr("xlink:href","/images/unchecked.png")
+        that.weights[idx].checked = false;
+        that.weights[idx].bar.style("opacity",.1);
+    }
+    else{
+        button.attr("checked",1);
+        button.attr("xlink:href","/images/checked.png")
+        that.weights[idx].checked = true;
+        that.weights[idx].bar.style("opacity",1);
+    }
+
 }
