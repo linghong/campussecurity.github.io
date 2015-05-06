@@ -71,23 +71,25 @@ BarChartViz.prototype.prepData = function()
     // -------------------- test grabbing data ---------------
     var yearBucket = crimeAnalyzer.getCategoryCrimeData()[that.year];
     that.states.forEach(function (d, i) {
-        var stateData = yearBucket["state" + d];
         var crimeCount = 0;
-        if (that.crimeCateogry){
-            crimeCount= stateData.crimeCounts[that.crimeCateogry];
-        }
-        else{
-            crimeCount += stateData.crimeCounts.aggravatedAssault;
-            crimeCount += stateData.crimeCounts.arson;
-            crimeCount += stateData.crimeCounts.burglary;
-            crimeCount += stateData.crimeCounts.drugViolations;
-            crimeCount += stateData.crimeCounts.forcibleSexOffense;
-            crimeCount += stateData.crimeCounts.liquorViolations;
-            crimeCount += stateData.crimeCounts.murderCount;
-            crimeCount += stateData.crimeCounts.negligentManSlaughter;
-            crimeCount += stateData.crimeCounts.robbery;
-            crimeCount += stateData.crimeCounts.vehicleTheft;
-            crimeCount += stateData.crimeCounts.weaponOffence;
+        var stateData = yearBucket["state" + d];
+        if(stateData){
+            if (that.crimeCateogry){
+                crimeCount= stateData.crimeCounts[that.crimeCateogry];
+            }
+            else{
+                crimeCount += stateData.crimeCounts.aggravatedAssault;
+                crimeCount += stateData.crimeCounts.arson;
+                crimeCount += stateData.crimeCounts.burglary;
+                crimeCount += stateData.crimeCounts.drugViolations;
+                crimeCount += stateData.crimeCounts.forcibleSexOffense;
+                crimeCount += stateData.crimeCounts.liquorViolations;
+                crimeCount += stateData.crimeCounts.murderCount;
+                crimeCount += stateData.crimeCounts.negligentManSlaughter;
+                crimeCount += stateData.crimeCounts.robbery;
+                crimeCount += stateData.crimeCounts.vehicleTheft;
+                crimeCount += stateData.crimeCounts.weaponOffence;
+            }
         }
         bardata.push({
             state: d,
@@ -102,17 +104,7 @@ BarChartViz.prototype.init = function()
     var that=this;
     var bardata = [];
 
-    /*
-    // -------------------- test grabbing data ---------------
-    var yearBucket = crimeAnalyzer.getCategoryCrimeData()[that.year];
-    that.states.forEach(function (d, i) {
-        var stateData = yearBucket["state" + d];
-        bardata.push({
-            state: d,
-            count: stateData.crimeCounts[that.crimeCateogry]
-        });
-    });
-    */
+    d3.select('.toolTip').style('opacity',0);
     bardata = this.theData;
 
     var margin = { top: 30, right: 5, bottom: 40, left:60 }
@@ -127,6 +119,13 @@ BarChartViz.prototype.init = function()
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
 
+
+    this.svg.append("text")
+        .attr("y", 20)
+        .attr("x", this.width/2)
+        .style("text-anchor", "middle")
+        .style("font-weight", "bold")
+        .text("Overall Crime Counts by States");
 
     var extent = d3.extent(bardata, function(d){
         return d.count;
@@ -160,10 +159,6 @@ BarChartViz.prototype.init = function()
             .scale(xScale)
             .orient('bottom');
 
-            /*.tickValues(xScale.domain().filter(function(d, i) {
-                return d.state;
-            }))*/
-
         var vAxisGroup = that.svg.append("g")
             .attr("class",'stateAxes')
             .attr("transform",
@@ -183,11 +178,14 @@ BarChartViz.prototype.init = function()
                 return "rotate(-90)"
             });
 
+        d3.select('body').select('.toolTip').remove();
+
         var tooltip = d3.select('body').append('div')
             .style('position', 'absolute')
             .style('padding', '0 5px')
             .style('font-size', '10px')
             .style('background', 'white')
+            .style('class', 'toolTip')
             .style('opacity', 0)
 
         var myChart = that.svg
