@@ -3,9 +3,9 @@
  */
 ParallelCoordinateViz = function(_theDiv,_eventHandler){
 
-    this.width = 366;
-    this.height = 160;
+    this.width = 381;
     this.eventHandler = _eventHandler;
+    this.height = 184;
     this.captionTextBoxData = [];
     this.captionTextBoxes = [];
 
