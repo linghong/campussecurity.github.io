@@ -295,10 +295,6 @@ CrimeDataAnalyzer.prototype.processWeights =function(weights, year){
             container = d.allTimeCrimeData
         }
 
-        if(d.schoolId =='196024001'){
-            console.log(d);
-        }
-
         if(container){
             for (var starIdx = 0; starIdx<5; starIdx++){
                 if(d.crimeFactorForMapVis > starRatingData[starIdx].from &&
