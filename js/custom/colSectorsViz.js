@@ -44,6 +44,7 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("x", -122)
         .attr("dy", "0.07em")
         .style("text-anchor", "middle")
+        .style("font-weight", "bold")
         .text("Crime Number/College");
 
     this.crimeYear=[2008,2009,2010,2011,2012,2013];

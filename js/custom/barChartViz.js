@@ -72,9 +72,26 @@ BarChartViz.prototype.prepData = function()
     var yearBucket = crimeAnalyzer.getCategoryCrimeData()[that.year];
     that.states.forEach(function (d, i) {
         var stateData = yearBucket["state" + d];
+        var crimeCount = 0;
+        if (that.crimeCateogry){
+            crimeCount= stateData.crimeCounts[that.crimeCateogry];
+        }
+        else{
+            crimeCount += stateData.crimeCounts.aggravatedAssault;
+            crimeCount += stateData.crimeCounts.arson;
+            crimeCount += stateData.crimeCounts.burglary;
+            crimeCount += stateData.crimeCounts.drugViolations;
+            crimeCount += stateData.crimeCounts.forcibleSexOffense;
+            crimeCount += stateData.crimeCounts.liquorViolations;
+            crimeCount += stateData.crimeCounts.murderCount;
+            crimeCount += stateData.crimeCounts.negligentManSlaughter;
+            crimeCount += stateData.crimeCounts.robbery;
+            crimeCount += stateData.crimeCounts.vehicleTheft;
+            crimeCount += stateData.crimeCounts.weaponOffence;
+        }
         bardata.push({
             state: d,
-            count: stateData.crimeCounts[that.crimeCateogry]
+            count: crimeCount
         });
     });
     return bardata;
@@ -97,8 +114,6 @@ BarChartViz.prototype.init = function()
     });
     */
     bardata = this.theData;
-
-    console.log(bardata)
 
     var margin = { top: 30, right: 5, bottom: 40, left:60 }
 
