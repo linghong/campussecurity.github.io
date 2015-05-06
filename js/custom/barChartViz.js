@@ -225,7 +225,7 @@ BarChartViz.prototype.init = function()
             .on('mouseout', function(d) {
                 d3.select(this)
                     .style('opacity', 1)
-                    .style('fill', tempColor)
+                tooltip.style('opacity',0)
             })
 
         myChart.transition()
