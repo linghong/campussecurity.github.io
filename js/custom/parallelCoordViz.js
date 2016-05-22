@@ -3,7 +3,7 @@
  */
 ParallelCoordinateViz = function(_theDiv,_eventHandler){
 
-    this.width = 381;
+    this.width = 370;
     this.eventHandler = _eventHandler;
     this.height = 184;
     this.captionTextBoxData = [];
@@ -14,8 +14,8 @@ ParallelCoordinateViz = function(_theDiv,_eventHandler){
         .attr('height',this.height)
     this.SPACING = 35;
     this.svg.append("rect")
-        .attr('width','100%')
-        .attr('height','100%')
+        .attr('width', this.width)
+        .attr('height',this.height)
         .attr('fill','white')
 
     this.aggravatedAssaults = []

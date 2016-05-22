@@ -32,15 +32,15 @@
 </head>
 
 <body>
-<div id="floatingDiv"
-     style="background-color: #999; z-index: 100;position: absolute;opacity: .2 ">
-</div>
-<div id="univDataDiv" style="display: none; z-index: 101;position: absolute;opacity: 1;background-color: #ffffff">
-    <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
-    <div id="univDataDivText"></div>
-</div>
 
 <div class="container">
+        <!--floating box for detailed college info-->
+        <div id="floatingDiv">
+        </div>
+        <div id="univDataDiv">
+            <div class="divCloser"><img  width="10" src="images/close.png" onclick="mapViz.hideDetails()"></div>
+            <div id="univDataDivText"></div>
+        </div>
     <!--row1: Site Name-->
     <header class="row " >
     </header>
@@ -66,15 +66,20 @@
         </div>
     </nav>
 
+    
     <!--row3 Body Content -->
     <div  class="row panel-info-darken edge-height">
 
+
         <!--top left column, map box-->
         <main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
-            <div class="col-md-12 col-sm-12 panel panel-info" id="main-left" style="font-size:10px;" >
+            <div class="col-md-12 col-sm-12 panel panel-info" id="main-left"  >
+
                 <!--map -->
                 <div class="col-md-12 col-sm-12 panel-calm main-center" id="map">
                 </div>
+
+                <!--label for yeasrs-->
                 <div class="col-md-12 col-sm-12" >
                     <label class="yearbutton">Select Data for -</label>
                     <label class="yearbutton2">[</label>
@@ -102,9 +107,8 @@
                     <label class="yearbutton2">]</label>
                 </div>
 
-
+                <!--label for crime type-->
                 <div class="col-md-12 col-sm-12" id="map-control-1" >
-
                     <button id="allCategory" value="">All</button>
                     <button id="weapon" value="weaponOffence">Weapon</button>
                     <button id="drug" value="drugViolations">Drug</button>
@@ -123,55 +127,67 @@
         </main>
 
         <!--top right column -->
-        <aside class="col-md-4 col-sm-12 panel-info-darken" style="padding-left:0px;" id="aside">
+        <aside class="col-md-4 col-sm-12 panel-info-darken" >
 
-            <div id="paramsContainer">
+            <div class="col-sm-12 panel panel-info" id="paramsContainer">
 
                 <!--box for user interactive box: make my own security map  -->
-                <h5>How Important Is A Crime Type To Me?</h5>
-                <div  id="weightsSelector" >
+                <div class="col-md-12 col-sm-6">
+                    <h5>How Important Is A Crime Type To Me?</h5>
+                    <div  id="weightsSelector" >
+                    </div>
+                    
+                    <!---hide, show check box-->
+                    <div id="hideShowBox">
+                        <label>
+                            <input id="cbxHideSafeSchools" type="checkbox"
+                            checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Hide Safe Schools</label>
+                    </div>
+                </div>
 
+                <!--parallelCoordViz-->
+                <div class="col-md-12 col-sm-6">
+                    <div id="parallelCheckBox">
+                        <label>Crime Numbers By [</label>
+                        <input type="radio" checked name="divSelector" value="state" onchange="rbClicked(this)"><label>State</label>
+                        <input type="radio" name="divSelector" value="type" onchange="rbClicked(this)"><label>School Type]</label>
+                    </div>
+                    <div id="parallelSchoolType" >
+                        <label><input id="sectId1" type="checkbox" value="1" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 4+ years</label>
+                        <label><input id="sectId2" type="checkbox" value="2" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit, 4+ years</label>
+                        <label><input id="sectId3" type="checkbox" value="3" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 4+ years</label>
+                        <label><input id="sectId4" type="checkbox" value="4" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 2 years</label>
+                        <label><input id="sectId5" type="checkbox" value="5" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit 2 years</label>
+                        <label><input id="sectId6" type="checkbox" value="6" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 2 years</label>
+                        <label><input id="sectId7" type="checkbox" value="7" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public <2 years</label>
+                        <label><input id="sectId8" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit <2 years</label>
+                        <label><input id="sectId9" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private <2 years</label>
+                    </div>
+                    <div id="parallelCoordinateBox" style="display: none">
+                    </div>
+                    <div id="parallelCoordinateStateBox">
                 </div>
-                <br>
-                <div style="display:none;font-size: 10px">
-                    <label><input id="sectId1" type="checkbox" value="1" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 4+ years</label>
-                    <label><input id="sectId2" type="checkbox" value="2" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit, 4+ years</label>
-                    <label><input id="sectId3" type="checkbox" value="3" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 4+ years</label>
-                    <label><input id="sectId4" type="checkbox" value="4" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public 2 years</label>
-                    <label><input id="sectId5" type="checkbox" value="5" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit 2 years</label>
-                    <label><input id="sectId6" type="checkbox" value="6" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private 2 years</label>
-                    <label><input id="sectId7" type="checkbox" value="7" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Public <2 years</label>
-                    <label><input id="sectId8" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private non-profit <2 years</label>
-                    <label><input id="sectId9" type="checkbox" value="9" checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Private <2 years</label>
                 </div>
-                <div style="font-size: 10px">
-                    <label><input id="cbxHideSafeSchools" type="checkbox"
-                                  checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Hide Safe Schools</label>
-                </div>
-            </div>
-            <div style="background-color: #ffffff">
-                <label>Crime Numbers By [</label>
-                <input type="radio" checked name="divSelector" value="state" onchange="rbClicked(this)"><label>State</label>
-                <input type="radio" name="divSelector" value="type" onchange="rbClicked(this)"><label>School Type]</label>
-            </div>
-            <div id="parallelCoordinateBox" style="display: none">
-            </div>
-            <div id="parallelCoordinateStateBox">
             </div>
 
         </aside>
+
         <section class="col-md-12 col-sm-12 panel-info-darken">
+            <!--bar chart-->
             <div class="col-md-7 col-sm-12 panel panel-info section" id="usStatesDiv">
 
             </div>
+
+            <!--scatter plot-->
             <div class="col-md-5 col-sm-12 panel panel-info section" >
 
                 <!--box for crime distribution across school sectors-->
                 <div class="col-md-12 col-sm-12 " >
-                <span class="minititle">College Crime Data 
+                    <span class="minititle">College Crime Data 
                     Shows a School Type Releated Pattern </span>
                 </div>
-                <!--box for user interactive box: make my own security map  -->
+
+                <!--box for user interactive check box-->
                 <div class="col-md-12 col-sm-8 panel-info center aside-center" >
                     <div class="col-md-12 col-sm-12 " id="legend">
                     </div>
@@ -263,11 +279,11 @@
         stateSectorsViz =new StateSectorsViz(schoolCrime);
         barChartViz = new BarChartViz("usStatesDiv",
                 myEventHandler,2008, 'liquorViolations' );
-        parallelCoordinateViz = new ParallelCoordinateViz('parallelCoordinateBox',myEventHandler)
-        stateParallelCoordinateViz = new StateParallelCoordinateViz('parallelCoordinateStateBox',myEventHandler)
+        parallelCoordinateViz = new ParallelCoordinateViz('parallelCoordinateBox',myEventHandler);
+        stateParallelCoordinateViz = new StateParallelCoordinateViz('parallelCoordinateStateBox',myEventHandler);
 
 
-        //click the button below the map, make updates for maps, and the viz in three boxes.
+        //click the button below the map, make updates for map, and the viz in three boxes.
         $("#map-control-1 button").click(function() {
             var yearToProcess = $('input:radio[name=year]:checked').val()
             if(yearToProcess == ""){
@@ -308,18 +324,6 @@
         }
         mapViz.wrangleData(yearToProcess);
     });
-    $(myEventHandler).on('yearChanged', function (e,year) {
-        mapViz.wrangleData(year);
-        barChartViz.wrangleDataYear(year);
-    });
-
-    $(myEventHandler).on('changed', function () {
-        var yearToProcess = $('input:radio[name=year]:checked').val()
-        if(yearToProcess == ""){
-            yearToProcess = null;
-        }
-        mapViz.wrangleData(yearToProcess);
-    });
 
     $(myEventHandler).on('yearChanged', function (e,year) {
         var yearToProcess = year;
@@ -327,15 +331,19 @@
             yearToProcess = null;
         }
         mapViz.wrangleData(yearToProcess);
-        parallelCoordinateViz.wrangleData(yearToProcess)
-        stateParallelCoordinateViz.wrangleData(yearToProcess)
+        parallelCoordinateViz.wrangleData(yearToProcess);
+        stateParallelCoordinateViz.wrangleData(yearToProcess);
+        barChartViz.wrangleDataYear(year);
     });
+
     $(myEventHandler).on('sectorSelected', function(e, sectorCd){
         mapViz.wrangleSectorIn(sectorCd)
     });
+
     $(myEventHandler).on('sectorDeSelected', function(e, sectorCd){
         mapViz.wrangleSectorOut(sectorCd)
     });
+
     $(myEventHandler).on('stateSelected', function(e, stateCd){
         mapViz.wrangleStateIn(stateCd)
     });
