@@ -1,11 +1,12 @@
 /**
  * Created by suhas on 5/1/2015.
+ * parallel Coordinate Viz for school types
  */
 ParallelCoordinateViz = function(_theDiv,_eventHandler){
 
-    this.width = 370;
-    this.eventHandler = _eventHandler;
+    this.width = $("#parallelBox").width();
     this.height = 184;
+    this.eventHandler = _eventHandler;   
     this.captionTextBoxData = [];
     this.captionTextBoxes = [];
 

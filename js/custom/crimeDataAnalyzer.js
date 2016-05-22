@@ -1,4 +1,6 @@
-
+/**
+* calculate crime score for map Viz
+*/
 CrimeDataAnalyzer = function(_crimeData) {
     this.crimeData = _crimeData;
 

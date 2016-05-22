@@ -1,7 +1,11 @@
+/*
+* bar chart Viz
+*/
+
 BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
 
-    this.width = 650;
-    this.height = 310;
+    this.width = $('#usStatesDiv').width();
+    this.height = 320;
     this.svg = null;
     this.states= [
         'AK',

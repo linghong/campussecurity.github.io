@@ -1,7 +1,9 @@
 
 /**
+ * scatter plots for crime pattern categorized by states (This viz does not display in the final visualization page)
  * @param _data -- the data array
  * @constructor
+ * Created by Linghong 
  */
 StateSectorsViz = function(_data){
     this.data = _data;

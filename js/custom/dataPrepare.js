@@ -1,6 +1,7 @@
-/*
+/**
 * a function to aggregate data with two aggregators
 *@_data  a flat structure data with all crime prameters
+*Created by Linghong
 */
 
 var aggregatedData;
@@ -11,7 +12,7 @@ DataPrepare = function(_data,_aggKey1, _aggKey2){
     this.doubleAggregate(_aggKey1, _aggKey2);   
 }
 /*
-  * Aflat data  structure include basic school information and all crime information
+  * A flat data  structure include basic school information and all crime information
  */
   /* 
   * function for aggregating data by keys (two layers) using a flat structure data file.

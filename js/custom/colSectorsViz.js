@@ -1,13 +1,15 @@
 /**
+ * scatter plots for crime pattern categorized by college type
  * @param _data -- the data array
  * @constructor
+ * Created by Linghong 
  */
 ColSectorsViz = function(_data){
     this.data = _data;
     // defines constants
     this.padding= {top: 30, right:-60, bottom: 15, left: 70};
     this.width = $("#yearsectors").width();
-    this.height = 0.75*this.width;
+    this.height = 0.73*this.width;
     this.displayData={};
     this.crimeKeyData={};
     this.xAxisGroup = null;
@@ -48,10 +50,10 @@ ColSectorsViz.prototype.initVis = function(){
         .text("Crime Number/College");
 
     this.crimeYear=[2008,2009,2010,2011,2012,2013];
+
     this.wrangleData("");
+
     // call the update method
-
-
     this.xAxisGroup = this.svg
         .append("g")
         .attr("class", "scatterPlotAxis scatterPlotAxisX")
@@ -63,13 +65,12 @@ ColSectorsViz.prototype.initVis = function(){
         .attr("class", "scatterPlotAxis")
         .attr("transform", "translate("+this.padding.left+",0)")
 
-
     this.updateViz();    
 }
 
 /**
- * Method to wrangle the data. In this case it takes an options object
- * @param _filterFunction - a function that filters data or "null" if none
+ * Method to wrangle the data. In this case it takes an option object
+ * @param _filterFunction - a function that filters data or is "null" if none
  */
 ColSectorsViz.prototype.wrangleData= function(_crimekey){
 
@@ -153,11 +154,9 @@ ColSectorsViz.prototype.updateViz = function(){
         .domain(["",1,2,3,4,5,6,7,8,9,"."])
         .rangePoints([this.padding.left, this.width-this.padding.left-this.padding.right]);
 
-
     var y = d3.scale.linear()
         .domain([0, yMax])
         .range([this.height-this.padding.bottom-this.padding.top, this.padding.top]);
-
 
     for(var i=1;i<that.labels.length; i++){
         this.svg.selectAll('text')
@@ -175,7 +174,6 @@ ColSectorsViz.prototype.updateViz = function(){
     }
 
     //x and y axis
-
     this.xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
@@ -227,7 +225,7 @@ ColSectorsViz.prototype.updateViz = function(){
 
 
 /**
- * Gets called by event handler and should create new aggregated data
+ * Get called by event handler and should create new aggregated data
  * aggregation is done by the function "aggregate(filter)". Filter has to
  * be defined here.
  */
@@ -240,8 +238,6 @@ ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
 
 ColSectorsViz.prototype.selectData=function(){
     var that=this;
-
-
 
     //function for checking which boxes are checked
     var  cbxYear=0;

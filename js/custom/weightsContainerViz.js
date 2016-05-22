@@ -1,5 +1,6 @@
 /**
  * Created by suhas on 4/18/2015.
+ * for the interactive box that is used for changing crime weights
  */
 
 WeightContainerViz = function(_theDiv,_eventHandler){

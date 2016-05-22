@@ -1,4 +1,6 @@
-//
+/**
+*Change weight container change other Viz look
+*/
 var year=2010
 
 var myEventHandler = new Object();

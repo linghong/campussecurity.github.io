@@ -72,7 +72,7 @@
 
 
         <!--top left column, map box-->
-        <main class="col-md-8 col-sm-12 panel-info-darken" id="mapContainer">
+        <main class="col-lg-8 col-md-12 panel-info-darken" id="mapContainer">
             <div class="col-md-12 col-sm-12 panel panel-info" id="main-left"  >
 
                 <!--map -->
@@ -127,26 +127,25 @@
         </main>
 
         <!--top right column -->
-        <aside class="col-md-4 col-sm-12 panel-info-darken" >
+        <aside class="col-lg-4 col-md-12 panel-info-darken" >
 
             <div class="col-sm-12 panel panel-info" id="paramsContainer">
 
                 <!--box for user interactive box: make my own security map  -->
-                <div class="col-md-12 col-sm-6">
+                <div class="col-lg-12  col-sm-6">
                     <h5>How Important Is A Crime Type To Me?</h5>
                     <div  id="weightsSelector" >
-                    </div>
-                    
-                    <!---hide, show check box-->
+                    </div>                                      
+                </div>
+
+                <!--parallelCoordViz-->
+                <div class="col-lg-12 col-sm-6" id ="parallelBox">
+                     <!---hide, show check box-->
                     <div id="hideShowBox">
                         <label>
                             <input id="cbxHideSafeSchools" type="checkbox"
                             checked onchange="$(myEventHandler).trigger('changed')">&nbsp;Hide Safe Schools</label>
                     </div>
-                </div>
-
-                <!--parallelCoordViz-->
-                <div class="col-md-12 col-sm-6">
                     <div id="parallelCheckBox">
                         <label>Crime Numbers By [</label>
                         <input type="radio" checked name="divSelector" value="state" onchange="rbClicked(this)"><label>State</label>
@@ -225,14 +224,14 @@
 
     //var categorySelectionViz = new CategorySelectionViz();
     $("#hide").hover(function(){
-        $('#mapContainer').removeClass("col-md-8").addClass("col-md-12");
-        $('#aside').hide();
+        $('#mapContainer').removeClass("col-lg-8").addClass("col-lg-12");
+        $('aside').hide();
         $('#switch').text('Show');
         mapViz.resize();
     });
     $("#show").hover(function(){
-        $('#mapContainer').removeClass("col-md-12").addClass("col-md-8");
-        $('#aside').show();
+        $('#mapContainer').removeClass("col-lg-12").addClass("col-lg-8");
+        $('aside').show();
         $('#switch').text('Hide');
         mapViz.resize();
 

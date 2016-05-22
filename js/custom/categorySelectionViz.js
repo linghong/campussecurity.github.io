@@ -1,3 +1,7 @@
+/**
+* hide and show check box
+*/
+
 CategorySelectionViz =  function(){
     this.crimeKey = "";
 }

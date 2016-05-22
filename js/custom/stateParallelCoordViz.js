@@ -3,7 +3,7 @@
  */
 StateParallelCoordinateViz = function(_theDiv,_eventHandler){
 
-    this.width = 370;
+    this.width = $("#parallelBox").width()+1;
     this.eventHandler = _eventHandler;
     this.height = 184;
     this.svg = d3.select("#"+_theDiv).append("svg")
