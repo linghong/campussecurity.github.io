@@ -7,9 +7,9 @@
 ColSectorsViz = function(_data){
     this.data = _data;
     // defines constants
-    this.padding= {top:30, right:20, bottom: 15, left: 40};
+    this.padding= {top:30, right:20, bottom: 100, left: 40};
     this.width = $("#yearsectors").width();
-    this.height = 240;
+    this.height = 310;
     this.displayData={};
     this.crimeKeyData={};
     this.xAxisGroup = null;
@@ -23,20 +23,20 @@ ColSectorsViz = function(_data){
         'Public < 2 yr',
         'Private < 2 yr',
         'For-profit < 2 yr','']
-    this.initVis();
+    this.initViz();
 }
 
 
 /**
  * Method that sets up the SVG and the variables
  */
-ColSectorsViz.prototype.initVis = function(){
+ColSectorsViz.prototype.initViz = function(){
     var that = this; // read about the this
 
     // constructs SVG layout
     this.svg = d3.select("#yearsectors").append("svg")
         .attr("width", this.width)
-        .attr("height", this.height+100)
+        .attr("height", this.height)
         .append("g");
 
     // Add the text label for the Y axis
@@ -57,13 +57,14 @@ ColSectorsViz.prototype.initVis = function(){
     this.xAxisGroup = this.svg
         .append("g")
         .attr("class", "scatterPlotAxis scatterPlotAxisX")
-        .attr("transform", "translate(0," + (this.height - this.padding.bottom-this.padding.top) + ")")
+        .attr("transform", "translate(0,"+(this.height-this.padding.bottom)+")")
 
 
     this.yAxisGroup = this.svg
         .append("g")
         .attr("class", "scatterPlotAxis")
-        .attr("transform", "translate("+this.padding.left+",0)")
+        .attr("transform", "translate(" + this.padding.left + ",0)")
+
 
     this.updateViz();    
 }
@@ -117,8 +118,7 @@ ColSectorsViz.prototype.wrangleData= function(_crimekey){
  * Method to updata Viz.
  */
 ColSectorsViz.prototype.updateViz = function(){
-   //for check boxes
-    var that = this;
+   var that =this;
 //this.displayData=this.crimeKeyData;
 // a data series
     this.displayData={};
@@ -151,17 +151,18 @@ ColSectorsViz.prototype.updateViz = function(){
 
 //scales
     var x =d3.scale.ordinal()
-        .domain(["",1,2,3,4,5,6,7,8,9,"."])
-        .rangePoints([this.padding.left, this.width+this.padding.left-this.padding.right]);
+        .domain(["",1,2,3,4,5,6,7,8,9,'.'])
+        .rangePoints([this.padding.left, this.width-this.padding.right]);
 
     var y = d3.scale.linear()
         .domain([0, yMax])
-        .range([this.height-this.padding.bottom-this.padding.top, this.padding.top]);
+        .range([this.height-this.padding.bottom, this.padding.top]);
 
-    for(var i=1;i<that.labels.length; i++){
-        this.svg.selectAll('text')
-            .data(this.labels)
-            .enter()
+   
+    var labelText= this.svg.selectAll('text')
+            .data(this.labels);
+
+    labelText.enter()
             .append('text')
             .attr('x', -y(0))
             .attr('y', function(d,i){return x(i);})
@@ -171,7 +172,6 @@ ColSectorsViz.prototype.updateViz = function(){
             .attr("text-anchor", "end")
             .text(function(d,i){return d})
             .attr('transform', 'rotate(-90)')
-    }
 
     //x and y axis
     this.xAxis = d3.svg.axis()
@@ -190,12 +190,10 @@ ColSectorsViz.prototype.updateViz = function(){
     this.yAxisGroup
         .call(this.yAxis);
 
-
     var circles = this.svg.selectAll("circle")
-        .data(flatData)
+        .data(flatData);
 
-        circles
-        .enter()
+    circles.enter()
         .append('circle')
         .attr('r', 6)
         .attr('class', function(d,i){
@@ -206,21 +204,9 @@ ColSectorsViz.prototype.updateViz = function(){
         })
         .attr('cy',function(d,i){
             return y(d.crimeData)
-        })
+        }) 
 
-    circles
-        .attr('cx', function(d,i){
-            return x(d.sectorCode)
-        })
-        .attr('cy',function(d,i){
-            return y(d.crimeData)
-        })
-        .attr('class', function(d,i){
-            return ('series-'+ d.year)
-        })
-
-    this.selectData();
-
+    this.selectData();   
 }
 
 
@@ -232,10 +218,9 @@ ColSectorsViz.prototype.updateViz = function(){
 ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
     this.wrangleData(_crimekey);
     this.updateViz();
-
 }
 
-
+//for check boxes
 ColSectorsViz.prototype.selectData=function(){
     var that=this;
 
@@ -255,10 +240,14 @@ ColSectorsViz.prototype.selectData=function(){
 
   });
 
+//resize
 ColSectorsViz.prototype.resize = function(){
     this.width = $("#yearsectors").width();
-
-    // constructs SVG layout
-    this.updateViz();
+    
+    d3.select("#yearsectors").select('svg').remove();
+  
+    this.initViz();
+  
 };
+
 }
