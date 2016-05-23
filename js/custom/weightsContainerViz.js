@@ -355,13 +355,13 @@ WeightContainerViz.prototype.processSection = function (idx){
 
     if(!this.weights[idx].checked){
         button.attr("checked",0);
-        button.attr("xlink:href","/images/unchecked.png")
+        button.attr("xlink:href","images/unchecked.png")
         that.weights[idx].checked = false;
         that.weights[idx].bar.style("opacity",.1);
     }
     else{
         button.attr("checked",1);
-        button.attr("xlink:href","/images/checked.png")
+        button.attr("xlink:href","images/checked.png")
         that.weights[idx].checked = true;
         that.weights[idx].bar.style("opacity",1);
     }
