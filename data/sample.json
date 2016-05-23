@@ -1,0 +1,38 @@
+{"type":"crimeData","schools":[
+{
+    "school": {
+      "schoolId":"100654001",
+      "name":"Alabama A & M University",
+      "branch":"Main Campus",
+      "address":"4107 Meridian St",
+      "city":"Normal",
+      "state":"AL",
+      "zip":"35762",
+      "latitude":"34.733964",
+      "longitude":"-86.522913",
+      "sectorCd":"1",
+      "yearData":[
+        {"yearOfData":"2008",
+          "murderCount":"0",
+          "negligentManSlaughter":"0",
+          "forcibleSexOffense":"1",
+          "nonForcibleSexOffense":"0",
+          "robbery":"4",
+          "aggravatedAssault":"26",
+          "burglary":"122",
+          "vehicleTheft":"3",
+          "arson":"1",
+          "weaponOffence":"4",
+          "drugViolations":"9",
+          "liquorViolations":"1"},
+        {"yearOfData":"2009"/* rest of the fields will repeat here*/},
+        {"yearOfData":"2010"/* rest of the fields will repeat here*/},
+        {"yearOfData":"2011"/* rest of the fields will repeat here*/},
+        {"yearOfData":"2012"/* rest of the fields will repeat here*/},
+        {"yearOfData":"2013"/* rest of the fields will repeat here*/}
+        ]
+    }
+  }
+  ,{"school":
+    {"schoolId":"100663001"/*school data will repeat here*/}}
+]}

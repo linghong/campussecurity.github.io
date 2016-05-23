@@ -1,0 +1,57 @@
+{
+  "type": "stateCrimeData",
+  "states": [
+    {
+      "state":"MD",
+      "yearCounts":
+      {
+        "years":{
+          "*":[
+            {
+              "murder":10,
+              "vehicleCrime":50
+            }
+          ],
+          "2006":[
+            {
+                "murder":10,
+                "vehicleCrime":50
+              }
+          ],
+          "2007":[
+            {
+              "murder":10,
+              "vehicleCrime":50
+            }
+          ]
+        }
+      }
+    },
+    {
+      "state":"DE",
+      "yearCounts":
+      {
+        "years":{
+          "*":[
+            {
+              "murder":10,
+              "vehicleCrime":50
+            }
+          ],
+          "2006":[
+            {
+              "murder":10,
+              "vehicleCrime":50
+            }
+          ],
+          "2007":[
+            {
+              "murder":10,
+              "vehicleCrime":50
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
