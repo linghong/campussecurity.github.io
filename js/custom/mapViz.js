@@ -10,7 +10,7 @@ MapViz = function(_statesData,_countryStatistics,_weightControl, _eventHandler) 
     this.zoomed = false;
     this.stateFillColor = "#f2f2f2";
     this.width = $("#map").width();
-    this.mapRatio = 0.6;
+    this.mapRatio = 0.63;
     this.height = this.width * this.mapRatio;
     this.xOffset = 0;
     this.yOffset = -35;
@@ -206,6 +206,12 @@ MapViz.prototype.wrangleStateOut = function (stateCd) {
 }
 
 MapViz.prototype.wrangleData = function (year, crimeKey) {
+    this.width = $("#map").width();
+    this.height = this.width * this.mapRatio;
+    this.scale = this.scaleFactor * this.width;
+    this.svg.attr("width", this.width)
+            .attr("height", this.height);
+
     this.svg.selectAll("text").remove();
     this.svg.selectAll("rect").remove();
 
@@ -641,4 +647,4 @@ MapViz.prototype.loadData = function (){
         this.svg.attr("width", this.width)
             .attr("height", this.height);
         this.moveMap();
-    }
+}

@@ -282,7 +282,7 @@
         stateParallelCoordinateViz = new StateParallelCoordinateViz('parallelCoordinateStateBox',myEventHandler);
 
 
-        //click the button below the map, make updates for map, and the viz in three boxes.
+        //click the crime button below the map, make updates for map, and the viz in three boxes.
         $("#map-control-1 button").click(function() {
             var yearToProcess = $('input:radio[name=year]:checked').val()
             if(yearToProcess == ""){
@@ -302,16 +302,16 @@
     }
 
     //move the time sliders below the map, make updates for maps, and the viz in three boxes.
-    d3.selectAll('input[type="range"]').on('input', function() {
+   /* d3.selectAll('input[type="range"]').on('input', function() {
         //get year in the range slider
         var slideryear=this.value;
         $(myEventHandler).trigger('yearChanged', slideryear)
         //update the three other Viz 
         colSectorsViz.onYearChange(slideryear);
         stateSectorsViz.onYearChange(slideryear);
-    });
+    });*/
 
-    d3.selectAll('input[type="checkbox"]').on('change', function(){
+   d3.selectAll('input[type="checkbox"]').on('change', function(){
         colSectorsViz.updateViz();
     });
 
@@ -324,6 +324,7 @@
         mapViz.wrangleData(yearToProcess);
     });
 
+     //select the year below the map, make updates for maps, and the other vizs.
     $(myEventHandler).on('yearChanged', function (e,year) {
         var yearToProcess = year;
         if(year == ""){
@@ -332,9 +333,10 @@
         mapViz.wrangleData(yearToProcess);
         parallelCoordinateViz.wrangleData(yearToProcess);
         stateParallelCoordinateViz.wrangleData(yearToProcess);
-        barChartViz.wrangleDataYear(year);
+        barChartViz.wrangleDataYear(year);      
     });
 
+    //mapViz change state or school scetor
     $(myEventHandler).on('sectorSelected', function(e, sectorCd){
         mapViz.wrangleSectorIn(sectorCd)
     });
@@ -347,6 +349,7 @@
         mapViz.wrangleStateIn(stateCd)
     });
 
+    //switch paral coordinate
     function rbClicked(ctrl){
         if('type' == ctrl.value){
             $('#parallelCoordinateBox').show()
@@ -357,6 +360,8 @@
             $('#parallelCoordinateStateBox').show()
         }
     }
+
+    //resize
     $( window ).resize(function() {
         mapViz.resize();
         barChartViz.resize();

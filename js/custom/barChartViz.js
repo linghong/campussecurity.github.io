@@ -267,17 +267,18 @@ BarChartViz.prototype.init = function()
 BarChartViz.prototype.wrangleDataYear = function(_year) {
     this.year = _year;
     this.theData = this.prepData();
+    this.width = $('#usStatesDiv').width();
     this.init();
 }
 
 BarChartViz.prototype.wrangleDataCrimeCategory = function(_crimeCategory) {
     this.crimeCateogry = _crimeCategory;
     this.theData = this.prepData();
+    this.width = $('#usStatesDiv').width();
     this.init();
 }
 
 BarChartViz.prototype.resize = function(){
     this.width = $('#usStatesDiv').width();
-    this.height = 310;
     this.init();
 }

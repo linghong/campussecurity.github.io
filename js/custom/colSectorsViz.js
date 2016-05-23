@@ -7,7 +7,7 @@
 ColSectorsViz = function(_data){
     this.data = _data;
     // defines constants
-    this.padding= {top:30, right:20, bottom: 100, left: 40};
+    this.padding= {top:30, right:20, bottom: 100, left: 52};
     this.width = $("#yearsectors").width();
     this.height = 310;
     this.displayData={};
@@ -158,20 +158,24 @@ ColSectorsViz.prototype.updateViz = function(){
         .domain([0, yMax])
         .range([this.height-this.padding.bottom, this.padding.top]);
 
-   
-    var labelText= this.svg.selectAll('text')
-            .data(this.labels);
+  // for(var i=1; i<that.labels.length;i++){
+      this.svg.selectAll('text')
+            .data(this.labels)
+            var labelText= this.svg.selectAll('text')
+                    .data(this.labels);
 
-    labelText.enter()
-            .append('text')
-            .attr('x', -y(0))
-            .attr('y', function(d,i){return x(i);})
-            .attr("dy", "0.07em")
-            .attr("dx", "-1em")
-            .attr('class', 'scatterPlotLabel')
-            .attr("text-anchor", "end")
-            .text(function(d,i){return d})
-            .attr('transform', 'rotate(-90)')
+            labelText.enter()
+                    .append('text')
+                    .attr('x', -y(0))
+                    .attr('y', function(d,i){return x(i);})
+                    .attr("dy", "0.07em")
+                    .attr("dx", "-1em")
+                    .attr('class', 'scatterPlotLabel')
+                    .attr("text-anchor", "end")
+                    .text(function(d,i){return d})
+                    .attr('transform', 'rotate(-90)')
+  // }
+  
 
     //x and y axis
     this.xAxis = d3.svg.axis()
@@ -206,6 +210,17 @@ ColSectorsViz.prototype.updateViz = function(){
             return y(d.crimeData)
         }) 
 
+      circles
+        .attr('cx', function(d,i){
+            return x(d.sectorCode)
+        })
+        .attr('cy',function(d,i){
+            return y(d.crimeData)
+        })
+        .attr('class', function(d,i){
+            return ('series-'+ d.year)
+        })
+
     this.selectData();   
 }
 
@@ -216,9 +231,21 @@ ColSectorsViz.prototype.updateViz = function(){
  * be defined here.
  */
 ColSectorsViz.prototype.onCrimeChange= function (_crimekey){
-    this.wrangleData(_crimekey);
+    console.log(_crimekey);
+    this.wrangleData(_crimekey); 
+    this.width = $("#yearsectors").width();
     this.updateViz();
 }
+
+ColSectorsViz.prototype.onYearChange= function (_slideryear){
+    this.wrangleData(this.crimekey, _slideryear);
+
+    this.width = $("#yearsectors").width();   
+    d3.select("#yearsectors").select('svg').remove();
+
+    this.updateViz();
+}
+
 
 //for check boxes
 ColSectorsViz.prototype.selectData=function(){
