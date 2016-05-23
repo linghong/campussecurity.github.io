@@ -80,7 +80,7 @@ WeightContainerViz = function(_theDiv,_eventHandler){
             .attr("checked","1")
             .attr('x',labelWidth+ 5*imagePadding )
             .attr('y',y +(barHeight-checkedImageWidth))
-            .attr("xlink:href", "/images/checked.png")
+            .attr("xlink:href", "images/checked.png")
             .style("cursor", "pointer")
             .on("mouseup", toggle)
 
@@ -108,7 +108,7 @@ WeightContainerViz = function(_theDiv,_eventHandler){
             .attr("height", imageWidth)
             .attr("idx",i)
             .style("cursor", "pointer")
-            .attr("xlink:href", "/images/minus.png")
+            .attr("xlink:href", "images/minus.png")
             .on('mouseup', subtract)
 
         y+=barHeight;
