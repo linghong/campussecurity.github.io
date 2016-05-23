@@ -49,4 +49,9 @@ input.weightScale{
 }
 .minititle{
 	font-size:5 em;
+	text-align: center;
+}
+
+#filterByYear{
+	margin-top:-10px;
 }

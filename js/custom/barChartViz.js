@@ -5,7 +5,7 @@
 BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
 
     this.width = $('#usStatesDiv').width();
-    this.height = 320;
+    this.height = 310;
     this.svg = null;
     this.states= [
         'AK',
@@ -276,4 +276,8 @@ BarChartViz.prototype.wrangleDataCrimeCategory = function(_crimeCategory) {
     this.init();
 }
 
-
+BarChartViz.prototype.resize = function(){
+    this.width = $('#usStatesDiv').width();
+    this.height = 310;
+    this.init();
+}

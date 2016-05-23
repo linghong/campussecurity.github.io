@@ -1,3 +1,6 @@
+/**
+* map Viz
+*/
 MapViz = function(_statesData,_countryStatistics,_weightControl, _eventHandler) {
     this.eventHandler = _eventHandler;
     this.txt = null;
@@ -50,11 +53,8 @@ MapViz.prototype.init = function(){
     this.drag = d3.behavior.drag().on("drag", dragMove);
     this.svg.call(this.drag);
 
-    /*$( window ).resize(function() {
-        that.svg.call(this.resize());
-   });*/
 
-    var that=this;
+
 
     function zoom(){
 
@@ -631,6 +631,7 @@ MapViz.prototype.loadData = function (){
         d3.select(this).style("fill",that.stateFillColor);
     }
 }
+
 
  MapViz.prototype.resize  = function (){
         // get the width of a D3 element

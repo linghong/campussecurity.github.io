@@ -7,9 +7,9 @@
 ColSectorsViz = function(_data){
     this.data = _data;
     // defines constants
-    this.padding= {top: 30, right:-60, bottom: 15, left: 70};
+    this.padding= {top:30, right:20, bottom: 15, left: 40};
     this.width = $("#yearsectors").width();
-    this.height = 0.73*this.width;
+    this.height = 240;
     this.displayData={};
     this.crimeKeyData={};
     this.xAxisGroup = null;
@@ -42,8 +42,8 @@ ColSectorsViz.prototype.initVis = function(){
     // Add the text label for the Y axis
     this.svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 30)
-        .attr("x", -122)
+        .attr("y", 10)
+        .attr("x", -110)
         .attr("dy", "0.07em")
         .style("text-anchor", "middle")
         .style("font-weight", "bold")
@@ -152,7 +152,7 @@ ColSectorsViz.prototype.updateViz = function(){
 //scales
     var x =d3.scale.ordinal()
         .domain(["",1,2,3,4,5,6,7,8,9,"."])
-        .rangePoints([this.padding.left, this.width-this.padding.left-this.padding.right]);
+        .rangePoints([this.padding.left, this.width+this.padding.left-this.padding.right]);
 
     var y = d3.scale.linear()
         .domain([0, yMax])
@@ -255,4 +255,10 @@ ColSectorsViz.prototype.selectData=function(){
 
   });
 
+ColSectorsViz.prototype.resize = function(){
+    this.width = $("#yearsectors").width();
+
+    // constructs SVG layout
+    this.updateViz();
+};
 }

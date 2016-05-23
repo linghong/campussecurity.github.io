@@ -60,8 +60,7 @@
                 <li><a href='http://github.com/campussecurity/campussecurity.github.io'>Source Code</a></li>
                 <li><a href='doc/processbook.pdf'>Process Book</a></li>
                 <li><a href='/media/T1_2015-05-06_0048.swf'>Watch Video</a></li>
-                <li><a href='#' id="hide">Maximize Map</a></li>
-                <li><a href='#' id="show">Minimize Map</a></li>
+                <li><a href='#' id="mapSize">Maximize Map</a></li>
             </ul>
         </div>
     </nav>
@@ -132,14 +131,14 @@
             <div class="col-sm-12 panel panel-info" id="paramsContainer">
 
                 <!--box for user interactive box: make my own security map  -->
-                <div class="col-lg-12  col-sm-6">
+                <div class="col-lg-12  col-sm-5">
                     <h5>How Important Is A Crime Type To Me?</h5>
                     <div  id="weightsSelector" >
                     </div>                                      
                 </div>
 
                 <!--parallelCoordViz-->
-                <div class="col-lg-12 col-sm-6" id ="parallelBox">
+                <div class="col-lg-12 col-sm-7" id ="parallelBox">
                      <!---hide, show check box-->
                     <div id="hideShowBox">
                         <label>
@@ -181,18 +180,17 @@
             <div class="col-md-5 col-sm-12 panel panel-info section" >
 
                 <!--box for crime distribution across school sectors-->
-                <div class="col-md-12 col-sm-12 " >
-                    <span class="minititle">College Crime Data 
-                    Shows a School Type Releated Pattern </span>
+                <div class="col-sm-12 center aside-center" id="legend" >
+                    <span class="minititle">School Type Releated Crime Patterns </span>
                 </div>
 
+                
+
                 <!--box for user interactive check box-->
-                <div class="col-md-12 col-sm-8 panel-info center aside-center" >
-                    <div class="col-md-12 col-sm-12 " id="legend">
-                    </div>
-                    <div class="col-md-10 col-sm-10 " id="yearsectors">
-                    </div>
-                    <div id ="filterByYear" class="col-md-2 col-sm-2 form-group">
+                <div class="col-sm-12" > 
+                    <div class="col-md-10 col-sm-10" id="yearsectors">
+                    </div>                
+                    <div id ="filterByYear" class="col-md-2 col-sm-1  form-group">
                         <label  for="series-2008" class="s-2008"><input type="checkbox" class="yearSelector" name="year" value="2008" title="2008" id="series-2008" checked></label>2008
                         <label for="series-2009" class="s-2009"><input type="checkbox" class="yearSelector" name="year" value="2009" title="2009" id="series-2009" checked></label>2009
                         <label for="series-2010" class="s-2010"><input type="checkbox" class="yearSelector" name="year" value="2010" title="2010" id="series-2010" checked></label>2010
@@ -200,6 +198,7 @@
                         <label for="series-2012" class="s-2012"><input type="checkbox" class="yearSelector" name="year" value="2012" title="2012" id="series-2012" checked></label>2012
                         <label for="series-2013" class="s-2013"><input type="checkbox" class="yearSelector" name="year" value="2013" title="2013" id="series-2013" checked ></label>2013
                     </div>
+                    
                 </div>
 
         </section>
@@ -223,21 +222,22 @@
     var weightsContainerViz = new WeightContainerViz("weightsSelector",myEventHandler);
 
     //var categorySelectionViz = new CategorySelectionViz();
-    $("#hide").hover(function(){
-        $('#mapContainer').removeClass("col-lg-8").addClass("col-lg-12");
-        $('aside').hide();
-        $('#switch').text('Show');
-        mapViz.resize();
+    $("#mapSize").click(function(){
+        console.log($('#mapSize').text());
+        if($('#mapSize').text()=="Maximize Map"){
+            $('#mapContainer').removeClass("col-lg-8").addClass("col-lg-12");
+            $('aside').hide();
+            $('#mapSize').text('Minimize Map');
+            mapViz.resize();
+       }else{
+            $('#mapContainer').removeClass("col-lg-12").addClass("col-lg-8");
+            $('aside').show();
+            $('#mapSize').text('Maximize Map');
+            mapViz.resize();
+       }       
     });
-    $("#show").hover(function(){
-        $('#mapContainer').removeClass("col-lg-12").addClass("col-lg-8");
-        $('aside').show();
-        $('#switch').text('Hide');
-        mapViz.resize();
-
-    });
-    $("#yearsectors").hover
-
+   
+   
     queue()
             .defer(d3.json, 'data/us-states.json')
             .defer(d3.tsv, 'data/countryStatistics.tsv')
@@ -357,7 +357,11 @@
             $('#parallelCoordinateStateBox').show()
         }
     }
-
+    $( window ).resize(function() {
+        mapViz.resize();
+        barChartViz.resize();
+        colSectorsViz.resize();
+   });
 </script>
 
 </body>
