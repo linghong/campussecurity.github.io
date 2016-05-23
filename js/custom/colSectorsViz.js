@@ -9,7 +9,7 @@ ColSectorsViz = function(_data){
     // defines constants
     this.padding= {top:30, right:20, bottom: 100, left: 52};
     this.width = $("#yearsectors").width();
-    this.height = 310;
+    this.height = 320;
     this.displayData={};
     this.crimeKeyData={};
     this.xAxisGroup = null;

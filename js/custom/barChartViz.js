@@ -5,7 +5,7 @@
 BarChartViz = function(_theDiv,_eventHandler,_year,_crimeCategory){
 
     this.width = $('#usStatesDiv').width();
-    this.height = 310;
+    this.height = 330;
     this.svg = null;
     this.states= [
         'AK',
@@ -111,7 +111,7 @@ BarChartViz.prototype.init = function()
     d3.select('.toolTip').style('opacity',0);
     bardata = this.theData;
 
-    var margin = { top: 30, right: 5, bottom: 40, left:60 }
+    var margin = { top: 50, right: 5, bottom: 40, left:60 }
 
     var height = that.height  - margin.top - margin.bottom,
         width = that.width - margin.left - margin.right,
